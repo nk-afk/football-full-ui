@@ -1356,7 +1356,7 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 
   <div class="pgfoot" id="pgfoot">
     <span>88 min drills&nbsp; ·&nbsp; 107 min elapsed&nbsp; ·&nbsp; 19 min unallocated</span>
-    <span style="color:var(--color-text-soft)">Sample data&nbsp; ·&nbsp; Illustrative visuals&nbsp; ·&nbsp; <a id="srcLink" style="color:var(--color-primary-text)">Sources &amp; definitions</a></span>
+    <span style="color:var(--color-text-soft)"><a id="srcLink" style="color:var(--color-primary-text)">Sources &amp; definitions</a></span>
   </div>
 </div>
 </main>
@@ -1519,7 +1519,7 @@ function drillCards(){
 }
 
 /* ---------- DRILL LOAD (compare) ---------- */
-function srcLinkFoot(){ return '<div class="ddfoot"><span class="l">Sample data&nbsp; ·&nbsp; Illustrative visuals</span><a data-srcopen>Sources &amp; definitions <i data-lucide="arrow-right"></i></a></div>'; }
+function srcLinkFoot(){ return '<div class="ddfoot"><span class="l"></span><a data-srcopen>Sources &amp; definitions <i data-lucide="arrow-right"></i></a></div>'; }
 function drillLoadPane(){
   var parts=['19 + 2 GK','19 + U01 + 2 GK','19 + U01 + 2 GK','18 + 2 GK'];
   var MAX=150;
@@ -1818,7 +1818,7 @@ function reviewDetail(){
     + cmp
     + '<div class="howworks"><div class="hw-head" data-how><span>How this flag works</span><i data-lucide="chevron-down"></i></div><div class="hw-body">'+d.how+'</div></div>'
     + upnext(i) + '</div>';
-  var foot='<div class="ddfoot"><span class="l">Sample session&nbsp; ·&nbsp; Illustrative video</span><a data-srcopen>Sources &amp; definitions <i data-lucide="arrow-right"></i></a></div>';
+  var foot='<div class="ddfoot"><span class="l"></span><a data-srcopen>Sources &amp; definitions <i data-lucide="arrow-right"></i></a></div>';
   return head + '<div class="rv-grid">'+poster+decision+'</div>' + foot;
 }
 function upnext(i){
