@@ -1,0 +1,785 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meridian · Player</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root{
+  --color-primary:#2B7FFF; --color-primary-text:#027BFC; --color-primary-hover:#1C6EF0;
+  --color-primary-soft:#EBF3FF; --color-primary-tint:#EBF3FF; --color-primary-border:#B4D1FF; --color-primary-ink:#027BFC;
+  --color-page:#F6F8FA; --color-surface:#FFFFFF; --color-surface-subtle:#F9FAFB; --color-surface-muted:#F1F5F9;
+  --color-border:#E5E7EB; --color-border-subtle:#EEF2F6; --color-separator:#E6EAF0;
+  --color-text:#111827; --color-text-muted:#4B5563; --color-text-soft:#6B7280; --color-text-disabled:#9CA3AF;
+  --r-sm:6px; --r-md:10px; --r-lg:12px; --r-xl:16px; --r-pill:999px;
+  --shadow-card:0 1px 2px rgba(15,23,42,.04); --shadow-pop:0 16px 40px rgba(15,23,42,.18);
+  --ff:"Inter Display","Inter",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --side:240px; --top:52px; --rail:360px;
+  --rail-inset:28px;
+  --c-plan:#5CA423; --c-plan-soft:#EFFAE6;
+  --c-partial:#E58600; --c-partial-soft:#FFEED6;
+  --c-review:#E50C00; --c-review-soft:#FFE7E5;
+  --c-notobs:#9CA3AF; --c-notobs-soft:#EEF1F4;
+  --c-now:#EF4444; --hourpx:58px; --gridh:522px;
+  --bar:#BBD4FB; --att-gym:#B7C4DB; --att-pitch:#B6E0A6;
+}
+*{margin:0;padding:0;box-sizing:border-box;corner-shape:squircle}
+.avatar,.pnum,.cal-date.today,.rc-ava,.rc-play .pc{corner-shape:round}
+body{font-family:var(--ff);background:var(--color-page);color:var(--color-text);-webkit-font-smoothing:antialiased}
+.eyebrow{font-size:11px;line-height:14px;font-weight:400;letter-spacing:.09em;text-transform:uppercase;color:var(--color-text-soft)}
+a{color:inherit;text-decoration:none}
+button{font-family:var(--ff)}
+
+/* ---------- app shell ---------- */
+.topbar{position:fixed;top:0;left:0;right:0;height:var(--top);background:var(--color-surface);border-bottom:1px solid var(--color-separator);display:flex;align-items:center;gap:14px;padding:0 24px 0 20px;z-index:40}
+.brand{display:flex;align-items:center;gap:9px;font-weight:700;letter-spacing:.02em}
+.brandlogo{height:22px;width:auto;display:block;color:var(--color-text)}
+.topbar .sp{flex:1}
+.topclub{color:var(--color-text-soft);font-weight:600;font-size:13px;padding-right:14px;margin-right:2px;border-right:1px solid var(--color-separator)}
+.btn{font-size:13px;font-weight:600;border-radius:var(--r-lg);border:1px solid var(--color-border);background:var(--color-surface);color:var(--color-text);height:36px;padding:0 14px;display:inline-flex;align-items:center;gap:7px;cursor:pointer}
+.btn:hover{background:var(--color-surface-subtle)}
+.btn svg{width:16px;height:16px}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--color-primary);color:#fff;display:grid;place-items:center;font-size:12px;font-weight:700;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover;display:block}
+.tbi{width:34px;height:34px;border-radius:var(--r-md);border:1px solid transparent;background:none;color:var(--color-text-soft);display:grid;place-items:center;cursor:pointer;position:relative}
+.tbi:hover{background:var(--color-surface-subtle);color:var(--color-text)}
+.tbi svg{width:18px;height:18px}
+.tbi .dot{position:absolute;top:7px;right:8px;width:6px;height:6px;border-radius:50%;background:var(--c-review)}
+.navtoggle{width:34px;height:34px;border-radius:var(--r-md);border:1px solid var(--color-border);background:var(--color-surface);color:var(--color-text-soft);display:grid;place-items:center;cursor:pointer;flex:none}
+.navtoggle:hover{background:var(--color-surface-subtle);color:var(--color-text)}
+.navtoggle svg{width:18px;height:18px}
+.side{position:fixed;top:var(--top);bottom:0;left:0;width:var(--side);background:var(--color-surface);border-right:1px solid var(--color-separator);padding:16px 12px;display:flex;flex-direction:column;gap:4px;overflow:auto;z-index:30;transition:width .2s ease}
+.side .grp{margin:14px 8px 6px}
+.nav{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--r-md);border:1px solid transparent;color:var(--color-text-soft);font-size:13px;font-weight:500;cursor:pointer;text-decoration:none;position:relative}
+.nav svg{width:18px;height:18px;color:var(--color-text-soft)}
+.nav:hover{background:var(--color-surface-subtle)}
+.nav.disabled{cursor:default;pointer-events:none}
+.nav.active{background:var(--color-surface-muted);border-color:rgba(31,43,39,.03);color:var(--color-text);font-weight:600}
+.nav.active svg{color:var(--color-text)}
+.nav .badge{margin-left:auto;background:#FEF3C7;color:#92400E;font-size:11px;font-weight:700;border-radius:var(--r-pill);padding:1px 8px}
+.side-foot{margin-top:auto;padding-top:12px;display:flex;flex-direction:column;gap:10px}
+.sidecta{width:100%;justify-content:center;background:var(--color-primary-tint);border-color:var(--color-primary-text);color:var(--color-primary-text);font-weight:700}
+.sidecta:hover{background:#DCEAFF}
+.profile{display:flex;align-items:center;gap:10px;padding:2px}
+.profile .pname{font-size:13px;font-weight:600;color:var(--color-text)}
+body.nav-collapsed{--side:64px}
+body.nav-collapsed .side{padding:16px 8px}
+body.nav-collapsed .side .grp{display:none}
+body.nav-collapsed .nav{justify-content:center;padding:9px 0;gap:0}
+body.nav-collapsed .nav .lbl{display:none}
+body.nav-collapsed .nav .badge{position:absolute;top:1px;right:9px;margin:0}
+body.nav-collapsed .side-foot{align-items:center}
+body.nav-collapsed .sidecta{width:36px;padding:0}
+body.nav-collapsed .sidecta .lbl{display:none}
+body.nav-collapsed .profile .pname{display:none}
+.main{margin-left:var(--side);margin-top:var(--top);transition:margin-left .2s ease;padding-bottom:80px}
+
+/* ---------- player detail ---------- */
+.players{max-width:1420px;margin:0 auto;padding:20px 28px 0}
+.pd-card{background:var(--color-surface);border-radius:var(--r-lg);box-shadow:var(--shadow-card);padding:24px 26px;margin-bottom:16px}
+#perfBody .metric,#perfBody .bodycomp{margin-top:0}
+.pd-notobs{display:flex;align-items:flex-start;gap:16px;padding:28px 26px}
+.pd-notobs-ic{width:44px;height:44px;border-radius:var(--r-md);background:var(--color-surface-subtle);display:grid;place-items:center;color:var(--color-text-soft);flex:none}
+.pd-notobs-ic svg{width:22px;height:22px}
+.pd-notobs-h{font-size:18px;font-weight:700;margin-bottom:6px}
+.pd-notobs-p{font-size:14px;line-height:20px;color:var(--color-text-soft);max-width:560px}
+
+.pd-switchrow{display:flex;justify-content:flex-end;margin-bottom:12px}
+.pd-switch{display:inline-flex;background:var(--color-surface-muted);border-radius:var(--r-md);padding:3px;gap:2px}
+.pd-switch button{border:0;background:none;font-family:inherit;font-size:12.5px;font-weight:600;color:var(--color-text-soft);padding:6px 13px;border-radius:7px;cursor:pointer}
+.pd-switch button.on{background:var(--color-surface);color:var(--color-text);box-shadow:var(--shadow-card)}
+
+.pd-hero{display:flex;justify-content:space-between;align-items:center;padding:0}
+.pd-hero-l{display:flex;align-items:center;gap:22px}
+.pd-ava{width:112px;height:112px;border-radius:var(--r-lg);overflow:hidden;background:var(--color-surface-muted);flex:none}
+.pd-ava img{width:100%;height:100%;object-fit:cover;display:block}
+.pd-eyebrow{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-soft);font-weight:600}
+.pd-name{font-size:34px;line-height:38px;font-weight:700;letter-spacing:-.02em;margin:3px 0 3px}
+.pd-role{font-size:16px;color:var(--color-text-soft)}
+.pd-stats{display:flex;align-items:center;margin-left:16px}
+.pd-stat{padding:4px 26px;border-left:1px solid var(--color-separator)}
+.pd-slab{font-size:12.5px;color:var(--color-text-soft);margin-bottom:6px}
+.pd-sval{font-size:17px;font-weight:600;color:var(--color-text)}
+.pd-share{width:42px;height:42px;border:1px solid var(--color-border);border-radius:var(--r-md);background:var(--color-surface);color:var(--color-text-soft);display:grid;place-items:center;cursor:pointer;flex:none}
+.pd-share:hover{background:var(--color-surface-subtle)}
+.pd-share svg{width:18px;height:18px}
+
+.perf-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin:4px 2px 14px;flex-wrap:wrap}
+.perf-title{font-size:24px;line-height:30px;font-weight:700;letter-spacing:-.01em}
+.range{display:flex;align-items:center;gap:8px}
+.rnav{width:28px;height:40px;border:0;background:none;border-radius:var(--r-md);display:grid;place-items:center;color:var(--color-text-soft);cursor:pointer}
+.rnav:hover{background:var(--color-surface-subtle);color:var(--color-text)}
+.rnav svg{width:18px;height:18px}
+.rpill{display:inline-flex;align-items:center;gap:9px;font-family:inherit;font-size:13px;font-weight:600;color:var(--color-text);white-space:nowrap;cursor:pointer;padding:6px 8px;border-radius:var(--r-md);border:0;background:none}
+.rpill:hover{background:var(--color-surface-subtle)}
+.rpill svg{width:16px;height:16px;color:var(--color-text-soft)}
+.rpill .dl-chev{width:14px;height:14px;margin-left:-3px}
+
+.ptabs2{display:flex;gap:4px;border-bottom:1px solid var(--color-border);margin-top:12px}
+.ptab2{padding:8px 12px 12px;font-size:13px;font-weight:500;color:var(--color-text-soft);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.ptab2:hover{color:var(--color-text)}
+.ptab2.on{color:var(--color-text);font-weight:600;border-bottom-color:var(--color-primary-text)}
+
+.metric{margin-top:20px}
+.m-label{font-size:13px;color:var(--color-text-soft)}
+.m-row{display:flex;align-items:center;gap:16px;margin:5px 0 3px}
+.m-val{font-size:30px;font-weight:700;letter-spacing:-.01em}
+.m-sep{width:1px;height:22px;background:var(--color-border)}
+.m-delta{font-size:15px;color:var(--color-text-soft);font-weight:500}
+.m-delta b{color:var(--color-text);font-weight:600}
+.m-sub{font-size:13px;color:var(--color-text-soft)}
+.m-cap{display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--color-text-soft);margin-top:14px}
+.m-cap .i{width:15px;height:15px;color:var(--color-text-disabled)}
+.m-axis{font-size:12px;color:var(--color-text-soft);margin-top:16px}
+.m-foot{font-size:12.5px;color:var(--color-text-soft);margin-top:12px}
+
+.chart{position:relative;padding-left:54px;margin-top:10px}
+.plot{position:relative;height:214px;border-bottom:1px solid var(--color-border)}
+.gl{position:absolute;left:0;right:0;border-top:1px dashed var(--color-border-subtle)}
+.ylab{position:absolute;left:-54px;width:44px;text-align:right;transform:translateY(-50%);font-size:11px;color:var(--color-text-soft)}
+.bars{position:absolute;left:0;right:0;bottom:0;top:0;display:flex;align-items:flex-end;justify-content:space-around;padding:0 8px}
+.bcol{position:relative;flex:1;height:100%;display:flex;align-items:flex-end;justify-content:center}
+.bar{position:relative;width:58px;max-width:72%;border-radius:6px 6px 0 0;background:var(--bar)}
+.bar.act{background:var(--color-primary)}
+.bval{position:absolute;top:-23px;left:50%;transform:translateX(-50%);font-size:12.5px;font-weight:600;color:var(--color-text);white-space:nowrap}
+.bar.act .bval{font-weight:700}
+.btip{position:absolute;top:-58px;left:50%;transform:translateX(-50%);background:var(--color-surface);border:1px solid var(--color-border);box-shadow:var(--shadow-pop);border-radius:var(--r-md);padding:6px 11px;font-size:12px;font-weight:600;color:var(--color-text);white-space:nowrap;z-index:2}
+.btip:after{content:"";position:absolute;bottom:-5px;left:50%;transform:translateX(-50%) rotate(45deg);width:9px;height:9px;background:var(--color-surface);border-right:1px solid var(--color-border);border-bottom:1px solid var(--color-border)}
+.xaxis{display:flex;justify-content:space-around;padding:10px 8px 0}
+.xlab{flex:1;text-align:center;font-size:12px;color:var(--color-text-soft)}
+.lsvg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;z-index:1}
+.ldot{position:absolute;width:9px;height:9px;border-radius:50%;corner-shape:round;background:var(--color-surface);border:2px solid var(--color-primary);transform:translate(-50%,-50%);z-index:3}
+.ldot.act{width:13px;height:13px;background:var(--color-primary);border:2.5px solid #fff;box-shadow:0 0 0 1.5px var(--color-primary)}
+.ldrop{position:absolute;width:0;border-left:1px dashed var(--color-primary);transform:translateX(-50%);z-index:1}
+.ltip{position:absolute;transform:translate(-50%,calc(-100% - 16px));background:var(--color-surface);border:1px solid var(--color-border);box-shadow:var(--shadow-pop);border-radius:var(--r-md);padding:6px 11px;font-size:12px;font-weight:600;color:var(--color-text);white-space:nowrap;z-index:4}
+.ltip:after{content:"";position:absolute;bottom:-5px;left:50%;transform:translateX(-50%) rotate(45deg);width:9px;height:9px;background:var(--color-surface);border-right:1px solid var(--color-border);border-bottom:1px solid var(--color-border)}
+.bodycomp{margin-top:18px}
+.bc-block+.bc-block{margin-top:28px}
+.bc-head{display:flex;align-items:baseline;justify-content:space-between;gap:20px;margin-bottom:4px}
+.bc-hl{display:flex;align-items:baseline;gap:16px}
+.bc-name{font-size:18px;font-weight:700;color:var(--color-text)}
+.bc-val{font-size:23px;font-weight:700;letter-spacing:-.01em;color:var(--color-text)}
+.bc-sep{width:1px;height:18px;background:var(--color-border);align-self:center}
+.bc-delta{font-size:14px;color:var(--color-text-soft)}
+.bc-delta .d{color:var(--color-text-muted)}
+.bc-meta{font-size:13px;color:var(--color-text-soft);white-space:nowrap}
+.bc-chart{margin-top:8px}
+.bc-chart .plot{height:92px}
+.sdot{position:absolute;width:11px;height:11px;border-radius:50%;corner-shape:round;transform:translate(-50%,-50%);z-index:3}
+.sdot.blue{background:#fff;border:2px solid var(--color-primary)}
+.sdot.green{background:#86B96E;border:2px solid #86B96E}
+.slabel{position:absolute;transform:translate(-50%,-150%);font-size:12.5px;font-weight:600;color:var(--color-text);white-space:nowrap;z-index:4}
+.bc-note{display:flex;align-items:center;gap:9px;background:var(--color-surface-subtle);border-radius:var(--r-md);padding:12px 14px;margin-top:22px;font-size:13px;color:var(--color-text-soft)}
+.bc-note svg{width:16px;height:16px;color:var(--color-text-disabled);flex:none}
+
+.perf2{display:grid;grid-template-columns:1fr 372px;margin:0}
+.attwrap{padding-right:40px}
+.aiwrap{padding-left:40px;border-left:1px solid var(--color-separator)}
+.sec-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sec-h{font-size:18px;font-weight:700}
+.sec-sub{font-size:13px;color:var(--color-text-soft)}
+.att-count{font-size:14px;color:var(--color-text);margin-bottom:20px}
+.att-count b{font-weight:700}
+.attrow{display:grid;grid-template-columns:48px repeat(14,1fr);align-items:center}
+.attrow.head{margin-bottom:10px}
+.attrow:not(.head){height:34px}
+.attday{text-align:center;font-size:11px;color:var(--color-text-soft)}
+.attlab{font-size:12.5px;color:var(--color-text-soft)}
+.acell{display:flex;justify-content:center}
+.sq{width:22px;height:22px;border-radius:5px;display:block}
+.sq.gym{background:var(--att-gym)}
+.sq.pitch{background:var(--att-pitch)}
+.sq.miss{background:transparent;border:1.5px solid var(--c-partial)}
+.dash{color:var(--color-text-disabled);font-size:13px}
+.attlegend{display:flex;gap:20px;margin-top:18px;font-size:12.5px;color:var(--color-text-soft)}
+.lg{display:flex;align-items:center;gap:8px}
+.lg .sq{width:16px;height:16px}
+.lg .dash{font-size:14px}
+
+.ai-title{display:flex;align-items:center;gap:9px;font-size:17px;font-weight:700;color:var(--color-text)}
+.ai-title svg{width:20px;height:20px;color:var(--color-primary)}
+.ai-sub{font-size:12.5px;color:var(--color-text-soft);margin:4px 0 16px}
+.ai-list p{font-size:14px;line-height:20px;color:var(--color-text-muted);margin-bottom:12px}
+.ai-upd{font-size:12px;color:var(--color-text-disabled);margin-top:6px}
+
+.lgs{display:flex;align-items:flex-start;justify-content:space-between;margin:0}
+.lgs-l{display:flex;gap:34px}
+.lgs-title{font-size:18px;font-weight:700;white-space:nowrap}
+.lgs-body{display:flex;flex-direction:column;gap:8px;padding-top:1px}
+.lgs-meta{font-size:14px;color:var(--color-text)}
+.lgs-meta b{font-weight:700}
+.lgs-exrow{display:flex;align-items:center;gap:16px}
+.lgs-ex{font-size:13.5px;color:var(--color-text-soft)}
+.lgs-review{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--c-partial)}
+.lgs-review svg{width:14px;height:14px}
+.lgs-ok{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--c-plan)}
+.lgs-view{color:var(--color-primary-text);font-weight:600;font-size:14px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.lgs-view svg{width:16px;height:16px}
+.modal-scrim{position:fixed;inset:0;background:rgba(17,24,39,.4);opacity:0;pointer-events:none;transition:opacity .2s;z-index:62}
+.modal-scrim.open{opacity:1;pointer-events:auto}
+.planmodal{position:fixed;top:50%;left:50%;transform:translate(-50%,-48%);width:560px;max-width:94vw;max-height:90vh;overflow:auto;background:var(--color-surface);border-radius:var(--r-xl);box-shadow:var(--shadow-pop);z-index:63;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+.planmodal.open{opacity:1;pointer-events:auto;transform:translate(-50%,-50%)}
+.pm-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:22px 24px 0}
+.pm-title{font-size:19px;font-weight:700;letter-spacing:-.01em}
+.pm-sub{font-size:13px;color:var(--color-text-soft);margin-top:3px}
+.pm-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:18px 24px 24px}
+.pm-card{display:flex;gap:13px;align-items:flex-start;text-align:left;border:1px solid var(--color-border);border-radius:var(--r-lg);padding:15px;background:var(--color-surface);cursor:pointer;font-family:inherit}
+.pm-card:hover{border-color:var(--color-primary-border);background:var(--color-primary-tint)}
+.pm-ic{width:38px;height:38px;border-radius:var(--r-md);background:var(--color-primary-tint);color:var(--color-primary-text);display:grid;place-items:center;flex:none}
+.pm-card:hover .pm-ic{background:var(--color-surface)}
+.pm-ic svg{width:19px;height:19px}
+.pm-ct{display:flex;flex-direction:column;min-width:0}
+.pm-cl{font-size:14px;font-weight:600;color:var(--color-text)}
+.pm-cd{font-size:12.5px;color:var(--color-text-soft);margin-top:3px;line-height:1.4}
+.pm-close{margin-left:auto;width:32px;height:32px;border:1px solid var(--color-border);background:none;border-radius:var(--r-md);cursor:pointer;display:grid;place-items:center;color:var(--color-text-soft)}
+.pm-close:hover{background:var(--color-surface-subtle);color:var(--color-text)}
+.pm-close svg{width:16px;height:16px}
+@media(max-width:560px){.pm-grid{grid-template-columns:1fr}}
+.notif-pop{position:fixed;top:56px;right:16px;width:344px;max-width:92vw;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--r-lg);box-shadow:var(--shadow-pop);z-index:70;opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .15s,transform .15s;overflow:hidden}
+.notif-pop.open{opacity:1;transform:none;pointer-events:auto}
+.notif-head{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--color-separator)}
+.notif-head h4{font-size:14px;font-weight:700;margin:0}
+.notif-mark{font-size:12px;color:var(--color-primary-text);font-weight:600;cursor:pointer;background:none;border:0;font-family:inherit;padding:0}
+.notif-mark:hover{text-decoration:underline}
+.notif-list{max-height:380px;overflow:auto}
+.notif-item{display:flex;gap:11px;padding:12px 16px;border-bottom:1px solid var(--color-border-subtle);cursor:pointer}
+.notif-item:last-child{border-bottom:0}
+.notif-item:hover{background:var(--color-surface-subtle)}
+.notif-item.unread{background:var(--color-primary-soft)}
+.notif-item.unread:hover{background:#E3EEFF}
+.notif-ic{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;flex:none}
+.notif-ic svg{width:16px;height:16px}
+.notif-ic.proc{background:#EBF3FF;color:#027BFC}
+.notif-ic.review{background:#FFE7E5;color:#E50C00}
+.notif-ic.ok{background:#EFFAE6;color:#5CA423}
+.notif-tx{flex:1;min-width:0}
+.notif-t{font-size:13px;font-weight:600;color:var(--color-text);line-height:1.3}
+.notif-s{font-size:12px;color:var(--color-text-soft);margin-top:2px;line-height:1.35}
+.notif-time{font-size:11px;color:var(--color-text-disabled);flex:none}
+.notif-foot{padding:11px 16px;text-align:center;border-top:1px solid var(--color-separator)}
+.notif-foot a{font-size:12.5px;color:var(--color-primary-text);font-weight:600;cursor:pointer}
+.topsearch{position:relative;display:flex;align-items:center;gap:8px;height:38px;width:200px;max-width:42vw;border:1px solid var(--color-border);border-radius:var(--r-lg);background:var(--color-surface-subtle);padding:0 12px;transition:width .2s ease}
+.topsearch:focus-within{width:330px;background:var(--color-surface);border-color:var(--color-primary-border);box-shadow:0 0 0 3px var(--color-primary-soft)}
+.topsearch > svg{width:16px;height:16px;color:var(--color-text-soft);flex:none}
+.topsearch input{flex:1;border:0;background:none;outline:none;font-family:inherit;font-size:13.5px;color:var(--color-text);min-width:0}
+.topsearch input::placeholder{color:var(--color-text-soft)}
+.topsearch-results{position:absolute;top:calc(100% + 7px);left:0;right:0;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--r-lg);box-shadow:var(--shadow-pop);padding:5px;display:none;z-index:70;max-height:320px;overflow:auto}
+.topsearch-results.open{display:block}
+.ts-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--r-md);cursor:pointer;text-decoration:none}
+.ts-item:hover{background:var(--color-surface-subtle)}
+.ts-ava{width:30px;height:30px;border-radius:8px;overflow:hidden;background:var(--color-surface-muted);flex:none}
+.ts-ava img{width:100%;height:100%;object-fit:cover;display:block}
+.ts-col{display:flex;flex-direction:column;min-width:0}
+.ts-name{font-size:13.5px;font-weight:600;color:var(--color-text)}
+.ts-sub{font-size:12px;color:var(--color-text-soft);margin-top:1px}
+.ts-empty{padding:14px;text-align:center;font-size:12.5px;color:var(--color-text-soft)}
+</style>
+</head>
+<body>
+
+<div id="shell-top"></div>
+<div id="shell-side"></div>
+
+<main class="main">
+  <div class="players">
+
+    <div class="pd-switchrow"><div class="pd-switch" id="pdSwitch"></div></div>
+
+    <div class="pd-card"><div class="pd-hero" id="pdHero"></div></div>
+
+    <div id="pdObsContent">
+    <div class="perf-head">
+      <div class="perf-headl">
+        <div class="perf-title">Performance over time</div>
+        <div class="ptabs2" id="perfTabs">
+          <div class="ptab2 on" data-m="load">Total load</div>
+          <div class="ptab2" data-m="reps">Total reps</div>
+          <div class="ptab2" data-m="volume">Total volume</div>
+          <div class="ptab2" data-m="body">Body composition</div>
+        </div>
+      </div>
+      <div class="range">
+        <button class="rnav" aria-label="Previous range"><i data-lucide="chevron-left"></i></button>
+        <button class="rpill"><i data-lucide="calendar"></i><span id="rangeLbl">10 Sep – 07 Oct 2026</span><i data-lucide="chevron-down" class="dl-chev"></i></button>
+        <button class="rnav" aria-label="Next range"><i data-lucide="chevron-right"></i></button>
+      </div>
+    </div>
+    <div class="pd-card">
+      <div id="perfBody"></div>
+    </div>
+
+    <div class="pd-card">
+      <div class="perf2">
+        <div class="attwrap" id="attBody"></div>
+        <div class="aiwrap" id="aiBody"></div>
+      </div>
+    </div>
+
+    <div class="pd-card"><div class="lgs" id="lgsBody"></div></div>
+    </div>
+
+    <div class="pd-card pd-notobs" id="pdNotObs" style="display:none">
+      <div class="pd-notobs-ic"><i data-lucide="video-off"></i></div>
+      <div>
+        <div class="pd-notobs-h">Not observed this period</div>
+        <p class="pd-notobs-p">No gym capture was recorded for this player in the last 14 days. When the ceiling cameras next pick up a session, their performance trend and attendance will appear here.</p>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<div class="modal-scrim" id="planScrim"></div>
+<div class="planmodal" id="planModal" role="dialog" aria-modal="true" aria-label="Plan a session">
+  <div class="pm-head">
+    <div><div class="pm-title">Plan a session</div><div class="pm-sub">Choose how you'd like to build the plan</div></div>
+    <button class="pm-close" id="planClose" aria-label="Close"><i data-lucide="x"></i></button>
+  </div>
+  <div class="pm-grid" id="pmGrid"></div>
+</div>
+
+
+<script>
+/* ============ DATA ============ */
+const DAYS=['24','25','26','27','28','29','30','01','02','03','04','05','06','07'];
+const D1=['10 Sep','16 Sep','20 Sep','26 Sep','01 Oct','07 Oct'];
+const D2=['09 Sep','15 Sep','19 Sep','25 Sep','30 Sep','06 Oct'];
+function mk(dates,vals){return dates.map((d,i)=>[d,vals[i]]);}
+
+const PLAYERS={
+  1:{ num:1, pos:'Midfielder', height:'183 cm', weight:'77.5 kg', latest:'07 Oct 2026', range:'10 Sep – 07 Oct 2026', att:6,
+      gym:  ['g','_','g','_','_','g','_','g','_','_','g','_','_','g'],
+      pitch:['_','_','_','_','_','_','_','_','_','_','_','_','_','_'],
+      metrics:{
+        load:  {title:'Total load', unit:'kg', latest:940, delta:'+14.6%', deltaLabel:'vs first session', caption:'Sum of working-set weights · excludes reps', note:'Definition provisional', axis:'Summed set load (kg)', foot:'6 gym sessions · Confirmed records', pts:mk(D1,[820,850,870,900,920,940])},
+        reps:  {title:'Total reps', unit:'reps', latest:21, delta:'+23.5%', deltaLabel:'vs first session', caption:'Completed repetitions across confirmed working sets.', note:'', axis:'Reps', foot:'6 gym sessions · Confirmed records', pts:mk(D1,[17,18,19,19,20,21])},
+        volume:{title:'Total volume', type:'line', unit:'kg·reps', latest:2200, delta:'+25.7%', deltaLabel:'vs first session', caption:'Sum of weight × completed reps across working sets', note:'', axis:'Volume (kg·reps)', foot:'6 gym sessions · Confirmed records', yMin:1400, yMax:2400, step:200, pts:mk(D1,[1750,1850,1900,2000,2100,2200])},
+        body:{
+          weight:{latest:77.5, delta:'-0.3 kg', since:'since 10 Sep', unit:'kg', color:'blue', yMin:76, yMax:79, step:1, pts:[['10 Sep',77.8],['07 Oct',77.5]]},
+          bodyfat:{latest:11.8, delta:'-0.3 percentage points', since:'since 10 Sep', unit:'%', color:'green', yMin:10, yMax:13, step:1, pts:[['10 Sep',12.1],['07 Oct',11.8]]},
+          measurements:2, latestDate:'07 Oct 2026', xlabels:D1, note:'Insufficient readings to establish a trend.'
+        }
+      },
+      ai:['Total load rose 14.6% across six gym sessions.','Seated row is the captured lift, trending up.','6 gym sessions attended in this period.','Body composition has two recorded measurements.'],
+      aiUpd:'Updated 07 Oct 2026',
+      session:{name:'Upper push', date:'07 Oct', loc:'Gym 1', ex:'Seated row', reviews:0}
+  },
+  13:{ num:13, pos:'Defender', height:'188 cm', weight:'82.1 kg', latest:'07 Oct 2026', range:'10 Sep – 07 Oct 2026', att:11,
+      gym:  ['g','_','g','_','_','_','g','_','_','g','_','g','_','g'],
+      pitch:['_','p','_','p','_','p','_','p','_','_','p','_','_','_'],
+      metrics:{
+        load:  {title:'Total load', unit:'kg', latest:1280, delta:'+8.5%', deltaLabel:'vs first session', caption:'Sum of working-set weights · excludes reps', note:'Definition provisional', axis:'Summed set load (kg)', foot:'6 gym sessions · Confirmed records', pts:mk(D1,[1180,1200,1210,1240,1255,1280])},
+        reps:  {title:'Total reps', unit:'reps', latest:96, delta:'+10.3%', deltaLabel:'vs first session', caption:'Completed repetitions across confirmed working sets.', note:'', axis:'Reps', foot:'6 gym sessions · Confirmed records', pts:mk(D1,[87,90,88,92,94,96])},
+        volume:{title:'Total volume', type:'line', unit:'kg·reps', latest:7100, delta:'+10.9%', deltaLabel:'vs first session', caption:'Sum of weight × completed reps across working sets', note:'', axis:'Volume (kg·reps)', foot:'6 gym sessions · Confirmed records', yMin:5000, yMax:8000, step:1000, pts:mk(D1,[6400,6600,6500,6900,6800,7100])},
+        body:{
+          weight:{latest:82.1, delta:'-0.3 kg', since:'since 10 Sep', unit:'kg', color:'blue', yMin:81, yMax:84, step:1, pts:[['10 Sep',82.4],['07 Oct',82.1]]},
+          bodyfat:{latest:10.5, delta:'-0.4 percentage points', since:'since 10 Sep', unit:'%', color:'green', yMin:9, yMax:12, step:1, pts:[['10 Sep',10.9],['07 Oct',10.5]]},
+          measurements:2, latestDate:'07 Oct 2026', xlabels:D1, note:'Insufficient readings to establish a trend.'
+        }
+      },
+      ai:['Total load rose 8.5% across six gym sessions.','Progression is steady with no session-to-session dips.','6 gym sessions attended in this period.','Body composition has two recorded measurements.'],
+      aiUpd:'Updated 07 Oct 2026',
+      session:{name:'Upper push', date:'07 Oct', loc:'Gym 1', ex:'Chest fly', reviews:0}
+  },
+  3:{ num:3, pos:'Defender', height:'186 cm', weight:'83.0 kg', latest:'07 Oct 2026', range:'10 Sep – 07 Oct 2026', att:5,
+      gym:  ['g','_','g','_','_','_','g','_','_','g','_','_','g','_'],
+      pitch:['_','_','_','_','_','_','_','_','_','_','_','_','_','_'],
+      metrics:{
+        load:  {title:'Total load', unit:'kg', latest:1350, delta:'+14.4%', deltaLabel:'vs first session', caption:'Sum of working-set weights · excludes reps', note:'Definition provisional', axis:'Summed set load (kg)', foot:'6 gym sessions · Confirmed records', pts:mk(D1,[1180,1220,1250,1290,1320,1350])},
+        reps:  {title:'Total reps', unit:'reps', latest:11, delta:'+22.2%', deltaLabel:'vs first session', caption:'Completed repetitions across confirmed working sets.', note:'', axis:'Reps', foot:'6 gym sessions · Confirmed records', pts:mk(D1,[9,9,10,10,11,11])},
+        volume:{title:'Total volume', type:'line', unit:'kg·reps', latest:7400, delta:'+15.6%', deltaLabel:'vs first session', caption:'Sum of weight × completed reps across working sets', note:'', axis:'Volume (kg·reps)', foot:'6 gym sessions · Confirmed records', yMin:5000, yMax:8000, step:1000, pts:mk(D1,[6400,6700,6800,7000,7200,7400])},
+        body:{
+          weight:{latest:83.0, delta:'-0.4 kg', since:'since 10 Sep', unit:'kg', color:'blue', yMin:82, yMax:85, step:1, pts:[['10 Sep',83.4],['07 Oct',83.0]]},
+          bodyfat:{latest:11.0, delta:'-0.3 percentage points', since:'since 10 Sep', unit:'%', color:'green', yMin:9, yMax:12, step:1, pts:[['10 Sep',11.3],['07 Oct',11.0]]},
+          measurements:2, latestDate:'07 Oct 2026', xlabels:D1, note:'Insufficient readings to establish a trend.'
+        }
+      },
+      ai:['Total load rose 14.4% across six gym sessions.','Squat is the captured lift, progressing steadily.','5 gym sessions attended in this period.','Body composition has two recorded measurements.'],
+      aiUpd:'Updated 07 Oct 2026',
+      session:{name:'Lower body', date:'07 Oct', loc:'Gym 2', ex:'Squat', reviews:0}
+  },
+  2:{ num:2, pos:'Forward', height:'180 cm', weight:'76.2 kg', latest:'07 Oct 2026', range:'10 Sep – 07 Oct 2026', att:6,
+      gym:  ['g','_','g','_','_','g','_','g','_','_','g','_','_','g'],
+      pitch:['_','_','_','_','_','_','_','_','_','_','_','_','_','_'],
+      metrics:{
+        load:  {title:'Total load', unit:'kg', latest:980, delta:'+14.0%', deltaLabel:'vs first session', caption:'Sum of working-set weights · excludes reps', note:'Definition provisional', axis:'Summed set load (kg)', foot:'6 gym sessions · Confirmed records', pts:mk(D1,[860,890,900,935,960,980])},
+        reps:  {title:'Total reps', unit:'reps', latest:73, delta:'+14.1%', deltaLabel:'vs first session', caption:'Completed repetitions across confirmed working sets.', note:'', axis:'Reps', foot:'6 gym sessions · Confirmed records', pts:mk(D1,[64,66,68,70,72,73])},
+        volume:{title:'Total volume', type:'line', unit:'kg·reps', latest:5200, delta:'+13.0%', deltaLabel:'vs first session', caption:'Sum of weight × completed reps across working sets', note:'', axis:'Volume (kg·reps)', foot:'6 gym sessions · Confirmed records', yMin:3000, yMax:6000, step:1000, pts:mk(D1,[4600,4750,4800,4950,5050,5200])},
+        body:{
+          weight:{latest:76.2, delta:'-0.3 kg', since:'since 10 Sep', unit:'kg', color:'blue', yMin:75, yMax:78, step:1, pts:[['10 Sep',76.5],['07 Oct',76.2]]},
+          bodyfat:{latest:11.4, delta:'-0.4 percentage points', since:'since 10 Sep', unit:'%', color:'green', yMin:10, yMax:13, step:1, pts:[['10 Sep',11.8],['07 Oct',11.4]]},
+          measurements:2, latestDate:'07 Oct 2026', xlabels:D1, note:'Insufficient readings to establish a trend.'
+        }
+      },
+      ai:['Total load rose 14.0% across six gym sessions.','Seated row set 1 capture is half-obscured and needs a coach review.','6 gym sessions attended in this period.','Body composition has two recorded measurements.'],
+      aiUpd:'Updated 07 Oct 2026',
+      session:{name:'Upper push', date:'07 Oct', loc:'Gym 1', ex:'Seated row / Lateral raise', reviews:1}
+  },
+  12:{ num:12, pos:'Midfielder', height:'177 cm', weight:'73.8 kg', latest:'07 Oct 2026', range:'10 Sep – 07 Oct 2026', att:5,
+      gym:  ['g','_','g','_','_','_','g','_','_','g','_','_','g','_'],
+      pitch:['_','_','_','_','_','_','_','_','_','_','_','_','_','_'],
+      metrics:{
+        load:  {title:'Total load', unit:'kg', latest:760, delta:'+15.2%', deltaLabel:'vs first session', caption:'Sum of working-set weights · excludes reps', note:'Definition provisional', axis:'Summed set load (kg)', foot:'6 gym sessions · Confirmed records', pts:mk(D1,[660,690,700,725,745,760])},
+        reps:  {title:'Total reps', unit:'reps', latest:70, delta:'+20.7%', deltaLabel:'vs first session', caption:'Completed repetitions across confirmed working sets.', note:'', axis:'Reps', foot:'6 gym sessions · Confirmed records', pts:mk(D1,[58,61,64,66,68,70])},
+        volume:{title:'Total volume', type:'line', unit:'kg·reps', latest:3900, delta:'+21.9%', deltaLabel:'vs first session', caption:'Sum of weight × completed reps across working sets', note:'', axis:'Volume (kg·reps)', foot:'6 gym sessions · Confirmed records', yMin:2000, yMax:5000, step:1000, pts:mk(D1,[3200,3400,3500,3700,3800,3900])},
+        body:{
+          weight:{latest:73.8, delta:'-0.4 kg', since:'since 10 Sep', unit:'kg', color:'blue', yMin:72, yMax:75, step:1, pts:[['10 Sep',74.2],['07 Oct',73.8]]},
+          bodyfat:{latest:10.9, delta:'-0.3 percentage points', since:'since 10 Sep', unit:'%', color:'green', yMin:9, yMax:12, step:1, pts:[['10 Sep',11.2],['07 Oct',10.9]]},
+          measurements:2, latestDate:'07 Oct 2026', xlabels:D1, note:'Insufficient readings to establish a trend.'
+        }
+      },
+      ai:['Total load rose 15.2% across six gym sessions.','A seventeen-rep second set on seated row stands out.','5 gym sessions attended in this period.','Body composition has two recorded measurements.'],
+      aiUpd:'Updated 07 Oct 2026',
+      session:{name:'Upper push', date:'07 Oct', loc:'Gym 1', ex:'Seated row / Cable biceps curl', reviews:0}
+  },
+  24:{ num:24, pos:'Defender', height:'185 cm', weight:'80.5 kg', latest:'07 Oct 2026', range:'10 Sep – 07 Oct 2026', att:4,
+      gym:  ['g','_','_','_','g','_','_','g','_','_','_','_','_','g'],
+      pitch:['_','_','_','_','_','_','_','_','_','_','_','_','_','_'],
+      metrics:{
+        load:  {title:'Total load', unit:'kg', latest:620, delta:'+14.8%', deltaLabel:'vs first session', caption:'Sum of working-set weights · excludes reps', note:'Definition provisional', axis:'Summed set load (kg)', foot:'6 gym sessions · Confirmed records', pts:mk(D1,[540,560,575,590,605,620])},
+        reps:  {title:'Total reps', unit:'reps', latest:11, delta:'+37.5%', deltaLabel:'vs first session', caption:'Completed repetitions across confirmed working sets.', note:'', axis:'Reps', foot:'6 gym sessions · Confirmed records', pts:mk(D1,[8,9,9,10,10,11])},
+        volume:{title:'Total volume', type:'line', unit:'kg·reps', latest:880, delta:'+25.7%', deltaLabel:'vs first session', caption:'Sum of weight × completed reps across working sets', note:'', axis:'Volume (kg·reps)', foot:'6 gym sessions · Confirmed records', yMin:400, yMax:1200, step:200, pts:mk(D1,[700,740,760,800,840,880])},
+        body:{
+          weight:{latest:80.5, delta:'-0.2 kg', since:'since 10 Sep', unit:'kg', color:'blue', yMin:79, yMax:82, step:1, pts:[['10 Sep',80.7],['07 Oct',80.5]]},
+          bodyfat:{latest:13.2, delta:'-0.2 percentage points', since:'since 10 Sep', unit:'%', color:'green', yMin:12, yMax:15, step:1, pts:[['10 Sep',13.4],['07 Oct',13.2]]},
+          measurements:2, latestDate:'07 Oct 2026', xlabels:D1, note:'Insufficient readings to establish a trend.'
+        }
+      },
+      ai:['Total load rose 14.8% across six gym sessions.','Overhead triceps extension is the one captured lift so far.','4 gym sessions attended in this period.','Body composition has two recorded measurements.'],
+      aiUpd:'Updated 07 Oct 2026',
+      session:{name:'Upper push', date:'07 Oct', loc:'Gym 1', ex:'Overhead triceps extension', reviews:0}
+  },
+  8:{ num:8, pos:'Forward', height:'181 cm', weight:'76.8 kg', latest:'07 Oct 2026', range:'10 Sep – 07 Oct 2026', att:6,
+      gym:  ['g','_','g','_','g','_','_','g','_','_','g','_','_','g'],
+      pitch:['_','_','_','_','_','_','_','_','_','_','_','_','_','_'],
+      metrics:{
+        load:  {title:'Total load', unit:'kg', latest:540, delta:'+14.9%', deltaLabel:'vs first session', caption:'Sum of working-set weights · excludes reps', note:'Definition provisional', axis:'Summed set load (kg)', foot:'6 gym sessions · Confirmed records', pts:mk(D1,[470,485,500,510,525,540])},
+        reps:  {title:'Total reps', unit:'reps', latest:7, delta:'+40.0%', deltaLabel:'vs first session', caption:'Completed repetitions across confirmed working sets.', note:'', axis:'Reps', foot:'6 gym sessions · Confirmed records', pts:mk(D1,[5,6,6,7,7,7])},
+        volume:{title:'Total volume', type:'line', unit:'kg·reps', latest:760, delta:'+26.7%', deltaLabel:'vs first session', caption:'Sum of weight × completed reps across working sets', note:'', axis:'Volume (kg·reps)', foot:'6 gym sessions · Confirmed records', yMin:400, yMax:1000, step:200, pts:mk(D1,[600,630,660,690,720,760])},
+        body:{
+          weight:{latest:76.8, delta:'-0.2 kg', since:'since 10 Sep', unit:'kg', color:'blue', yMin:75, yMax:78, step:1, pts:[['10 Sep',77.0],['07 Oct',76.8]]},
+          bodyfat:{latest:12.3, delta:'-0.2 percentage points', since:'since 10 Sep', unit:'%', color:'green', yMin:11, yMax:14, step:1, pts:[['10 Sep',12.5],['07 Oct',12.3]]},
+          measurements:2, latestDate:'07 Oct 2026', xlabels:D1, note:'Insufficient readings to establish a trend.'
+        }
+      },
+      ai:['Total load rose 14.9% across six gym sessions.','Triceps pushdown is the captured lift.','6 gym sessions attended in this period.','Body composition has two recorded measurements.'],
+      aiUpd:'Updated 07 Oct 2026',
+      session:{name:'Upper push', date:'07 Oct', loc:'Gym 1', ex:'Triceps pushdown', reviews:0}
+  },
+  20:{ num:20, pos:'Defender', height:'184 cm', weight:'79.4 kg', latest:'07 Oct 2026', range:'10 Sep – 07 Oct 2026', att:5,
+      gym:  ['g','_','_','g','_','_','g','_','_','g','_','_','g','_'],
+      pitch:['_','_','_','_','_','_','_','_','_','_','_','_','_','_'],
+      metrics:{
+        load:  {title:'Total load', unit:'kg', latest:700, delta:'+14.8%', deltaLabel:'vs first session', caption:'Sum of working-set weights · excludes reps', note:'Definition provisional', axis:'Summed set load (kg)', foot:'6 gym sessions · Confirmed records', pts:mk(D1,[610,630,650,665,685,700])},
+        reps:  {title:'Total reps', unit:'reps', latest:3, delta:'+50.0%', deltaLabel:'vs first session', caption:'Completed repetitions across confirmed working sets.', note:'', axis:'Reps', foot:'6 gym sessions · Confirmed records', pts:mk(D1,[2,2,3,3,3,3])},
+        volume:{title:'Total volume', type:'line', unit:'kg·reps', latest:420, delta:'+31.3%', deltaLabel:'vs first session', caption:'Sum of weight × completed reps across working sets', note:'', axis:'Volume (kg·reps)', foot:'6 gym sessions · Confirmed records', yMin:200, yMax:600, step:100, pts:mk(D1,[320,350,360,380,400,420])},
+        body:{
+          weight:{latest:79.4, delta:'-0.3 kg', since:'since 10 Sep', unit:'kg', color:'blue', yMin:78, yMax:81, step:1, pts:[['10 Sep',79.7],['07 Oct',79.4]]},
+          bodyfat:{latest:12.6, delta:'-0.2 percentage points', since:'since 10 Sep', unit:'%', color:'green', yMin:11, yMax:14, step:1, pts:[['10 Sep',12.8],['07 Oct',12.6]]},
+          measurements:2, latestDate:'07 Oct 2026', xlabels:D1, note:'Insufficient readings to establish a trend.'
+        }
+      },
+      ai:['Total load rose 14.8% across six gym sessions.','Leg curl is the single captured set so far.','5 gym sessions attended in this period.','Body composition has two recorded measurements.'],
+      aiUpd:'Updated 07 Oct 2026',
+      session:{name:'Posterior chain', date:'07 Oct', loc:'Gym 2', ex:'Leg curl', reviews:0}
+  },
+  16:{ num:16, pos:'Midfielder', height:'182 cm', weight:'78.0 kg', latest:'27 Sep 2026', range:'—', att:0, notObserved:true,
+      gym:['_','_','_','_','_','_','_','_','_','_','_','_','_','_'], pitch:['_','_','_','_','_','_','_','_','_','_','_','_','_','_']
+  }
+};
+const ORDER=[1,2,3,8,12,13,16,20,24];
+
+/* ============ STATE ============ */
+const params=new URLSearchParams(location.search);
+let cur=parseInt(params.get('p'),10); if(!PLAYERS[cur]) cur=1;
+let metric='load';
+
+/* ============ HELPERS ============ */
+function icons(){ if(window.lucide) lucide.createIcons(); }
+function pad(n){return String(n);}
+function fmt(n){return Number(n).toLocaleString('en-US');}
+function alertSVG(){return '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="currentColor"/><rect x="11" y="6.6" width="2" height="7.2" rx="1" fill="#fff"/><circle cx="12" cy="17" r="1.25" fill="#fff"/></svg>';}
+function niceMax(max){
+  const raw=max/4, pow=Math.pow(10,Math.floor(Math.log10(raw))), n=raw/pow;
+  let step; if(n<=1)step=1;else if(n<=1.5)step=1.5;else if(n<=2)step=2;else if(n<=3)step=3;else if(n<=4)step=4;else if(n<=5)step=5;else if(n<=6)step=6;else if(n<=8)step=8;else step=10;
+  return step*pow*4;
+}
+
+/* ============ RENDER: SWITCH + HERO ============ */
+function renderSwitch(){
+  document.getElementById('pdSwitch').innerHTML=ORDER.map(n=>`<button class="${n===cur?'on':''}" data-n="${n}">Player ${pad(n)}</button>`).join('');
+}
+function renderHero(){
+  const p=PLAYERS[cur];
+  document.getElementById('rangeLbl').textContent=p.range;
+  document.getElementById('pdHero').innerHTML=`
+    <div class="pd-hero-l">
+      <div class="pd-ava"><img src="https://randomuser.me/api/portraits/men/${p.num}.jpg" alt=""></div>
+      <div class="pd-id">
+        <div class="pd-eyebrow">${pad(p.num)} &middot; First team</div>
+        <div class="pd-name">Player ${pad(p.num)}</div>
+        <div class="pd-role">${p.pos}</div>
+      </div>
+      <div class="pd-stats">
+        <div class="pd-stat"><div class="pd-slab">Height</div><div class="pd-sval">${p.height}</div></div>
+        <div class="pd-stat"><div class="pd-slab">Weight</div><div class="pd-sval">${p.weight}</div></div>
+        <div class="pd-stat"><div class="pd-slab">Latest session</div><div class="pd-sval">${p.latest}</div></div>
+      </div>
+    </div>
+    <button class="pd-share" aria-label="Share"><i data-lucide="share"></i></button>`;
+}
+
+/* ============ RENDER: PERFORMANCE + CHART ============ */
+function chartHTML(m){ return m.type==='line' ? lineChartHTML(m) : barChartHTML(m); }
+function barChartHTML(m){
+  const pts=m.pts, vals=pts.map(p=>p[1]), yMax=niceMax(Math.max(...vals)), step=yMax/4;
+  let grid='';
+  for(let i=0;i<=4;i++){ const t=i*step, top=(1-t/yMax)*100; grid+=`<div class="gl" style="top:${top}%"></div><div class="ylab" style="top:${top}%">${fmt(t)}</div>`; }
+  const bars=pts.map((p,i)=>{
+    const h=(p[1]/yMax)*100, act=(i===pts.length-1);
+    const tip=act?`<div class="btip">${p[0]} &middot; ${fmt(p[1])}${m.unit?(' '+m.unit):''}</div>`:'';
+    return `<div class="bcol"><div class="bar${act?' act':''}" style="height:${h}%"><div class="bval">${fmt(p[1])}</div>${tip}</div></div>`;
+  }).join('');
+  const xs=pts.map(p=>`<div class="xlab">${p[0]}</div>`).join('');
+  return `<div class="chart"><div class="plot">${grid}<div class="bars">${bars}</div></div><div class="xaxis">${xs}</div></div>`;
+}
+function lineChartHTML(m){
+  const pts=m.pts, n=pts.length, yMin=m.yMin, yMax=m.yMax, step=m.step;
+  const xOf=i=>((i+0.5)/n*100), yOf=v=>((1-(v-yMin)/(yMax-yMin))*100);
+  let grid='';
+  for(let t=yMin;t<=yMax+0.001;t+=step){ const top=yOf(t); grid+=`<div class="gl" style="top:${top}%"></div><div class="ylab" style="top:${top}%">${fmt(Math.round(t))}</div>`; }
+  const poly=pts.map((p,i)=>`${xOf(i).toFixed(2)},${yOf(p[1]).toFixed(2)}`).join(' ');
+  const svg=`<svg class="lsvg" viewBox="0 0 100 100" preserveAspectRatio="none"><polyline points="${poly}" fill="none" stroke="var(--color-primary)" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
+  const dots=pts.map((p,i)=>{const act=i===n-1;return `<div class="ldot${act?' act':''}" style="left:${xOf(i)}%;top:${yOf(p[1])}%"></div>`;}).join('');
+  const li=n-1, lx=xOf(li), ly=yOf(pts[li][1]);
+  const drop=`<div class="ldrop" style="left:${lx}%;top:${ly}%;height:${(100-ly).toFixed(2)}%"></div>`;
+  const tip=`<div class="ltip" style="left:${lx}%;top:${ly}%">${pts[li][0]} &middot; ${fmt(pts[li][1])}${m.unit?(' '+m.unit):''}</div>`;
+  const xs=pts.map(p=>`<div class="xlab">${p[0]}</div>`).join('');
+  return `<div class="chart"><div class="plot">${grid}${svg}${drop}${dots}${tip}</div><div class="xaxis">${xs}</div></div>`;
+}
+function renderPerf(){
+  const m=PLAYERS[cur].metrics[metric];
+  const body=document.getElementById('perfBody');
+  if(metric==='body'){
+    body.innerHTML=bodyHTML(m);
+  } else {
+    const val=fmt(m.latest)+(m.unit?(' '+m.unit):'');
+    body.innerHTML=`
+      <div class="metric">
+        <div class="m-label">${m.title}</div>
+        <div class="m-row"><div class="m-val">${val}</div><div class="m-sep"></div><div class="m-delta"><b>${m.delta}</b> ${m.deltaLabel}</div></div>
+        <div class="m-sub">Latest session</div>
+        <div class="m-cap">${m.caption}${m.note?`<i data-lucide="info" class="i"></i><span>${m.note}</span>`:''}</div>
+        <div class="m-axis">${m.axis}</div>
+        ${chartHTML(m)}
+        <div class="m-foot">${m.foot}</div>
+      </div>`;
+  }
+  document.querySelectorAll('#perfTabs .ptab2').forEach(t=>t.classList.toggle('on',t.dataset.m===metric));
+}
+function bodyHTML(b){
+  return `<div class="bodycomp">
+    ${bcBlock('Weight', b.weight, b)}
+    ${bcBlock('Body fat', b.bodyfat, b)}
+    <div class="bc-note"><i data-lucide="info"></i>${b.note}</div>
+  </div>`;
+}
+function bcBlock(name, s, b){
+  const valTxt = s.unit==='%' ? `${s.latest}%` : `${s.latest} ${s.unit}`;
+  return `<div class="bc-block">
+    <div class="bc-head">
+      <div class="bc-hl"><div class="bc-name">${name}</div><div class="bc-val">${valTxt}</div><div class="bc-sep"></div><div class="bc-delta"><span class="d">${s.delta}</span> ${s.since}</div></div>
+      <div class="bc-meta">${b.measurements} recorded measurements &middot; Latest ${b.latestDate}</div>
+    </div>
+    ${scatterHTML(s, b.xlabels)}
+  </div>`;
+}
+function scatterHTML(s, xl){
+  const n=xl.length, yMin=s.yMin, yMax=s.yMax, step=s.step;
+  const xOf=i=>((i+0.5)/n*100), yOf=v=>((1-(v-yMin)/(yMax-yMin))*100);
+  let grid='';
+  for(let t=yMin;t<=yMax+0.001;t+=step){ const top=yOf(t); grid+=`<div class="gl" style="top:${top}%"></div><div class="ylab" style="top:${top}%">${fmt(t)}</div>`; }
+  const idxs=[0,n-1];
+  const marks=s.pts.map((p,k)=>{
+    const xi=idxs[k], x=xOf(xi), y=yOf(p[1]);
+    const lab = s.unit==='%' ? `${p[1]}%` : `${p[1]} ${s.unit}`;
+    return `<div class="sdot ${s.color}" style="left:${x}%;top:${y}%"></div><div class="slabel" style="left:${x}%;top:${y}%">${lab}</div>`;
+  }).join('');
+  const xs=xl.map(d=>`<div class="xlab">${d}</div>`).join('');
+  return `<div class="chart bc-chart"><div class="plot">${grid}${marks}</div><div class="xaxis">${xs}</div></div>`;
+}
+
+/* ============ RENDER: ATTENDANCE + AI + SESSION ============ */
+function attCell(s){
+  if(s==='g') return '<div class="acell"><span class="sq gym"></span></div>';
+  if(s==='p') return '<div class="acell"><span class="sq pitch"></span></div>';
+  if(s==='m') return '<div class="acell"><span class="sq miss"></span></div>';
+  return '<div class="acell"><span class="dash">&ndash;</span></div>';
+}
+function renderAtt(){
+  const p=PLAYERS[cur];
+  const gymN=p.gym.filter(x=>x==='g').length;
+  document.getElementById('attBody').innerHTML=`
+    <div class="sec-row"><div class="sec-h">Attendance</div><div class="sec-sub">Last 14 days</div></div>
+    <div class="att-count"><b>${gymN}</b> gym sessions attended</div>
+    <div class="attgrid">
+      <div class="attrow head"><div class="attlab"></div>${DAYS.map(d=>`<div class="attday">${d}</div>`).join('')}</div>
+      <div class="attrow"><div class="attlab">Gym</div>${p.gym.map(attCell).join('')}</div>
+    </div>
+    <div class="attlegend">
+      <div class="lg"><span class="sq gym"></span>Gym</div>
+      <div class="lg"><span class="dash">&ndash;</span>Not scheduled</div>
+    </div>`;
+}
+function renderAI(){
+  const p=PLAYERS[cur];
+  document.getElementById('aiBody').innerHTML=`
+    <div class="ai-title"><i data-lucide="sparkles"></i>AI summary</div>
+    <div class="ai-sub">Based on confirmed records</div>
+    <div class="ai-list">${p.ai.map(t=>`<p>${t}</p>`).join('')}</div>
+    <div class="ai-upd">${p.aiUpd}</div>`;
+}
+function renderSession(){
+  const s=PLAYERS[cur].session;
+  const review = s.reviews>0
+    ? `<span class="lgs-review">${alertSVG()}${s.reviews} item${s.reviews>1?'s':''} ${s.reviews>1?'need':'needs'} review</span>`
+    : `<span class="lgs-ok"><i data-lucide="check-circle-2"></i>No items need review</span>`;
+  document.getElementById('lgsBody').innerHTML=`
+    <div class="lgs-l">
+      <div class="lgs-title">Latest gym session</div>
+      <div class="lgs-body">
+        <div class="lgs-meta"><b>${s.name}</b> &middot; ${s.date} &middot; ${s.loc}</div>
+        <div class="lgs-exrow"><span class="lgs-ex">${s.ex}</span>${review}</div>
+      </div>
+    </div>
+    <a class="lgs-view" href="Meridian%20%E2%80%94%20Gym%20(session%20overview%20v3).html">View session <i data-lucide="arrow-right"></i></a>`;
+}
+
+function renderAll(){
+  const p=PLAYERS[cur]; const notObs=!!p.notObserved;
+  renderSwitch(); renderHero();
+  document.getElementById('pdObsContent').style.display=notObs?'none':'';
+  document.getElementById('pdNotObs').style.display=notObs?'':'none';
+  if(!notObs){ renderPerf(); renderAtt(); renderAI(); renderSession(); }
+  icons();
+}
+
+/* ============ WIRING ============ */
+document.getElementById('pdSwitch').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b)return; cur=parseInt(b.dataset.n,10); metric='load'; renderAll(); });
+document.getElementById('perfTabs').addEventListener('click',e=>{ const t=e.target.closest('.ptab2'); if(!t)return; metric=t.dataset.m; renderPerf(); icons(); });
+
+renderAll();
+
+/* ============ PLAN-A-SESSION METHOD PICKER ============ */
+const PLAN_METHODS=[
+  {icon:'mic',label:'Voice record',desc:'Talk through the session. We transcribe and structure it.'},
+  {icon:'keyboard',label:'Type it out',desc:'Build the plan by hand with exercises, sets and reps.'},
+  {icon:'link',label:'Connect your AMS',desc:'Pull the plan from your athlete management system.'},
+  {icon:'upload',label:'Upload a plan',desc:'Import a file: PDF, spreadsheet or document.'},
+  {icon:'camera',label:'Take a photo',desc:'Snap a handwritten plan and we digitise it.'},
+  {icon:'layout-template',label:'Start from a template',desc:'Begin from a saved preset or an existing programme.'},
+];
+function pmToast(msg){ var t=document.getElementById('m-toast'); if(!t){t=document.createElement('div');t.id='m-toast';t.style.cssText='position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#111827;color:#fff;font-weight:600;font-size:13px;padding:11px 16px;border-radius:10px;box-shadow:0 10px 30px rgba(15,23,42,.25);z-index:9999;opacity:0;transition:opacity .18s;pointer-events:none';document.body.appendChild(t);} t.textContent=msg; requestAnimationFrame(function(){t.style.opacity='1';}); clearTimeout(t._h); t._h=setTimeout(function(){t.style.opacity='0';},2200); }
+function renderPlanModal(){ document.getElementById('pmGrid').innerHTML=PLAN_METHODS.map((m,i)=>`<button class="pm-card" data-i="${i}"><span class="pm-ic"><i data-lucide="${m.icon}"></i></span><span class="pm-ct"><span class="pm-cl">${m.label}</span><span class="pm-cd">${m.desc}</span></span></button>`).join(''); icons(); }
+function openPlanModal(){ document.getElementById('planScrim').classList.add('open'); document.getElementById('planModal').classList.add('open'); }
+function closePlanModal(){ document.getElementById('planScrim').classList.remove('open'); document.getElementById('planModal').classList.remove('open'); }
+document.getElementById('planScrim').onclick=closePlanModal;
+document.getElementById('planClose').onclick=closePlanModal;
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closePlanModal(); });
+document.getElementById('pmGrid').addEventListener('click',function(e){ const c=e.target.closest('.pm-card'); if(!c)return; const m=PLAN_METHODS[+c.dataset.i]; closePlanModal(); pmToast(m.label+' \u00b7 coming soon'); });
+document.addEventListener('click',function(e){ if(e.target.closest('.sidecta')) openPlanModal(); });
+renderPlanModal();
+
+/* ============ NOTIFICATIONS DROPDOWN ============ */
+(function(){
+  var NOTIFS=[
+    {type:'proc',   icon:'loader',         t:'Rehab session is processing',          s:'Attendance & highlights will appear once it finishes.', time:'2m',  unread:true},
+    {type:'review', icon:'alert-circle',   t:'Player 07 — full set needs confirmation', s:'Upper push · 2 of ? sets recorded',                time:'18m', unread:true},
+    {type:'ok',     icon:'check-circle-2', t:'Strength session processed',           s:'Ready to review · 21 players',                          time:'1h',  unread:false},
+    {type:'review', icon:'alert-circle',   t:'Player 18 — set left unconfirmed',     s:'Lower body · capture ended mid-set',                    time:'3h',  unread:false}
+  ];
+  var panel=null;
+  function ic(){ if(window.lucide) lucide.createIcons(); }
+  function bell(){ return document.querySelector('.tbi[aria-label="Notifications"]'); }
+  function clearDot(){ var b=bell(); if(b){ var d=b.querySelector('.dot'); if(d) d.style.display='none'; } }
+  function build(){
+    panel=document.createElement('div'); panel.className='notif-pop'; panel.id='notifPop';
+    panel.innerHTML='<div class="notif-head"><h4>Notifications</h4><button class="notif-mark" id="notifMark">Mark all read</button></div>'
+      +'<div class="notif-list">'+NOTIFS.map(function(n){return '<div class="notif-item'+(n.unread?' unread':'')+'"><div class="notif-ic '+n.type+'"><i data-lucide="'+n.icon+'"></i></div><div class="notif-tx"><div class="notif-t">'+n.t+'</div><div class="notif-s">'+n.s+'</div></div><div class="notif-time">'+n.time+'</div></div>';}).join('')+'</div>'
+      +'<div class="notif-foot"><a>View all activity</a></div>';
+    document.body.appendChild(panel); ic();
+    panel.addEventListener('click',function(e){ e.stopPropagation(); if(e.target.closest('#notifMark')){ panel.querySelectorAll('.notif-item.unread').forEach(function(x){x.classList.remove('unread');}); clearDot(); } });
+  }
+  function toggle(){ if(!panel) build(); var open=panel.classList.toggle('open'); if(open) clearDot(); }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('.tbi[aria-label="Notifications"]');
+    if(b){ e.stopPropagation(); toggle(); return; }
+    if(panel && panel.classList.contains('open') && !e.target.closest('#notifPop')) panel.classList.remove('open');
+  });
+})();
+
+/* ============ MERIDIAN SHELL ============ */
+(function(){
+  var HOME="Meridian%20%E2%80%94%20Home%20(week)%20v1.html";
+  var GYM="Meridian%20%E2%80%94%20Gym%20(session%20overview%20v3).html";
+  var PITCH="Meridian%20%E2%80%94%20Pitch%20(session%20overview%20v1).html";
+  var PLAYERS_HREF="Meridian%20%E2%80%94%20Players%20v1.html";
+  var NAV=[
+    {k:'home',label:'Home',icon:'home',href:HOME,solid:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.33 2.56a1 1 0 0 1 1.34 0l8 7.17a1 1 0 0 1 .33.74V20a1.5 1.5 0 0 1-1.5 1.5H15V15.5a1.5 1.5 0 0 0-1.5-1.5h-3A1.5 1.5 0 0 0 9 15.5V21.5H4.5A1.5 1.5 0 0 1 3 20v-9.53a1 1 0 0 1 .33-.74z"/></svg>'},
+    {k:'gym',label:'Gym sessions',icon:'dumbbell',href:GYM,line:'<svg viewBox="0 0 256 256" fill="currentColor"><path d="M248,120h-8V88a16,16,0,0,0-16-16H208V64a16,16,0,0,0-16-16H168a16,16,0,0,0-16,16v56H104V64A16,16,0,0,0,88,48H64A16,16,0,0,0,48,64v8H32A16,16,0,0,0,16,88v32H8a8,8,0,0,0,0,16h8v32a16,16,0,0,0,16,16H48v8a16,16,0,0,0,16,16H88a16,16,0,0,0,16-16V136h48v56a16,16,0,0,0,16,16h24a16,16,0,0,0,16-16v-8h16a16,16,0,0,0,16-16V136h8a8,8,0,0,0,0-16ZM32,168V88H48v80Zm56,24H64V64H88V192Zm104,0H168V64h24V175.82c0,.06,0,.12,0,.18s0,.12,0,.18V192Zm32-24H208V88h16Z"/></svg>',solid:'<svg viewBox="0 0 256 256" fill="currentColor"><path d="M200,64V192a16,16,0,0,1-16,16H168a16,16,0,0,1-16-16V136H104v56a16,16,0,0,1-16,16H72a16,16,0,0,1-16-16V64A16,16,0,0,1,72,48H88a16,16,0,0,1,16,16v56h48V64a16,16,0,0,1,16-16h16A16,16,0,0,1,200,64ZM36,72H32A16,16,0,0,0,16,88v32H8.27A8.18,8.18,0,0,0,0,127.47,8,8,0,0,0,8,136h8v32a16,16,0,0,0,16,16h4a4,4,0,0,0,4-4V76A4,4,0,0,0,36,72Zm220,55.47a8.18,8.18,0,0,0-8.25-7.47H240V88a16,16,0,0,0-16-16h-4a4,4,0,0,0-4,4V180a4,4,0,0,0,4,4h4a16,16,0,0,0,16-16V136h8A8,8,0,0,0,256,127.47Z"/></svg>'},
+    {k:'pitch',label:'Pitch sessions',href:PITCH,line:'<svg viewBox="0 0 512 512" fill="currentColor"><path d="M477 61H35A35 35 0 0 0 0 96v320a35 35 0 0 0 35 35h442a35 35 0 0 0 35-35V96a35 35 0 0 0-35-35M256 321a65 65 0 1 1 65-65 65.08 65.08 0 0 1-65 65M30 191h55a5 5 0 0 1 5 5v120a5 5 0 0 1-5 5H30zm0 225v-65h55a35 35 0 0 0 35-35V196a35 35 0 0 0-35-35H30V96a5 5 0 0 1 5-5h206v71.19a95 95 0 0 0 0 187.62V421H35a5 5 0 0 1-5-5m447 5H271v-71.19a95 95 0 0 0 0-187.62V91h206a5 5 0 0 1 5 5v65h-55a35 35 0 0 0-35 35v120a35 35 0 0 0 35 35h55v65a5 5 0 0 1-5 5m5-230v130h-55a5 5 0 0 1-5-5V196a5 5 0 0 1 5-5z"/></svg>',solid:'<svg viewBox="0 0 512 512"><mask id="pf"><rect width="512" height="512" fill="#fff"/><g fill="none" stroke="#000" stroke-width="30" stroke-linejoin="round"><line x1="256" y1="61" x2="256" y2="451"/><circle cx="256" cy="256" r="60"/><path d="M0 171h74v170H0"/><path d="M512 171h-74v170h74"/></g></mask><rect x="0" y="61" width="512" height="390" rx="40" fill="currentColor" mask="url(#pf)"/></svg>'},
+    {k:'players',label:'Players',icon:'user',href:PLAYERS_HREF,solid:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7.5" r="4"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0 1 1 0 0 1-1 1h-13a1 1 0 0 1-1-1z"/></svg>'}
+  ];
+  function esc(s){return (s==null?'':String(s));}
+  window.MeridianShell=function(o){
+    o=o||{}; var club=o.club||'Northbank FC', active=o.active||'', badge=(o.badge==null?'':o.badge);
+    var actions=o.actions||[], topActs=actions.filter(a=>!a.primary), primary=actions.filter(a=>a.primary)[0];
+    var acts=topActs.map(function(a){
+      if(a.iconOnly) return '<button class="tbi" aria-label="'+esc(a.label||'')+'">'+(a.icon?'<i data-lucide="'+a.icon+'"></i>':'')+(a.dot?'<span class="dot"></span>':'')+'</button>';
+      return '<button class="btn">'+(a.icon?'<i data-lucide="'+a.icon+'"></i>':'')+esc(a.label)+'</button>';
+    }).join('');
+    var clubHTML=o.hideClub?'':'<span class="topclub">'+esc(club)+'</span>';
+    var logo='<svg class="brandlogo" viewBox="0 0 745 158" fill="currentColor"><path d="M12 97 L93 24 C102 15 110 12 117 12 C132 12 141 22 141 36 L141 89 Q141 95 145 91 L173 64 C181 56 187 54 194 54 C207 54 215 63 219 77 C222 87 223 98 223 113 L223 146 L211 146 C198 146 191 141 191 129 L191 98 Q191 92 187 94 L153 128 C144 138 134 143 123 143 C106 143 96 133 96 116 L96 65 Q96 59 92 63 L42 111 C35 118 27 124 16 124 Q12 124 12 119 Z"></path><g transform="translate(7,0) translate(259,125) scale(1.18) translate(-259,-125)"><path d="M259 125 V72 Q264 70 271 71 V77 C275 72 281 70 288 70 C295 70 301 73 304 79 C309 73 315 70 322 70 C332 70 337 78 337 93 V125 H324 V93 C324 85 321 82 315 82 C308 82 304 87 304 95 V125 H291 V93 C291 85 287 82 281 82 C274 82 271 87 271 95 V125 Z"></path><path fill-rule="evenodd" d="M370 70 C354 70 343 81 343 98 C343 115 354 126 371 126 C382 126 390 121 395 113 L385 107 C382 112 377 115 371 115 C363 115 357 110 356 102 H397 V98 C397 81 387 70 370 70 Z M356 92 H384 C382 84 378 81 370 81 C363 81 358 85 356 92 Z"></path><path d="M403 125 V73 Q407 70 415 71 V79 C419 72 426 69 434 71 V83 C422 82 416 88 416 98 V125 Z"></path><path d="M440 71 H453 V125 H440 Z"></path><circle cx="446.5" cy="54" r="8.4"></circle><path fill-rule="evenodd" d="M503 47 H515 V125 H503 V118 C499 123 492 126 485 126 C469 126 458 114 458 98 C458 82 469 70 485 70 C492 70 499 73 503 78 Z M487 82 C477 82 471 88 471 98 C471 108 477 114 487 114 C496 114 503 108 503 98 C503 88 496 82 487 82 Z"></path><path d="M525 71 H538 V125 H525 Z"></path><circle cx="531.5" cy="54" r="8.4"></circle><path fill-rule="evenodd" d="M547 83 C551 74 559 70 570 70 C586 70 594 78 594 92 V113 C594 118 594.5 122 595 125 H583 L581 120 C577 124 571 126 564 126 C552 126 545 120 545 110 C545 99 554 95 567 93 L581 91 C580 84 576 81 569 81 C563 81 559 83 557 87 Z M581 101 L569 103 C561 104 557 107 557 111 C557 115 560 117 566 117 C575 117 581 112 581 104 Z"></path><path d="M603 125 V73 Q608 70 615 71 V78 C619 73 625 70 632 70 C646 70 653 79 653 93 V125 H640 V94 C640 86 636 82 630 82 C621 82 616 87 616 96 V125 Z"></path></g></svg>';
+    var top='<header class="topbar"><button class="navtoggle" id="navToggle" aria-label="Collapse navigation"><i data-lucide="panel-left"></i></button><div class="brand">'+logo+'</div><span class="sp"></span>'+clubHTML+acts+'</header>';
+    var items='';
+    NAV.forEach(function(n){
+      if(n.group){items+='<div class="grp eyebrow">'+n.group+'</div>';return;}
+      var isA=(n.k===active), href=n.href||'', bh=n.badge?'<span class="badge" id="navBadge">'+esc(badge)+'</span>':'';
+      var lin=n.line||'<i data-lucide="'+n.icon+'"></i>', ic=isA?(n.solid||lin):lin;
+      items+='<a class="nav'+(isA?' active':'')+(href?'':' disabled')+'"'+(href?' href="'+href+'"':' aria-disabled="true"')+'>'+ic+'<span class="lbl">'+n.label+'</span>'+bh+'</a>';
+    });
+    var cta=primary?'<button class="btn sidecta"><i data-lucide="'+(primary.icon||'plus')+'"></i><span class="lbl">'+esc(primary.label)+'</span></button>':'';
+    var foot='<div class="side-foot">'+cta+'<div class="profile"><div class="avatar"><img src="https://randomuser.me/api/portraits/men/41.jpg" alt=""></div><span class="pname lbl">Aman</span></div></div>';
+    var th=document.getElementById('shell-top'); if(th) th.outerHTML=top;
+    var sh=document.getElementById('shell-side'); if(sh) sh.outerHTML='<aside class="side">'+items+foot+'</aside>';
+    try{ if(localStorage.getItem('meridian-nav-collapsed')==='1') document.body.classList.add('nav-collapsed'); }catch(e){}
+    var tg=document.getElementById('navToggle'); if(tg) tg.onclick=function(){ var cc=document.body.classList.toggle('nav-collapsed'); try{localStorage.setItem('meridian-nav-collapsed',cc?'1':'0');}catch(e){} };
+    icons();
+  };
+})();
+MeridianShell({active:'players',club:'Northbank FC',actions:[{label:'Plan a session',icon:'plus',primary:true}]});
+/* ============ TOP SEARCH BAR ============ */
+(function(){
+  var SP=[{num:1,pos:'Midfielder'},{num:2,pos:'Forward'},{num:3,pos:'Defender'},{num:8,pos:'Forward'},{num:12,pos:'Midfielder'},{num:13,pos:'Defender'},{num:16,pos:'Midfielder'},{num:20,pos:'Defender'},{num:24,pos:'Defender'}];
+  function pad(n){return String(n);}
+  function href(n){return 'Meridian%20%E2%80%94%20Player%20detail%20v1.html?p='+n;}
+  var tb=document.querySelector('.topbar'); if(!tb || tb.querySelector('.topsearch')) return;
+  var box=document.createElement('div'); box.className='topsearch';
+  box.innerHTML='<i data-lucide="search"></i><input type="text" placeholder="Search players" aria-label="Search players"><div class="topsearch-results" id="tsResults"></div>';
+  tb.appendChild(box);
+  if(window.lucide) lucide.createIcons();
+  var input=box.querySelector('input'), res=box.querySelector('#tsResults');
+  function matches(q){ q=(q||'').trim().toLowerCase(); return SP.filter(function(p){ return !q || ('player '+pad(p.num)).indexOf(q)>=0 || String(p.num).indexOf(q)>=0 || p.pos.toLowerCase().indexOf(q)>=0; }); }
+  function render(){ var q=input.value.trim(); if(!q){ res.classList.remove('open'); res.innerHTML=''; return; } var list=matches(q); res.innerHTML = list.length ? list.map(function(p){ return '<a class="ts-item" href="'+href(p.num)+'"><span class="ts-ava"><img src="https://randomuser.me/api/portraits/men/'+p.num+'.jpg" alt=""></span><span class="ts-col"><span class="ts-name">Player '+pad(p.num)+'</span><span class="ts-sub">'+p.pos+'</span></span></a>'; }).join('') : '<div class="ts-empty">No players found</div>'; res.classList.add('open'); }
+  input.addEventListener('input',render);
+  input.addEventListener('focus',function(){ if(input.value.trim()) render(); });
+  input.addEventListener('keydown',function(e){ if(e.key==='Enter'){ var list=matches(input.value); if(list.length) location.href=href(list[0].num); } });
+  document.addEventListener('click',function(e){ if(!e.target.closest('.topsearch')) res.classList.remove('open'); });
+})();
+</script>
+</body>
+</html>
