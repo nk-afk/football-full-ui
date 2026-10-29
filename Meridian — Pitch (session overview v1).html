@@ -1293,6 +1293,42 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .reconbox li{display:flex;gap:11px;padding:8px 0;font-size:13px;color:var(--color-text);counter-increment:r}
 .reconbox li::before{content:counter(r);width:22px;height:22px;flex:none;border-radius:50%;background:#fff;border:1px solid var(--color-warning-soft);color:var(--color-warning-ink);font-size:12px;font-weight:700;display:grid;place-items:center}
 </style>
+<style>
+/* ======================== SESSION PLAN ======================== */
+.plan-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:16px;align-items:start}
+@media(max-width:1000px){.plan-grid{grid-template-columns:1fr}}
+.timeline2{position:relative}
+.pb{display:grid;grid-template-columns:52px 1fr;gap:12px}
+.pb-time{font-size:12px;font-weight:700;color:var(--color-text-soft);font-variant-numeric:tabular-nums;text-align:right;padding-top:14px}
+.pb-body{position:relative;border-left:2px solid var(--color-border);padding:0 0 16px 20px}
+.pb:last-child .pb-body{border-left-color:transparent;padding-bottom:0}
+.pb-dot{position:absolute;left:-7px;top:16px;width:12px;height:12px;border-radius:50%;background:var(--color-primary);border:2px solid var(--color-surface);box-shadow:0 0 0 1px var(--color-border)}
+.pb.rest .pb-dot{background:var(--color-text-disabled);width:9px;height:9px;left:-5px;top:14px}
+.pb-card{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--r-lg);padding:13px 15px;box-shadow:var(--shadow-card)}
+.pb.rest .pb-card{background:var(--color-surface-subtle);box-shadow:none;padding:8px 14px;border-style:dashed}
+.pb-top{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.pb-t{font-size:15px;font-weight:700;color:var(--color-text)}
+.pb-dur{font-size:11px;font-weight:700;color:var(--color-primary-text);background:var(--color-primary-soft);border-radius:var(--r-pill);padding:2px 9px}
+.pb-area{font-size:12px;color:var(--color-text-soft)}
+.pb-focus{font-size:13px;color:var(--color-text);margin-top:7px;font-weight:600}
+.pb-pts{margin:7px 0 0;padding-left:17px;font-size:12.5px;color:var(--color-text-soft);line-height:1.65}
+.pb-link{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--color-primary-text);cursor:pointer;margin-top:10px}
+.pb-link svg{width:13px;height:13px}
+.plan-side .pcard+.pcard{margin-top:14px}
+.obj-row{display:flex;align-items:center;gap:11px;padding:10px 0;border-top:1px solid var(--color-border-subtle);cursor:pointer}
+.obj-row:first-of-type{border-top:0}
+.obj-row:hover .obj-t{color:var(--color-primary-text)}
+.obj-n{width:24px;height:24px;flex:none;border-radius:50%;background:var(--color-primary-soft);color:var(--color-primary-text);font-size:12px;font-weight:700;display:grid;place-items:center}
+.obj-m{flex:1;min-width:0}
+.obj-t{font-size:13px;font-weight:600;color:var(--color-text)}
+.obj-s{font-size:12px;color:var(--color-text-soft);margin-top:1px}
+.obj-ch{color:var(--color-text-disabled);display:flex}.obj-ch svg{width:16px;height:16px}
+.kvlist{display:flex;flex-direction:column}
+.kvrow{display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-top:1px solid var(--color-border-subtle);font-size:13px}
+.kvrow:first-child{border-top:0}
+.kvrow .kvk{color:var(--color-text-soft);white-space:nowrap}
+.kvrow .kvv{font-weight:600;text-align:right}
+</style>
 </head>
 <body>
 
@@ -1312,7 +1348,6 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
     </div>
     <div class="headacts">
       <button class="btn secondary-blue" id="planBtn"><i data-lucide="file-text"></i>Session plan</button>
-      <button class="btn" id="exportBtn"><i data-lucide="upload"></i>Export</button>
     </div>
   </div>
 
@@ -1375,7 +1410,7 @@ var INTEST='<span class="testtag">In testing</span>';
 
 var state={ tab:'overview', drill:null, analysis:0, moment:0, reviewView:'list', reviewIdx:0,
   ovSub:null, pView:'squad', pPlayer:'13', pSub:'session', reviewClip:13, srcOpen:false, srcTab:'sources', srcBack:'overview',
-  poss:'out', shapeTeam:'A' };
+  poss:'out', shapeTeam:'A', planOpen:false };
 var reviewDecisions={};
 
 var DRILLS=[
@@ -1419,18 +1454,19 @@ var TABS=[{k:'overview',label:'Overview'},{k:'drills',label:'Drills'},{k:'player
 function renderTabs(){
   var host=document.getElementById('themetabs');
   host.innerHTML=TABS.map(function(t){ var ct=t.ct; return '<button class="ttab'+(t.k===state.tab?' active':'')+'" data-tab="'+t.k+'">'+t.label+(ct?'<span class="tct num">'+ct+'</span>':'')+'</button>'; }).join('');
-  host.querySelectorAll('.ttab').forEach(function(b){ b.onclick=function(){ state.tab=b.dataset.tab; state.drill=null; state.ovSub=null; state.srcOpen=false; if(b.dataset.tab==='players') state.pView='squad'; if(b.dataset.tab==='review') state.reviewView='list'; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
+  host.querySelectorAll('.ttab').forEach(function(b){ b.onclick=function(){ state.tab=b.dataset.tab; state.drill=null; state.ovSub=null; state.srcOpen=false; state.planOpen=false; if(b.dataset.tab==='players') state.pView='squad'; if(b.dataset.tab==='review') state.reviewView='list'; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
 }
 function renderPane(){
   var host=document.getElementById('panes');
-  if(state.srcOpen){ host.innerHTML=sourcesPane(); }
+  if(state.planOpen){ host.innerHTML=planPane(); }
+  else if(state.srcOpen){ host.innerHTML=sourcesPane(); }
   else if(state.tab==='overview'){ host.innerHTML = state.ovSub==='drillload' ? drillLoadPane() : PANE.overview(); }
   else if(state.tab==='drills'){ if(!state.drill) state.drill=DRILLS[0].k; host.innerHTML=drillDetail(state.drill); }
   else if(state.tab==='players'){ host.innerHTML=playersPane(); }
   else if(state.tab==='review'){ host.innerHTML=PANE.review(); }
   else { host.innerHTML = PANE[state.tab]?PANE[state.tab]():''; }
   var rootView = (state.tab==='overview'&&!state.ovSub) || (state.tab==='players'&&state.pView==='squad') || (state.tab==='review'&&state.reviewView==='list');
-  var pf=document.getElementById('pgfoot'); if(pf) pf.style.display = (!state.srcOpen && rootView) ? '' : 'none';
+  var pf=document.getElementById('pgfoot'); if(pf) pf.style.display = (!state.srcOpen && !state.planOpen && rootView) ? '' : 'none';
   wirePane(); icons();
 }
 function openDrill(k,ai){ state.drill=k; state.analysis=ai||0; state.moment=0; state.tab='drills'; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }
@@ -1538,6 +1574,40 @@ function reconcileBox(full){
   var items=['Build-ups: report 15 vs live 14.','22:14 row: opponents 5 in report vs 7 live.','P06: 11 receipts vs 10 receptions.'];
   if(full) items=items.concat(['Review view labels 13 clips but the live build exposed 6 cards — the full 13-item library is populated here.','The Methods control opened only a placeholder; it is now this full sources map.']);
   return '<div class="reconbox"><div class="rh"><i data-lucide="alert-triangle"></i>Reconcile before release</div><ol>'+items.map(function(t){return '<li>'+t+'</li>';}).join('')+'</ol></div>';
+}
+
+/* ---------- SESSION PLAN ---------- */
+function kv(k,v){ return '<div class="kvrow"><span class="kvk">'+k+'</span><span class="kvv">'+v+'</span></div>'; }
+function planPane(){
+  var blocks=[
+    {t:'00:00',title:'Warm-up & 3v2',dur:'30 min',area:'Small-sided',focus:'Activate, then attacking 3v2 waves.',pts:['Dynamic mobility + hurdle hops 3×6','In 3v2, commit a defender before releasing','Finish first-time where it’s on'],drill:'warmup',ai:0},
+    {t:'30:00',title:'Reset & hydrate',dur:'4 min',rest:true},
+    {t:'34:00',title:'10v10 game',dur:'16 min',area:'60 × 45 m',tag:'Highest intensity',focus:'Pressing & counter-press.',pts:['Press the receiver within 2 s on the agreed cues','Win it back within 5 s of a turnover','Stay compact out of possession'],drill:'10v10',ai:0},
+    {t:'50:00',title:'Reset',dur:'4 min',rest:true},
+    {t:'54:00',title:'11v11',dur:'27 min',area:'75 × 55 m',focus:'Build-up & shape.',pts:['Play out from the goalkeeper under pressure','Break the first line — line-breaking passes','Hold back-line height and spacing'],drill:'11v11',ai:0},
+    {t:'81:00',title:'Reset',dur:'3 min',rest:true},
+    {t:'84:00',title:'Crossing & finishing',dur:'15 min',area:'Half-pitch',focus:'Deliveries & finishing.',pts:['Work near post, far post and cut-backs','Deliveries that reach an attacker first','First-time finishes'],drill:'crossing',ai:0},
+    {t:'99:00',title:'Cool-down & debrief',dur:'8 min',area:'Whole squad',focus:'Recovery and a quick clip review.',pts:['Light mobility and stretch','Flag 2–3 clips for the review queue']}
+  ];
+  var tl=blocks.map(function(b){
+    var card = b.rest
+      ? '<div class="pb-card"><div class="pb-top"><span class="pb-t" style="font-size:13px;color:var(--color-text-soft)">'+b.title+'</span><span class="pb-area">'+b.dur+'</span></div></div>'
+      : '<div class="pb-card"><div class="pb-top"><span class="pb-t">'+b.title+'</span><span class="pb-dur">'+b.dur+'</span>'+(b.area?'<span class="pb-area">'+b.area+'</span>':'')+(b.tag?'<span class="dchip" style="margin:0">'+b.tag+'</span>':'')+'</div>'
+        + '<div class="pb-focus">'+b.focus+'</div><ul class="pb-pts">'+b.pts.map(function(p){return '<li>'+p+'</li>';}).join('')+'</ul>'
+        + (b.drill?'<span class="pb-link" data-opendrill="'+b.drill+'" data-ai="'+b.ai+'">View analysis <i data-lucide="arrow-right"></i></span>':'')+'</div>';
+    return '<div class="pb'+(b.rest?' rest':'')+'"><div class="pb-time">'+b.t+'</div><div class="pb-body"><span class="pb-dot"></span>'+card+'</div></div>';
+  }).join('');
+  var left='<div class="pcard"><div class="pct" style="margin-bottom:14px">Session timeline <span style="font-weight:500;color:var(--color-text-soft);font-size:12px">88 min on the ball · 19 min warm-up, resets &amp; cool-down</span></div><div class="timeline2">'+tl+'</div></div>';
+  var objs=[['1','Counter-press within 5 s of a turnover','10v10 · Pressing',{drill:'10v10',ai:0}],['2','Build-up from the goalkeeper under pressure','11v11 · Build-up',{drill:'11v11',ai:0}],['3','Attacker-first crossing & finishing','Crossing · Deliveries',{drill:'crossing',ai:0}],['4','Scanning before receiving','Players · Scanning',{psub:'scanning'}]];
+  var objHtml=objs.map(function(o){ var t=o[3]; var attr=t.psub?('data-psub="'+t.psub+'"'):('data-opendrill="'+t.drill+'" data-ai="'+t.ai+'"'); return '<div class="obj-row" '+attr+'><span class="obj-n">'+o[0]+'</span><div class="obj-m"><div class="obj-t">'+o[1]+'</div><div class="obj-s">'+o[2]+'</div></div><span class="obj-ch"><i data-lucide="chevron-right"></i></span></div>';}).join('');
+  var side='<div class="plan-side"><div class="pcard"><div class="pct" style="margin-bottom:4px">Session objectives</div>'+objHtml+'</div>'
+    + '<div class="pcard"><div class="pct" style="margin-bottom:10px">Setup &amp; equipment</div><div class="kvlist">'
+      + kv('Pitches','60 × 45 m + 75 × 55 m')+kv('Goals','2 full + 4 mini')+kv('Bibs','Red / blue · 2 teams')+kv('Hurdles','6')+kv('GPS vests','19')+kv('Cameras','Wide 4K · sideline 50 fps')+'</div></div>'
+    + '<div class="pcard"><div class="pct" style="margin-bottom:10px">Squad &amp; groups</div><div class="kvlist">'
+      + kv('Squad','22 players')+kv('Team A','11 · blue')+kv('Team B','11 · red')+kv('Tracking','19 GPS · 3 video-only')+'</div><div class="footnote">Video-only: U01 + 2 goalkeepers. Sample plan · illustrative.</div></div></div>';
+  var head='<button class="backlink" data-planclose><i data-lucide="arrow-left"></i>Back to session</button>'
+    + '<div class="pagetitle"><div><h2>Session plan</h2><div class="ptsub">Training session F03 · Preseason · 22 players · 107 min elapsed</div></div><span class="selctl" data-toast="Export plan · illustrative"><i data-lucide="printer"></i>Export plan</span></div>';
+  return head + '<div class="plan-grid">'+left+side+'</div>' + srcLinkFoot();
 }
 
 /* ---------- DRILLS (list) ---------- */
@@ -2021,7 +2091,8 @@ function wirePane(){
   var host=document.getElementById('panes');
   host.querySelectorAll('[data-drill]').forEach(function(el){ el.onclick=function(){ openDrill(el.dataset.drill, +(el.dataset.ai||0)); }; });
   host.querySelectorAll('[data-opendrills]').forEach(function(el){ el.onclick=function(){ state.drill=null; state.tab='drills'; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
-  host.querySelectorAll('[data-go]').forEach(function(el){ el.onclick=function(){ state.drill=null; state.ovSub=null; state.srcOpen=false; state.tab=el.dataset.go; if(el.dataset.go==='review') state.reviewView='list'; if(el.dataset.go==='players') state.pView='squad'; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
+  host.querySelectorAll('[data-planclose]').forEach(function(el){ el.onclick=function(){ state.planOpen=false; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
+  host.querySelectorAll('[data-go]').forEach(function(el){ el.onclick=function(){ state.drill=null; state.ovSub=null; state.srcOpen=false; state.planOpen=false; state.tab=el.dataset.go; if(el.dataset.go==='review') state.reviewView='list'; if(el.dataset.go==='players') state.pView='squad'; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
   host.querySelectorAll('[data-drillload]').forEach(function(el){ el.onclick=function(){ state.tab='overview'; state.ovSub='drillload'; state.srcOpen=false; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
   host.querySelectorAll('[data-srcopen]').forEach(function(el){ el.onclick=function(){ state.srcBack=state.tab; state.srcOpen=true; state.srcTab='sources'; renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
   host.querySelectorAll('[data-srcgaps]').forEach(function(el){ el.onclick=function(){ state.srcBack=state.tab; state.srcOpen=true; state.srcTab='gaps'; renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
@@ -2053,8 +2124,7 @@ document.addEventListener('click',function(){ closeMenus(); });
 renderTabs();
 renderPane();
 document.addEventListener('click',function(e){ var r=e.target.closest('.rqb'); if(r){ var card=r.closest('.rqcard'); card.querySelector('.rqactions').innerHTML='<button class="rqb done"><i data-lucide="check-circle"></i>'+r.dataset.v+'</button>'; icons(); toast('Clip '+card.dataset.rq+' · '+r.dataset.v.toLowerCase()); } });
-var pb=document.getElementById('planBtn'); if(pb) pb.onclick=function(){ toast('Session plan · illustrative'); };
-var eb=document.getElementById('exportBtn'); if(eb) eb.onclick=function(){ toast('Export · illustrative'); };
+var pb=document.getElementById('planBtn'); if(pb) pb.onclick=function(){ state.planOpen=true; state.srcOpen=false; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); };
 var sd=document.getElementById('sessDd'); if(sd) sd.onclick=function(){ toast('Session picker · illustrative'); };
 var sl=document.getElementById('srcLink'); if(sl) sl.onclick=function(){ state.srcBack=state.tab; state.srcOpen=true; state.srcTab='sources'; renderPane(); window.scrollTo({top:0,behavior:'smooth'}); };
 icons();
