@@ -487,6 +487,19 @@ body.nav-collapsed .brandlogo{display:none}
 .weekstrip{position:relative}
 .weekstrip::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(16,24,40,.15) 14%,rgba(16,24,40,.15) 86%,transparent);pointer-events:none}
 </style>
+<style>
+/* ======================== INTERNAL CARDS v2 + NAV LINE FIX ======================== */
+/* Internal cards per spec: 40% white fill, 2px white inside stroke, radius 16 */
+.clipcard,.kmcard,.flagcard{
+  background:rgba(255,255,255,.4);
+  border:2px solid #FFFFFF;
+  border-radius:16px;
+  box-shadow:none;
+  -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+}
+/* Remove the hairline on the nav rail */
+.side{border-right:0}
+</style>
 </head>
 <body>
 
