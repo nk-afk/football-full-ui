@@ -816,7 +816,8 @@ body::before{content:none}
 /* search bar per Light.svg: gray outline, r8, gray magnifier, gray placeholder (our text kept) */
 .topsearch-gym{border:1px solid #9CA3AF;border-radius:8px;background:rgba(255,255,255,.5)}
 .topsearch-gym:focus-within{border-color:#6B7280;box-shadow:0 0 0 3px rgba(156,163,175,.18)}
-.topsearch-gym>svg{color:#6B7280}
+.topsearch-gym>svg{color:#9CA3AF;transition:color .12s}
+.topsearch-gym:hover>svg,.topsearch-gym:focus-within>svg{color:#6B7280}
 .topsearch-gym input::placeholder{color:#9CA3AF}
 </style>
 <style>

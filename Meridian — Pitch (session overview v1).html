@@ -1594,7 +1594,8 @@ body::before{content:none}
 /* search bar per Light.svg: gray outline, r8, gray magnifier, gray placeholder (our text kept) */
 .topsearch-gym{border:1px solid #9CA3AF;border-radius:8px;background:rgba(255,255,255,.5)}
 .topsearch-gym:focus-within{border-color:#6B7280;box-shadow:0 0 0 3px rgba(156,163,175,.18)}
-.topsearch-gym>svg{color:#6B7280}
+.topsearch-gym>svg{color:#9CA3AF;transition:color .12s}
+.topsearch-gym:hover>svg,.topsearch-gym:focus-within>svg{color:#6B7280}
 .topsearch-gym input::placeholder{color:#9CA3AF}
 </style>
 <style>
@@ -1693,7 +1694,7 @@ var INTEST='<span class="testtag">In testing</span>';
 
 var state={ tab:'overview', drill:null, analysis:0, moment:0, reviewView:'list', reviewIdx:0,
   ovSub:null, pView:'squad', pPlayer:'13', pSub:'session', reviewClip:13, srcOpen:false, srcTab:'sources', srcBack:'overview',
-  poss:'out', shapeTeam:'A', planOpen:false, standaloneReview:false };
+  poss:'out', shapeTeam:'A', planOpen:false, standaloneReview:false, standalonePlayer:false };
 var reviewDecisions={};
 var reviewCorrections={}; /* id -> {field, from, to, reason, by, at} */
 var correctingId=null;    /* decision id whose correction form is open */
@@ -1740,7 +1741,7 @@ var TABS=[{k:'overview',label:'Overview'},{k:'drills',label:'Drills'},{k:'player
 function renderTabs(){
   var host=document.getElementById('themetabs');
   host.innerHTML=TABS.map(function(t){ var ct=t.ct; return '<button class="ttab'+(t.k===state.tab?' active':'')+'" data-tab="'+t.k+'">'+t.label+(ct?'<span class="tct num">'+ct+'</span>':'')+'</button>'; }).join('');
-  host.querySelectorAll('.ttab').forEach(function(b){ b.onclick=function(){ state.tab=b.dataset.tab; state.drill=null; state.ovSub=null; state.srcOpen=false; state.planOpen=false; state.standaloneReview=false; if(b.dataset.tab==='players') state.pView='squad'; if(b.dataset.tab==='review') state.reviewView='list'; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
+  host.querySelectorAll('.ttab').forEach(function(b){ b.onclick=function(){ state.tab=b.dataset.tab; state.drill=null; state.ovSub=null; state.srcOpen=false; state.planOpen=false; state.standaloneReview=false; state.standalonePlayer=false; if(b.dataset.tab==='players') state.pView='squad'; if(b.dataset.tab==='review') state.reviewView='list'; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
 }
 function renderPane(){
   var host=document.getElementById('panes');
@@ -1753,7 +1754,7 @@ function renderPane(){
   else { host.innerHTML = PANE[state.tab]?PANE[state.tab]():''; }
   var rootView = (state.tab==='overview'&&!state.ovSub) || (state.tab==='players'&&state.pView==='squad') || (state.tab==='review'&&state.reviewView==='list');
   var pf=document.getElementById('pgfoot'); if(pf) pf.style.display = (!state.srcOpen && !state.planOpen && rootView) ? '' : 'none';
-  var standalone = (state.tab==='overview' && state.ovSub==='drillload') || (state.tab==='review' && state.standaloneReview);
+  var standalone = (state.tab==='overview' && state.ovSub==='drillload') || (state.tab==='review' && state.standaloneReview) || (state.tab==='players' && state.pView==='player' && state.standalonePlayer);
   var phd=document.querySelector('.phead'); if(phd) phd.style.display = standalone ? 'none' : '';
   var tbs=document.getElementById('themetabs'); if(tbs) tbs.style.display = standalone ? 'none' : '';
   var topb=document.querySelector('.topbar'); if(topb) topb.style.display = standalone ? 'none' : '';
@@ -1761,10 +1762,10 @@ function renderPane(){
   wirePane(); icons(); maybePushNav();
 }
 /* ---- browser history: two-finger swipe / back-forward navigation ---- */
-function navSnapshot(){ return {tab:state.tab,ovSub:state.ovSub,drill:state.drill,pView:state.pView,pPlayer:state.pPlayer,reviewView:state.reviewView,reviewIdx:state.reviewIdx,standaloneReview:state.standaloneReview,srcOpen:state.srcOpen,planOpen:state.planOpen}; }
+function navSnapshot(){ return {tab:state.tab,ovSub:state.ovSub,drill:state.drill,pView:state.pView,pPlayer:state.pPlayer,reviewView:state.reviewView,reviewIdx:state.reviewIdx,standaloneReview:state.standaloneReview,standalonePlayer:state.standalonePlayer,srcOpen:state.srcOpen,planOpen:state.planOpen}; }
 var lastNavKey=null, navSuppress=false;
 function maybePushNav(){ if(navSuppress) return; var snap=navSnapshot(), key=JSON.stringify(snap); if(key===lastNavKey) return; try{ if(lastNavKey===null){ history.replaceState(snap,''); } else { history.pushState(snap,''); } }catch(e){} lastNavKey=key; }
-function applySnapshot(s){ ['tab','ovSub','drill','pView','pPlayer','reviewView','reviewIdx','standaloneReview','srcOpen','planOpen'].forEach(function(k){ state[k]=s[k]; }); renderTabs(); renderPane(); }
+function applySnapshot(s){ ['tab','ovSub','drill','pView','pPlayer','reviewView','reviewIdx','standaloneReview','standalonePlayer','srcOpen','planOpen'].forEach(function(k){ state[k]=s[k]; }); renderTabs(); renderPane(); }
 window.addEventListener('popstate', function(e){ if(!e.state) return; navSuppress=true; applySnapshot(e.state); lastNavKey=JSON.stringify(navSnapshot()); navSuppress=false; window.scrollTo({top:0}); });
 function openDrill(k,ai){ state.drill=k; state.analysis=ai||0; state.moment=0; state.tab='drills'; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }
 
@@ -1997,7 +1998,9 @@ function statCard(ic,v,l,r){ return '<div class="statcard"><div class="sc-ic"><i
 function pPlayer(){
   var sub=state.pSub;
   var subtabs='<div class="themetabs" style="margin-bottom:16px">'+[['session','Session'],['movement','Movement'],['history','History & testing']].map(function(t){return '<button class="ttab'+(sub===t[0]?' active':'')+'" data-ptab="'+t[0]+'">'+t[1]+'</button>';}).join('')+'</div>';
-  var head='<div class="subcrumb"><a data-psub="squad">Squad comparison</a><span class="sl">/</span>P13</div>'
+  var head=(state.standalonePlayer
+      ? '<button class="backlink" data-psub="squad"><i data-lucide="arrow-left"></i>Back to squad comparison</button>'
+      : '<div class="subcrumb"><a data-psub="squad">Squad comparison</a><span class="sl">/</span>P13</div>')
     + '<div class="pagetitle"><div><h2>P13 · Right winger</h2><div class="ptsub">Team B · Session F03</div></div><span class="selctl" data-toast="Longitudinal profile · illustrative">View longitudinal profile <i data-lucide="arrow-right"></i></span></div>'+subtabs;
   var body;
   if(sub==='session'){
@@ -2424,14 +2427,14 @@ function wirePane(){
   host.querySelectorAll('[data-drill]').forEach(function(el){ el.onclick=function(){ openDrill(el.dataset.drill, +(el.dataset.ai||0)); }; });
   host.querySelectorAll('[data-opendrills]').forEach(function(el){ el.onclick=function(){ state.drill=null; state.tab='drills'; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
   host.querySelectorAll('[data-planclose]').forEach(function(el){ el.onclick=function(){ state.planOpen=false; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
-  host.querySelectorAll('[data-go]').forEach(function(el){ el.onclick=function(){ state.drill=null; state.ovSub=null; state.srcOpen=false; state.planOpen=false; state.standaloneReview=false; state.tab=el.dataset.go; if(el.dataset.go==='review') state.reviewView='list'; if(el.dataset.go==='players') state.pView='squad'; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
+  host.querySelectorAll('[data-go]').forEach(function(el){ el.onclick=function(){ state.drill=null; state.ovSub=null; state.srcOpen=false; state.planOpen=false; state.standaloneReview=false; state.standalonePlayer=false; state.tab=el.dataset.go; if(el.dataset.go==='review') state.reviewView='list'; if(el.dataset.go==='players') state.pView='squad'; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
   host.querySelectorAll('[data-drillload]').forEach(function(el){ el.onclick=function(){ state.tab='overview'; state.ovSub='drillload'; state.srcOpen=false; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
   host.querySelectorAll('[data-srcopen]').forEach(function(el){ el.onclick=function(){ state.srcBack=state.tab; state.srcOpen=true; state.srcTab='sources'; renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
   host.querySelectorAll('[data-srcgaps]').forEach(function(el){ el.onclick=function(){ state.srcBack=state.tab; state.srcOpen=true; state.srcTab='gaps'; renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
   host.querySelectorAll('[data-srcclose]').forEach(function(el){ el.onclick=function(){ state.srcOpen=false; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
   host.querySelectorAll('[data-srctab]').forEach(function(el){ el.onclick=function(){ state.srcTab=el.dataset.srctab; state.srcOpen=true; renderPane(); }; });
-  host.querySelectorAll('[data-psub]').forEach(function(el){ el.onclick=function(){ closeMenus(); state.tab='players'; state.srcOpen=false; state.pView=el.dataset.psub; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
-  host.querySelectorAll('[data-pplayer]').forEach(function(el){ el.onclick=function(){ state.tab='players'; state.srcOpen=false; state.pView='player'; state.pPlayer=el.dataset.pplayer; state.pSub='session'; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
+  host.querySelectorAll('[data-psub]').forEach(function(el){ el.onclick=function(){ closeMenus(); state.tab='players'; state.srcOpen=false; state.standalonePlayer=false; state.pView=el.dataset.psub; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
+  host.querySelectorAll('[data-pplayer]').forEach(function(el){ el.onclick=function(){ state.tab='players'; state.srcOpen=false; state.pView='player'; state.standalonePlayer=true; state.pPlayer=el.dataset.pplayer; state.pSub='session'; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
   host.querySelectorAll('[data-ptab]').forEach(function(el){ el.onclick=function(){ state.pSub=el.dataset.ptab; renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
   host.querySelectorAll('[data-opendrill]').forEach(function(el){ el.onclick=function(){ openDrill(el.dataset.opendrill, +(el.dataset.ai||0)); }; });
   host.querySelectorAll('[data-clip]').forEach(function(el){ el.onclick=function(){ state.reviewClip=+el.dataset.clip; renderPane(); }; });
