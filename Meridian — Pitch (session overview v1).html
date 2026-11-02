@@ -1062,6 +1062,20 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .cd-btn.text{border:0;background:none;color:var(--color-primary-text);height:36px}
 .cd-btn.text:hover{background:var(--color-primary-soft)}
 .cd-fine{font-size:12px;color:var(--color-text-soft);margin-top:10px;line-height:1.45}
+.corrform{background:var(--color-surface-subtle);border:1px solid var(--color-border);border-radius:var(--r-md);padding:14px;margin:16px 0}
+.corrform .cf-h{font-size:13px;font-weight:700;color:var(--color-text);margin-bottom:12px}
+.cf-field{margin-bottom:11px}
+.cf-field label{display:block;font-size:12px;font-weight:600;color:var(--color-text-soft);margin-bottom:5px}
+.cf-field input,.cf-field textarea{width:100%;border:1px solid var(--color-border);border-radius:var(--r-md);padding:9px 11px;font:inherit;font-size:13.5px;color:var(--color-text);background:var(--color-surface);resize:vertical}
+.cf-field input:focus,.cf-field textarea:focus{outline:none;border-color:var(--color-primary-text);box-shadow:0 0 0 3px var(--color-primary-soft)}
+.cf-ro{font-size:14px;font-weight:700;color:var(--color-text);padding:4px 0}
+.cf-fine{font-size:12px;color:var(--color-text-soft);margin-top:4px;line-height:1.45}
+.okbox.corrected{background:var(--color-primary-soft)}
+.okbox.corrected .ab-ic,.okbox.corrected .ab-t{color:var(--color-primary-text)}
+.okbox.corrected .ab-s{color:var(--color-text);opacity:1;margin-top:3px}
+.okbox .corr-from{text-decoration:line-through;color:var(--color-text-soft)}
+.okbox .corr-why{font-size:12.5px;color:var(--color-text-muted);margin-top:6px;font-style:italic}
+.okbox .corr-meta{font-size:11.5px;color:var(--color-text-soft);margin-top:6px}
 .howworks{border-top:1px solid var(--color-separator);margin-top:16px;padding-top:14px}
 .hw-head{display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:13.5px;font-weight:700;color:var(--color-text)}
 .hw-head svg{width:18px;height:18px;color:var(--color-text-soft);transition:transform .15s}
@@ -1681,6 +1695,9 @@ var state={ tab:'overview', drill:null, analysis:0, moment:0, reviewView:'list',
   ovSub:null, pView:'squad', pPlayer:'13', pSub:'session', reviewClip:13, srcOpen:false, srcTab:'sources', srcBack:'overview',
   poss:'out', shapeTeam:'A', planOpen:false, standaloneReview:false };
 var reviewDecisions={};
+var reviewCorrections={}; /* id -> {field, from, to, reason, by, at} */
+var correctingId=null;    /* decision id whose correction form is open */
+function nowStamp(){ var d=new Date(); var mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getMonth()]; var h=d.getHours(), m=d.getMinutes(); return d.getDate()+' '+mo+' '+d.getFullYear()+', '+(h<10?'0':'')+h+':'+(m<10?'0':'')+m; }
 
 var DRILLS=[
   {k:'warmup',  n:'01', name:'Warm-up & 3v2',       min:30, size:'small-sided', teams:false, bip:null, mmin:56, pct:60, accdec:1.28, accpct:65, hsrmin:0.2, hsrpct:5,  metric:'56 m/min',icon:'flame',cardana:'Waves · Jumps & impacts'},
@@ -1776,15 +1793,15 @@ function recapCard(){
     + '<div class="recap-ctrls"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="t">0:00 / 1:28</span><div class="sc"></div><div class="rt"><i data-lucide="volume-2"></i><i data-lucide="maximize"></i><i data-lucide="settings"></i></div></div></div></div>';
 }
 var STAFFFOCUS=[
-  {ic:'bar-chart-3',c:'load',t:'Load',d:'5.5 min of coach stops',drill:'11v11',ai:1},
+  {ic:'bar-chart-3',c:'load',t:'Load',d:'5.5 min of coach stops',drill:'11v11',ai:0},
   {ic:'users',c:'press',t:'Pressing',d:'Team B pressed after 46% of turnovers',drill:'10v10',ai:0},
   {ic:'circle-dot',c:'build',t:'Build-up',d:'6 of 15 lost before midfield',drill:'11v11',ai:0},
-  {ic:'eye',c:'scan',t:'Scanning',d:'Check P04 and P11',drill:'10v10',ai:3},
+  {ic:'eye',c:'scan',t:'Scanning',d:'Check P04 and P11',psub:'scanning'},
   {ic:'video',c:'capture',t:'Capture',d:'P08 impacts at 6× median',review:1},
-  {ic:'activity',c:'move',t:'Movement',d:'Confirm P13’s hard stop',review:0}
+  {ic:'activity',c:'move',t:'Movement',d:'Review P13’s hard stop',review:0}
 ];
 function staffFocus(){
-  function row(f){ var attr=(f.review!=null)?('data-review="'+f.review+'"'):('data-drill="'+f.drill+'" data-ai="'+f.ai+'"');
+  function row(f){ var attr=(f.psub!=null)?('data-psub="'+f.psub+'"'):(f.review!=null)?('data-review="'+f.review+'"'):('data-drill="'+f.drill+'" data-ai="'+f.ai+'"');
     return '<div class="sf-row" '+attr+'><span class="sf-ic"><i data-lucide="'+f.ic+'"></i></span><div class="sf-m"><div class="sf-t">'+f.t+'</div><div class="sf-d">'+f.d+'</div></div><span class="sf-ch"><i data-lucide="chevron-right"></i></span></div>'; }
   var obs=STAFFFOCUS.filter(function(f){return f.review==null;});
   var data=STAFFFOCUS.filter(function(f){return f.review!=null;});
@@ -1992,7 +2009,7 @@ function pPlayer(){
     var dbd=[['Warm-up',30,55,30,56,23.2],['10v10',16,100,78,73,26.2],['11v11',27,101,168,79,29.2],['Crossing',15,53,101,17,23.3]];
     var drillTable='<div class="pcard"><div class="pch"><div class="pct">Drill by drill</div><span style="font-size:12px;color:var(--color-text-soft)"><i data-lucide="smartphone" style="width:13px;height:13px;vertical-align:-2px"></i> Club GPS</span></div>'
       + '<table class="dtable"><thead><tr><th>Drill</th><th class="num">Min</th><th class="num">m/min</th><th class="num">HS m</th><th class="num">Acc+dec</th><th class="num">Top km/h</th></tr></thead><tbody>'+dbd.map(function(r){return '<tr><td style="font-weight:600">'+r[0]+'</td><td class="num">'+r[1]+'</td><td class="num">'+r[2]+'</td><td class="num">'+r[3]+'</td><td class="num">'+r[4]+'</td><td class="num">'+r[5]+'</td></tr>';}).join('')+'</tbody></table>'
-      + '<div style="border-top:1px solid var(--color-separator);margin-top:14px;padding-top:14px"><div class="pct" style="font-size:13px;margin-bottom:8px">Fast runs in the games</div><div class="stackbar"><div class="seg" style="width:67%;background:var(--color-primary-active)"></div><div class="seg" style="width:25%;background:var(--color-primary)"></div><div class="seg" style="width:8%;background:var(--sb-steel)"></div></div><div style="display:flex;justify-content:space-between;align-items:center"><div class="stacklegend"><span><i style="background:var(--color-primary-active)"></i>8 recovery/pressing</span><span><i style="background:var(--color-primary)"></i>3 with ball</span><span><i style="background:var(--sb-steel)"></i>1 in-possession off-ball</span></div><a class="cnl" data-opendrill="11v11" data-ai="3" style="font-size:12.5px;font-weight:600;color:var(--color-primary-text);cursor:pointer;white-space:nowrap">View positions &amp; run clips <i data-lucide="arrow-right" style="width:13px;height:13px;vertical-align:-2px"></i></a></div></div></div>';
+      + '<div style="border-top:1px solid var(--color-separator);margin-top:14px;padding-top:14px"><div class="pct" style="font-size:13px;margin-bottom:8px">Fast runs in the games</div><div class="stackbar"><div class="seg" style="width:67%;background:var(--color-primary-active)"></div><div class="seg" style="width:25%;background:var(--color-primary)"></div><div class="seg" style="width:8%;background:var(--sb-steel)"></div></div><div style="display:flex;justify-content:space-between;align-items:center"><div class="stacklegend"><span><i style="background:var(--color-primary-active)"></i>8 recovery/pressing</span><span><i style="background:var(--color-primary)"></i>3 with ball</span><span><i style="background:var(--sb-steel)"></i>1 in-possession off-ball</span></div><a class="cnl" data-opendrill="11v11" data-ai="1" style="font-size:12.5px;font-weight:600;color:var(--color-primary-text);cursor:pointer;white-space:nowrap">View positions &amp; run clips <i data-lucide="arrow-right" style="width:13px;height:13px;vertical-align:-2px"></i></a></div></div></div>';
     var tech='<div class="pcard"><div class="pct" style="margin-bottom:4px">Technical work</div>'
       + '<div class="twrow"><div class="tw-ic"><i data-lucide="send"></i></div><div><div class="tw-l">Crossing</div><div class="tw-v">5 of 9</div><div class="tw-s">Attacker-first</div></div></div>'
       + '<div class="twrow"><div class="tw-ic"><i data-lucide="eye"></i></div><div><div class="tw-l">Scanning</div><div class="tw-v">0.29 /s</div><div class="tw-s">Preseason 0.24 – 0.33</div></div></div></div>'
@@ -2100,12 +2117,31 @@ function reviewDetail(){
     + '<div class="srcshow"><div class="sh-t">What the sources show</div><div class="srcgrid">'
     + d.sources.map(function(s){return '<div class="srccell"><div class="scl">'+s[0]+'</div><div class="scv num">'+s[1]+'</div>'+(s[2]?'<div class="scs">'+s[2]+'</div>':'')+'</div>';}).join('')
     + '</div><div class="srcnote">'+d.note+'</div></div></div>';
-  var box = v
-    ? '<div class="okbox"><span class="ab-ic"><i data-lucide="check-circle"></i></span><div><div class="ab-t">'+v+'</div><div class="ab-s">Saved with the clip. You can change it any time.</div></div></div>'
-    : '<div class="awaitbox"><span class="ab-ic"><i data-lucide="alert-triangle"></i></span><div><div class="ab-t">Awaiting coach review</div><div class="ab-s">Excluded from model inputs until reviewed.</div></div></div>';
-  var btns = v
-    ? '<div class="cd-btns"><button class="cd-btn text" data-verdict="">Reopen flag</button></div>'
-    : '<div class="cd-btns"><button class="cd-btn pri" data-verdict="Confirmed">'+d.confirm+'</button><button class="cd-btn" data-verdict="Corrected">'+d.correct+'</button><button class="cd-btn text" data-verdict="Dismissed">Dismiss flag</button></div>';
+  var corr=reviewCorrections[d.id];
+  var curField=d.sources[0][0], curVal=d.sources[0][1];
+  var box, btns;
+  if(correctingId===d.id){
+    box='<div class="corrform"><div class="cf-h">Correct this event</div>'
+      + '<div class="cf-field"><label>'+curField+' — recorded</label><div class="cf-ro">'+curVal+'</div></div>'
+      + '<div class="cf-field"><label for="corrVal">Corrected value</label><input id="corrVal" type="text" placeholder="e.g. '+curVal+'"></div>'
+      + '<div class="cf-field"><label for="corrReason">Reason</label><textarea id="corrReason" rows="2" placeholder="What the clip shows and why the recorded value is wrong"></textarea></div>'
+      + '<div class="cf-field"><label for="corrBy">Reviewer</label><input id="corrBy" type="text" placeholder="Your name"></div>'
+      + '<div class="cf-fine"><i data-lucide="info" style="width:13px;height:13px;vertical-align:-2px"></i> The corrected value replaces the recorded one in load inputs; the original is kept in the change history.</div></div>';
+    btns='<div class="cd-btns"><button class="cd-btn pri" data-correct-save>Save correction</button><button class="cd-btn text" data-correct-cancel>Cancel</button></div>';
+  } else if(v==='Corrected' && corr){
+    box='<div class="okbox corrected"><span class="ab-ic"><i data-lucide="pencil"></i></span><div>'
+      + '<div class="ab-t">Corrected · '+corr.field+'</div>'
+      + '<div class="ab-s"><span class="corr-from">'+corr.from+'</span> <i data-lucide="arrow-right" style="width:12px;height:12px;vertical-align:-1px"></i> <strong>'+corr.to+'</strong></div>'
+      + '<div class="corr-why">“'+corr.reason+'”</div>'
+      + '<div class="corr-meta">'+corr.by+' · '+corr.at+' · corrected value now used in load inputs</div></div></div>';
+    btns='<div class="cd-btns"><button class="cd-btn text" data-verdict="">Reopen flag</button></div>';
+  } else if(v){
+    box='<div class="okbox"><span class="ab-ic"><i data-lucide="check-circle"></i></span><div><div class="ab-t">'+v+'</div><div class="ab-s">Saved with the clip. You can change it any time.</div></div></div>';
+    btns='<div class="cd-btns"><button class="cd-btn text" data-verdict="">Reopen flag</button></div>';
+  } else {
+    box='<div class="awaitbox"><span class="ab-ic"><i data-lucide="alert-triangle"></i></span><div><div class="ab-t">Awaiting coach review</div><div class="ab-s">Excluded from model inputs until reviewed.</div></div></div>';
+    btns='<div class="cd-btns"><button class="cd-btn pri" data-verdict="Confirmed">'+d.confirm+'</button><button class="cd-btn" data-correct-open>'+d.correct+'</button><button class="cd-btn text" data-verdict="Dismissed">Dismiss flag</button></div>';
+  }
   var cmp = d.cmp ? '<div style="border-top:1px solid var(--color-separator);margin-top:16px;padding-top:14px"><div class="cd-eyebrow">Source comparison</div><div style="font-size:12.5px;color:var(--color-text-soft);margin:6px 0 2px">'+d.cmp[0]+'</div><div style="font-size:21px;font-weight:700;letter-spacing:-.01em">'+d.cmp[1]+'</div></div>' : '';
   var decision='<div class="pcard"><div class="cd-q">'+d.q+'</div><div class="cd-desc">'+d.desc+'</div>'
     + box + btns
@@ -2405,7 +2441,10 @@ function wirePane(){
   host.querySelectorAll('[data-reviewlist]').forEach(function(el){ el.onclick=function(){ state.drill=null; state.tab='review'; state.reviewView='list'; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
   host.querySelectorAll('[data-reviewlib]').forEach(function(el){ el.onclick=function(){ state.drill=null; state.standaloneReview=true; state.tab='review'; state.reviewView='list'; state.ovSub=null; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
   host.querySelectorAll('[data-rvpage]').forEach(function(el){ el.onclick=function(){ state.reviewIdx += (el.dataset.rvpage==='next'?1:-1); if(state.reviewIdx<0)state.reviewIdx=0; if(state.reviewIdx>DECISIONS.length-1)state.reviewIdx=DECISIONS.length-1; renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
-  host.querySelectorAll('[data-verdict]').forEach(function(el){ el.onclick=function(){ var d=DECISIONS[state.reviewIdx]; var val=el.dataset.verdict; if(val) reviewDecisions[d.id]=val; else delete reviewDecisions[d.id]; renderTabs(); renderPane(); if(val) toast(d.player+' · '+val.toLowerCase()); }; });
+  host.querySelectorAll('[data-verdict]').forEach(function(el){ el.onclick=function(){ var d=DECISIONS[state.reviewIdx]; var val=el.dataset.verdict; correctingId=null; if(val){ reviewDecisions[d.id]=val; delete reviewCorrections[d.id]; } else { delete reviewDecisions[d.id]; delete reviewCorrections[d.id]; } renderTabs(); renderPane(); if(val) toast(d.player+' · '+val.toLowerCase()); }; });
+  host.querySelectorAll('[data-correct-open]').forEach(function(el){ el.onclick=function(){ correctingId=DECISIONS[state.reviewIdx].id; renderPane(); }; });
+  host.querySelectorAll('[data-correct-cancel]').forEach(function(el){ el.onclick=function(){ correctingId=null; renderPane(); }; });
+  host.querySelectorAll('[data-correct-save]').forEach(function(el){ el.onclick=function(){ var d=DECISIONS[state.reviewIdx]; var gv=function(id){ var n=document.getElementById(id); return n&&n.value?n.value.trim():''; }; var val=gv('corrVal'), reason=gv('corrReason'), by=gv('corrBy'); if(!val||!reason){ toast('Enter the corrected value and a reason'); return; } reviewCorrections[d.id]={field:d.sources[0][0], from:d.sources[0][1], to:val, reason:reason, by:(by||'Unattributed'), at:nowStamp()}; reviewDecisions[d.id]='Corrected'; correctingId=null; renderTabs(); renderPane(); toast(d.player+' · correction saved'); }; });
   host.querySelectorAll('[data-how]').forEach(function(el){ el.onclick=function(){ el.parentNode.classList.toggle('open'); }; });
   host.querySelectorAll('[data-toast]').forEach(function(el){ el.onclick=function(){ toast(el.dataset.toast); }; });
   host.querySelectorAll('.recap-play').forEach(function(el){ el.onclick=function(){ toast('Session highlight · playback illustrative'); }; });
