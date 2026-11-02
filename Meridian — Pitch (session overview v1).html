@@ -1611,7 +1611,7 @@ body::before{content:none}
         <span class="sesscount num" id="sessCount">3 of 3</span>
       </div>
       <div class="sublinerow">
-        <div class="subline">Preseason&nbsp; ·&nbsp; 22 players&nbsp; ·&nbsp; 88 min&nbsp; ·&nbsp; 2 cameras</div>
+        <div class="subline">Preseason&nbsp; ·&nbsp; 22 players&nbsp; ·&nbsp; 88 min drills&nbsp; ·&nbsp; 2 cameras</div>
         <div class="gymloc"><i data-lucide="map-pin"></i>Bodymoor Heath Training Ground</div>
       </div>
     </div>
@@ -1624,7 +1624,7 @@ body::before{content:none}
   <div id="panes"></div>
 
   <div class="pgfoot" id="pgfoot">
-    <span>88 min drills&nbsp; ·&nbsp; 107 min elapsed&nbsp; ·&nbsp; 19 min unallocated</span>
+    <span>88 min drills&nbsp; ·&nbsp; 107 min elapsed&nbsp; ·&nbsp; 19 min warm-up, resets &amp; cool-down</span>
     <span style="color:var(--color-text-soft)"><a id="srcLink" style="color:var(--color-primary-text)">Sources &amp; definitions</a></span>
   </div>
 </div>
@@ -1684,8 +1684,8 @@ var reviewDecisions={};
 
 var DRILLS=[
   {k:'warmup',  n:'01', name:'Warm-up & 3v2',       min:30, size:'small-sided', teams:false, bip:null, mmin:56, pct:60, accdec:1.28, accpct:65, hsrmin:0.2, hsrpct:5,  metric:'56 m/min',icon:'flame',cardana:'Waves · Jumps & impacts'},
-  {k:'10v10',   n:'02', name:'10v10 game',          min:16, size:'60 × 45 m', teams:true, bip:79, mmin:103, pct:111, accdec:2.49, accpct:126, hsrmin:2.6, hsrpct:51, metric:'103 m/min', tag:'Highest intensity',sel:true,icon:'goal',cardana:'Pressing · Team shape'},
-  {k:'11v11',   n:'03', name:'11v11',               min:27, size:'75 × 55 m', teams:true, bip:66, mmin:89, pct:95, accdec:2.13, accpct:108, hsrmin:4.2, hsrpct:82, metric:'89 m/min',icon:'users',cardana:'Build-up · Shape & runs'},
+  {k:'10v10',   n:'02', name:'10v10 game',          min:16, size:'60 × 45 m', teams:true, bip:79, mmin:103, pct:111, accdec:2.49, accpct:126, hsrmin:2.6, hsrpct:51, metric:'103 m/min', tag:'Top m/min & acc–dec',sel:true,icon:'goal',cardana:'Pressing · Team shape'},
+  {k:'11v11',   n:'03', name:'11v11',               min:27, size:'75 × 55 m', teams:true, bip:66, mmin:89, pct:95, accdec:2.13, accpct:108, hsrmin:4.2, hsrpct:82, metric:'89 m/min', tag:'Top high-speed rate',icon:'users',cardana:'Build-up · Shape & runs'},
   {k:'crossing',n:'04', name:'Crossing & finishing',min:15, size:'half-pitch',  teams:false, bip:null, mmin:49, pct:53, accdec:1.72, accpct:88, hsrmin:1.9, hsrpct:38, metric:'49 m/min',icon:'target',cardana:'Delivery outcomes'}
 ];
 function drill(k){ return DRILLS.filter(function(d){return d.k===k;})[0]; }
@@ -1707,7 +1707,7 @@ var P=[
   {n:'16',grp:'F',pos:'FW · ST',team:'A',mmin:92,hsr:98,ad:2.05,pass:26,comp:88,press:6,scans:0.18,cuts:3,peak:82},
   {n:'17',grp:'F',pos:'FW · LW',team:'B',mmin:80,hsr:367,ad:1.49,pass:31,comp:87,press:11,scans:0.29,cuts:10,peak:93},
   {n:'19',grp:'F',pos:'FW · LCM',team:'A',mmin:110,hsr:148,ad:2.93,pass:36,comp:75,press:14,scans:0.23,cuts:3,peak:83},
-  {n:'13',grp:'F',pos:'W · RW',team:'B',mmin:101,hsr:245,ad:3.53,pass:28,comp:89,press:7,scans:0.29,cuts:19,peak:91},
+  {n:'13',grp:'F',pos:'W · RW',team:'B',mmin:101,hsr:246,ad:3.53,pass:28,comp:89,press:7,scans:0.29,cuts:19,peak:91},
   {n:'18',grp:'F',pos:'FW · ST',team:'B',mmin:81,hsr:110,ad:1.98,pass:22,comp:77,press:9,scans:0.27,cuts:8,peak:87},
   {n:'14',grp:'F',pos:'W · LW',team:'B',mmin:103,hsr:168,ad:3.19,pass:24,comp:79,press:9,scans:null,cuts:20,peak:86}
 ];
@@ -1872,9 +1872,9 @@ function planPane(){
   var blocks=[
     {t:'00:00',title:'Warm-up & 3v2',dur:'30 min',area:'Small-sided',focus:'Activate, then attacking 3v2 waves.',pts:['Dynamic mobility + hurdle hops 3×6','In 3v2, commit a defender before releasing','Finish first-time where it’s on'],drill:'warmup',ai:0},
     {t:'30:00',title:'Reset & hydrate',dur:'4 min',rest:true},
-    {t:'34:00',title:'10v10 game',dur:'16 min',area:'60 × 45 m',tag:'Highest intensity',focus:'Pressing & counter-press.',pts:['Press the receiver within 2 s on the agreed cues','Win it back within 5 s of a turnover','Stay compact out of possession'],drill:'10v10',ai:0},
+    {t:'34:00',title:'10v10 game',dur:'16 min',area:'60 × 45 m',tag:'Top m/min & acc–dec',focus:'Pressing & counter-press.',pts:['Press the receiver within 2 s on the agreed cues','Win it back within 5 s of a turnover','Stay compact out of possession'],drill:'10v10',ai:0},
     {t:'50:00',title:'Reset',dur:'4 min',rest:true},
-    {t:'54:00',title:'11v11',dur:'27 min',area:'75 × 55 m',focus:'Build-up & shape.',pts:['Play out from the goalkeeper under pressure','Break the first line — line-breaking passes','Hold back-line height and spacing'],drill:'11v11',ai:0},
+    {t:'54:00',title:'11v11',dur:'27 min',area:'75 × 55 m',tag:'Top high-speed rate',focus:'Build-up & shape.',pts:['Play out from the goalkeeper under pressure','Break the first line — line-breaking passes','Hold back-line height and spacing'],drill:'11v11',ai:0},
     {t:'81:00',title:'Reset',dur:'3 min',rest:true},
     {t:'84:00',title:'Crossing & finishing',dur:'15 min',area:'Half-pitch',focus:'Deliveries & finishing.',pts:['Work near post, far post and cut-backs','Deliveries that reach an attacker first','First-time finishes'],drill:'crossing',ai:0},
     {t:'99:00',title:'Cool-down & debrief',dur:'8 min',area:'Whole squad',focus:'Recovery and a quick clip review.',pts:['Light mobility and stretch','Flag 2–3 clips for the review queue']}
@@ -1887,7 +1887,7 @@ function planPane(){
         + (b.drill?'<span class="pb-link" data-opendrill="'+b.drill+'" data-ai="'+b.ai+'">View analysis <i data-lucide="arrow-right"></i></span>':'')+'</div>';
     return '<div class="pb'+(b.rest?' rest':'')+'"><div class="pb-time">'+b.t+'</div><div class="pb-body"><span class="pb-dot"></span>'+card+'</div></div>';
   }).join('');
-  var left='<div class="pcard"><div class="pct" style="margin-bottom:14px">Session timeline <span style="font-weight:500;color:var(--color-text-soft);font-size:12px">88 min on the ball · 19 min warm-up, resets &amp; cool-down</span></div><div class="timeline2">'+tl+'</div></div>';
+  var left='<div class="pcard"><div class="pct" style="margin-bottom:14px">Session timeline <span style="font-weight:500;color:var(--color-text-soft);font-size:12px">88 min drill time · 107 min elapsed · ball-live shown per drill</span></div><div class="timeline2">'+tl+'</div></div>';
   var objs=[['1','Counter-press within 5 s of a turnover','10v10 · Pressing',{drill:'10v10',ai:0}],['2','Build-up from the goalkeeper under pressure','11v11 · Build-up',{drill:'11v11',ai:0}],['3','Attacker-first crossing & finishing','Crossing · Deliveries',{drill:'crossing',ai:0}],['4','Scanning before receiving','Players · Scanning',{psub:'scanning'}]];
   var objHtml=objs.map(function(o){ var t=o[3]; var attr=t.psub?('data-psub="'+t.psub+'"'):('data-opendrill="'+t.drill+'" data-ai="'+t.ai+'"'); return '<div class="obj-row" '+attr+'><span class="obj-n">'+o[0]+'</span><div class="obj-m"><div class="obj-t">'+o[1]+'</div><div class="obj-s">'+o[2]+'</div></div><span class="obj-ch"><i data-lucide="chevron-right"></i></span></div>';}).join('');
   var side='<div class="plan-side"><div class="pcard"><div class="pct" style="margin-bottom:4px">Session objectives</div>'+objHtml+'</div>'
@@ -1937,7 +1937,7 @@ function pSquad(){
   var colhd='<tr><th>Player</th>'+cols.map(function(c,ci){var sep=(c[2]==='v'&&cols[ci-1]&&cols[ci-1][2]==='g')?' colsep':'';return '<th class="num'+sep+'">'+c[1]+'</th>';}).join('')+'<th></th></tr>';
   var table='<div class="pcard"><div class="pch"><div class="pct">Squad comparison <span class="crpill" style="background:var(--color-primary-soft);color:var(--color-primary-text)">Both games · 43 min</span></div>'+pAnaSel()+'</div>'
     + '<div class="pcsub" style="margin-bottom:12px">22 participants · 19 GPS · 3 video-only. Shaded GPS cells sit far from the squad median. Team split illustrative.</div>'
-    + '<div class="fltrow"><span class="selctl">Role: All <i data-lucide="chevron-down"></i></span><span class="selctl">Team: Both <i data-lucide="chevron-down"></i></span><span class="srchbox"><i data-lucide="search"></i><input type="text" placeholder="Search players…"></span><span class="spacer"></span><span class="selctl">Balanced <i data-lucide="chevron-down"></i></span><span class="selctl"><i data-lucide="columns-3"></i>Columns</span></div>'
+    + '<div class="fltrow"><span class="selctl">Role: All <i data-lucide="chevron-down"></i></span><span class="selctl">Team: Both <i data-lucide="chevron-down"></i></span><span class="srchbox"><i data-lucide="search"></i><input type="text" placeholder="Search players…"></span><span class="spacer"></span><span class="selctl">Balanced <i data-lucide="chevron-down"></i></span><span class="selctl" data-toast="Column options · illustrative"><i data-lucide="columns-3"></i>Columns</span></div>'
     + '<div style="overflow-x:auto"><table class="dtable"><thead>'+grphd+colhd+'</thead><tbody>'+body+'</tbody></table></div>'
     + '<div class="pgr"><span>19 of 19 GPS players shown</span><span>Additional columns: pass attempts, cuts, % own peak</span></div></div>'
     + '<div class="pcard" style="margin-top:14px"><div class="pch"><div class="pct">Video-only: U01 + 2 goalkeepers <span style="color:var(--color-text-soft);font-weight:500;font-size:12.5px">3 players</span></div></div><div class="pcsub" style="margin-bottom:0">No GPS data (video only). Available: passes complete, pressures, scans/s.</div></div>'
@@ -1986,7 +1986,7 @@ function pPlayer(){
   if(sub==='session'){
     var cards='<div class="cardgrid4">'
       + statCard('map-pin','6,774 m','Distance','6th / 19')
-      + statCard('footprints','376 m','High-speed distance','2nd / 19')
+      + statCard('footprints','377 m','High-speed distance','2nd / 19')
       + statCard('zap','225','Acc + dec','1st / 19')
       + statCard('gauge','29.2 km/h','Top speed','91% own peak')+'</div>';
     var dbd=[['Warm-up',30,55,30,56,23.2],['10v10',16,100,78,73,26.2],['11v11',27,101,168,79,29.2],['Crossing',15,53,101,17,23.3]];
@@ -2344,7 +2344,7 @@ function vizLeft(v){
 }
 function shapeTable(){
   var sh=[['A, without ball',26.1,31.4,9.9,10.6,4.1],['A, with ball',31.1,35.5,11.3,13.1,8.0],['B, without ball',26.2,30.8,9.7,10.6,4.5],['B, with ball',30.8,37.0,11.9,12.0,7.2]];
-  return '<div class="pct" style="font-size:13px;margin-bottom:8px">Team shape averages, metres</div><table class="dtable" style="margin-bottom:6px"><thead><tr><th></th><th class="num">L</th><th class="num">W</th><th class="num">D–M</th><th class="num">M–A</th><th class="num">Spread</th></tr></thead><tbody>'+sh.map(function(r){return '<tr><td>'+r[0]+'</td><td class="num">'+r[1]+'</td><td class="num">'+r[2]+'</td><td class="num">'+r[3]+'</td><td class="num">'+r[4]+'</td><td class="num">'+r[5]+'</td></tr>';}).join('')+'</tbody></table>';
+  return '<div class="pct" style="font-size:13px;margin-bottom:8px">Team shape averages, metres</div><table class="dtable" style="margin-bottom:6px"><thead><tr><th></th><th class="num">L</th><th class="num">W</th><th class="num">D–M</th><th class="num">M–A</th><th class="num">Spread</th></tr></thead><tbody>'+sh.map(function(r){return '<tr><td>'+r[0]+'</td><td class="num">'+r[1]+'</td><td class="num">'+r[2]+'</td><td class="num">'+r[3]+'</td><td class="num">'+r[4]+'</td><td class="num">'+r[5]+'</td></tr>';}).join('')+'</tbody></table><div class="footnote">Illustrative shared shape sample — the same averages currently render for 10v10 and 11v11. Validate per drill and pitch size before release.</div>';
 }
 function tile(ic,k,v,s,src){ return '<div class="tile"><div class="tk"><i data-lucide="'+ic+'"></i>'+k+' '+chip(src)+'</div><div class="tv">'+v+'</div><div class="ts">'+s+'</div></div>'; }
 function teamLegend(){ return '<div class="legend"><span><i style="background:var(--teamA)"></i>Team A</span><span><i style="background:var(--teamB)"></i>Team B</span></div>'; }
