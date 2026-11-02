@@ -68,7 +68,7 @@ button{font-family:var(--ff)}
 .navtoggle:hover{background:var(--color-surface-subtle);color:var(--color-text)}
 .navtoggle svg{width:18px;height:18px}
 .side-foot{margin-top:auto;padding-top:12px;display:flex;flex-direction:column;gap:10px}
-.sidecta{width:100%;justify-content:center;background:var(--color-primary-tint);border-color:var(--color-primary-text);color:var(--color-primary-text);font-weight:700}
+.sidecta{width:100%;justify-content:center;background:var(--color-primary-tint);border-color:var(--color-primary-text);color:var(--color-primary-text);font-weight:700;border-radius:13px}
 .sidecta:hover{background:#DCEAFF}
 .profile{display:flex;align-items:center;gap:10px;padding:2px}
 .profile .pname{font-size:13px;font-weight:600;color:var(--color-text)}
@@ -218,14 +218,14 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .topsearch-gym>svg{width:15px;height:15px;color:var(--color-text-soft);flex:none}
 .topsearch-gym input{flex:1;border:0;background:none;outline:none;font-family:inherit;font-size:13px;color:var(--color-text);min-width:0}
 .topsearch-gym input::placeholder{color:var(--color-text-soft)}
-.seg{display:inline-flex;background:var(--color-surface-muted);border-radius:var(--r-md);padding:3px}
+.seg{display:inline-flex;background:var(--color-surface-muted);border-radius:13px;padding:3px}
 .segb{border:0;background:none;font-size:12.5px;font-weight:600;color:var(--color-text-soft);padding:6px 13px;border-radius:7px;cursor:pointer}
 .segb.active{background:var(--color-surface);color:var(--color-text);box-shadow:var(--shadow-card)}
 .search{display:flex;align-items:center;gap:7px;border:1px solid var(--color-border);border-radius:var(--r-md);padding:0 11px;height:36px;background:var(--color-surface)}
 .search svg{width:15px;height:15px;color:var(--color-text-soft)}
 .search input{border:0;outline:0;font-family:inherit;font-size:13px;width:140px;background:none;color:var(--color-text)}
 .selectwrap{position:relative;display:inline-flex;align-items:center}
-.selectwrap select{appearance:none;border:1px solid var(--color-border);border-radius:var(--r-md);height:36px;padding:0 32px 0 12px;font-family:inherit;font-size:13px;font-weight:500;color:var(--color-text);background:var(--color-surface);cursor:pointer}
+.selectwrap select{appearance:none;border:1px solid var(--color-border);border-radius:13px;height:36px;padding:0 32px 0 12px;font-family:inherit;font-size:13px;font-weight:500;color:var(--color-text);background:var(--color-surface);cursor:pointer}
 .selectwrap svg{width:15px;height:15px;color:var(--color-text-soft);position:absolute;right:10px;pointer-events:none}
 .ptabs{display:flex;gap:4px;border-bottom:1px solid var(--color-border);margin-bottom:4px}
 .ptab{border:0;background:none;font-size:13px;font-weight:500;color:var(--color-text-soft);padding:8px 12px 12px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;display:flex;align-items:center;gap:6px}
@@ -619,7 +619,9 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 </style>
 <style>
 /* ======================== NAV BAR GRADIENT ======================== */
-.side{background:linear-gradient(180deg,#090C34 0%,#0F3167 100%);border-right:1px solid rgba(255,255,255,.08)}
+.side{background:linear-gradient(180deg,#090C34 0%,#0F3167 100%);border-right:0;top:4px;left:4px;bottom:4px;width:calc(var(--side) - 4px);border-radius:16px;z-index:50}
+.sidehead{display:flex;align-items:center;gap:10px;padding:2px 4px 14px}
+body.nav-collapsed .sidehead{justify-content:center}
 .side .grp{color:rgba(255,255,255,.42)}
 .nav{color:rgba(255,255,255,.72)}
 .nav svg{color:rgba(255,255,255,.72)}
@@ -650,7 +652,7 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
   --color-primary:#1C3FCA;
   --color-primary-hover:#022198;
   --color-primary-active:#022198;
-  --color-primary-text:#004A8E;
+  --color-primary-text:hsla(228, 76%, 45%, 1);
   --color-primary-ink:#004A8E;
   --color-primary-soft:#DDE9FF;
   --color-primary-tint:#DDE9FF;
@@ -677,7 +679,7 @@ body.nav-collapsed .brandlogo{display:none}
 </style>
 <style>
 /* ======================== GLASS BARS (topbar + weekstrip) ======================== */
-.topbar{background:linear-gradient(90deg,#090C34 0,#090C34 var(--side),rgba(255,255,255,.4) var(--side));-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.topbar{left:var(--side);background:rgba(255,255,255,.4);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:left .2s ease}
 .weekstrip{background:rgba(255,255,255,.4);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 </style>
 <style>
@@ -726,7 +728,7 @@ body.nav-collapsed .brandlogo{display:none}
 </style>
 <style>
 /* ======================== NAV LEFT EDGE FIX ======================== */
-body::before{content:"";position:fixed;left:0;top:0;bottom:0;width:3px;background:#090C34;z-index:45;pointer-events:none}
+body::before{content:none}
 </style>
 <style>
 /* ======================== INTERNAL CARD DROP SHADOW ======================== */
@@ -739,7 +741,6 @@ body::before{content:"";position:fixed;left:0;top:0;bottom:0;width:3px;backgroun
   --c-partial-ink:#D67D26;
   --c-partial-soft:#FFF7ED;
 }
-.exc.p{border:1px solid #FDD185}
 .rv2-pill,.rv2-issue.is-partial .rv2-issue-ic{border:1px solid #FDD185}
 </style>
 <style>
@@ -763,7 +764,7 @@ body::before{content:"";position:fixed;left:0;top:0;bottom:0;width:3px;backgroun
 <style>
 /* ======================== NAV SEAM + CLIPCARD16 + BUTTON v2 ======================== */
 /* kill the bright seam where the navy rail meets the light content */
-.side{box-shadow:inset -2px 0 0 0 #0C1240, 4px 0 12px -4px rgba(9,12,52,.22)}
+.side{box-shadow:none}
 /* internal card padding 16 */
 .clipcard{padding:16px}
 /* primary button per new Button.svg: solid #022198 + radial sheen + 2px white inner stroke, NO drop shadow */
@@ -821,7 +822,7 @@ body::before{content:"";position:fixed;left:0;top:0;bottom:0;width:3px;backgroun
 <style>
 /* ======================== TRACK 50% + SEG CHIP + SEARCH ICON ======================== */
 .sg-track,.minibar{background:rgba(255,255,255,.5)}
-.seg{background:rgba(28,63,202,.08);border:1px solid rgba(28,63,202,.10)}
+.seg{background:rgba(28,63,202,.08)}
 </style>
 <style>
 /* ======================== SEARCH BAR radius match Export (13) ======================== */
@@ -2035,6 +2036,7 @@ renderStats(); renderTable(); renderRail(); renderWeek(); updateTitle();
   };
 })();
 MeridianShell({active:'gym',badge:7,club:'Northbank FC',actions:[{label:'Export',icon:'download'},{label:'Plan a session',icon:'plus',primary:true}]});
+(function(){ var side=document.querySelector('.side'), tb=document.querySelector('.topbar'); if(!side||!tb) return; var tgl=tb.querySelector('.navtoggle'), brand=tb.querySelector('.brand'); if(!tgl&&!brand) return; var head=document.createElement('div'); head.className='sidehead'; if(tgl) head.appendChild(tgl); if(brand) head.appendChild(brand); side.insertBefore(head, side.firstChild); })();
 (function(){
   var tb=document.querySelector('.topbar'); if(!tb) return;
   var club=tb.querySelector('.topclub'); if(!club) return;

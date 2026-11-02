@@ -280,7 +280,9 @@ body.nav-collapsed .profile .pname{display:none}
 </style>
 <style>
 /* ======================== NAV BAR GRADIENT ======================== */
-.side{background:linear-gradient(180deg,#090C34 0%,#0F3167 100%);border-right:1px solid rgba(255,255,255,.08)}
+.side{background:linear-gradient(180deg,#090C34 0%,#0F3167 100%);border-right:0;top:4px;left:4px;bottom:4px;width:calc(var(--side) - 4px);border-radius:16px;z-index:50}
+.sidehead{display:flex;align-items:center;gap:10px;padding:2px 4px 14px}
+body.nav-collapsed .sidehead{justify-content:center}
 .side .grp{color:rgba(255,255,255,.42)}
 .nav{color:rgba(255,255,255,.72)}
 .nav svg{color:rgba(255,255,255,.72)}
@@ -311,7 +313,7 @@ body.nav-collapsed .profile .pname{display:none}
   --color-primary:#1C3FCA;
   --color-primary-hover:#022198;
   --color-primary-active:#022198;
-  --color-primary-text:#004A8E;
+  --color-primary-text:hsla(228, 76%, 45%, 1);
   --color-primary-ink:#004A8E;
   --color-primary-soft:#DDE9FF;
   --color-primary-tint:#DDE9FF;
@@ -338,7 +340,7 @@ body.nav-collapsed .brandlogo{display:none}
 </style>
 <style>
 /* ======================== GLASS BARS (topbar + weekstrip) ======================== */
-.topbar{background:linear-gradient(90deg,#090C34 0,#090C34 var(--side),rgba(255,255,255,.4) var(--side));-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.topbar{left:var(--side);background:rgba(255,255,255,.4);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:left .2s ease}
 .weekstrip{background:rgba(255,255,255,.4);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 </style>
 <style>
@@ -387,7 +389,7 @@ body.nav-collapsed .brandlogo{display:none}
 </style>
 <style>
 /* ======================== NAV LEFT EDGE FIX ======================== */
-body::before{content:"";position:fixed;left:0;top:0;bottom:0;width:3px;background:#090C34;z-index:45;pointer-events:none}
+body::before{content:none}
 </style>
 <style>
 /* ======================== INTERNAL CARD DROP SHADOW ======================== */
@@ -424,7 +426,7 @@ body::before{content:"";position:fixed;left:0;top:0;bottom:0;width:3px;backgroun
 <style>
 /* ======================== NAV SEAM + CLIPCARD16 + BUTTON v2 ======================== */
 /* kill the bright seam where the navy rail meets the light content */
-.side{box-shadow:inset -2px 0 0 0 #0C1240, 4px 0 12px -4px rgba(9,12,52,.22)}
+.side{box-shadow:none}
 /* internal card padding 16 */
 .clipcard{padding:16px}
 /* primary button per new Button.svg: solid #022198 + radial sheen + 2px white inner stroke, NO drop shadow */
@@ -965,7 +967,7 @@ renderPlanModal();
     var cta=primary?'<button class="btn sidecta"><i data-lucide="'+(primary.icon||'plus')+'"></i><span class="lbl">'+esc(primary.label)+'</span></button>':'';
     var foot='<div class="side-foot">'+cta+'<div class="profile"><div class="avatar"><img src="https://randomuser.me/api/portraits/men/41.jpg" alt=""></div><span class="pname lbl">Aman</span></div></div>';
     var th=document.getElementById('shell-top'); if(th) th.outerHTML=top;
-    var sh=document.getElementById('shell-side'); if(sh) sh.outerHTML='<aside class="side">'+items+foot+'</aside>';
+    var sh=document.getElementById('shell-side'); if(sh) sh.outerHTML='<aside class="side">'+items+foot+'</aside>'; (function(){var side=document.querySelector('.side'),tb=document.querySelector('.topbar');if(!side||!tb)return;var tgl=tb.querySelector('.navtoggle'),brand=tb.querySelector('.brand');if(!tgl&&!brand)return;var h=document.createElement('div');h.className='sidehead';if(tgl)h.appendChild(tgl);if(brand)h.appendChild(brand);side.insertBefore(h,side.firstChild);})();
     try{ if(localStorage.getItem('meridian-nav-collapsed')==='1') document.body.classList.add('nav-collapsed'); }catch(e){}
     var tg=document.getElementById('navToggle'); if(tg) tg.onclick=function(){ var cc=document.body.classList.toggle('nav-collapsed'); try{localStorage.setItem('meridian-nav-collapsed',cc?'1':'0');}catch(e){} };
     icons();
