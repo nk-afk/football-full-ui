@@ -679,12 +679,13 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 
 .tabpane{display:none}
 .tabpane.active{display:block}
-.twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
 @media (max-width:1080px){.twocol{grid-template-columns:1fr}}
 
 /* generic card + section head inside panes */
 .pcard{background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--r-lg);padding:16px;box-shadow:var(--shadow-card)}
 .pcard + .pcard{margin-top:16px}
+.twocol>.pcard{margin-top:0}
 .pch{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:4px}
 .pct{font-size:14px;font-weight:700;color:var(--color-text);display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .pcsub{font-size:12.5px;color:var(--color-text-soft);margin-bottom:12px;line-height:1.45}
@@ -951,6 +952,7 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 
 /* main grid */
 .hero-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:16px;align-items:start}
+.hero-grid>.pcard{margin-top:0}
 @media (max-width:1000px){.hero-grid{grid-template-columns:1fr}}
 
 /* hero clip */
