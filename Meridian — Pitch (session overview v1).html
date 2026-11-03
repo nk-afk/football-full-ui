@@ -884,7 +884,7 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .drillcards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
 @media (max-width:1000px){.drillcards{grid-template-columns:repeat(2,1fr)}}
 @media (max-width:620px){.drillcards{grid-template-columns:1fr}}
-.drills-2x2 .drillcards{grid-template-columns:repeat(2,1fr)}
+.drills-2x2 .drillcards{grid-template-columns:repeat(2,1fr);gap:16px}
 @media (max-width:620px){.drills-2x2 .drillcards{grid-template-columns:1fr}}
 .dcard{position:relative;display:flex;flex-direction:column;text-align:left;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--r-lg);padding:16px;cursor:pointer;box-shadow:var(--shadow-card);font-family:inherit;transition:box-shadow .15s ease}
 .dcard:hover{box-shadow:inset 0 4px 0 0 var(--color-primary),var(--shadow-card)}
@@ -905,6 +905,28 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .dcard .dbar-fill{display:block;height:100%;background:var(--color-primary);border-radius:999px}
 .dcard .dbar-pct{font-size:13px;font-weight:600;color:var(--color-text-soft);font-variant-numeric:tabular-nums}
 .dchip{display:inline-block;font-size:11px;font-weight:600;color:var(--color-primary-text);background:var(--color-primary-soft);border-radius:var(--r-pill);padding:3px 9px}
+
+/* compact drill cards (drills landing) */
+.dcard2{position:relative;display:flex;flex-direction:column;text-align:left;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--r-lg);cursor:pointer;box-shadow:var(--shadow-card);font-family:inherit;overflow:hidden;transition:box-shadow .15s ease}
+.dcard2:hover{box-shadow:inset 0 4px 0 0 var(--color-primary),var(--shadow-card)}
+.dc2-top{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 0}
+.dc2-num{display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:600;color:var(--color-text-soft);font-variant-numeric:tabular-nums}
+.dc2-rule{display:block;width:38px;height:2px;border-radius:2px;background:var(--color-primary)}
+.dc2-dur{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--color-text-soft)}
+.dc2-dur svg{width:14px;height:14px}
+.dc2-body{display:flex;align-items:flex-start;gap:20px;padding:12px 18px 16px}
+.dc2-left{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px}
+.dc2-name{font-size:23px;font-weight:700;letter-spacing:-.01em;line-height:1.15;color:var(--color-text)}
+.dc2-left .dchip{align-self:flex-start}
+.dc2-metric{flex:none;min-width:148px;padding-left:20px;border-left:1px solid var(--color-separator)}
+.dc2-val{display:flex;align-items:baseline;gap:6px;font-size:34px;font-weight:800;letter-spacing:-.02em;line-height:1;color:var(--color-text)}
+.dc2-unit{font-size:15px;font-weight:600;color:var(--color-text-soft)}
+.dc2-sub{font-size:12.5px;color:var(--color-text-soft);margin-top:7px}
+.dc2-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 18px;background:var(--color-surface-subtle);border-top:1px solid var(--color-border)}
+.dc2-al{font-size:12px;color:var(--color-text-soft)}
+.dc2-av{font-size:13.5px;font-weight:600;color:var(--color-text);margin-top:2px}
+.dc2-open{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--color-primary-text);white-space:nowrap}
+.dc2-open svg{width:14px;height:14px}
 
 /* page footer */
 .pgfoot{display:flex;align-items:center;justify-content:space-between;margin:26px 0 40px;padding-top:14px;border-top:1px solid var(--color-separator);font-size:12px;color:var(--color-text-soft)}
@@ -1818,7 +1840,17 @@ function staffFocus(){
     + '</div>';
 }
 function drillsLanding(){
-  return '<div class="recapsub" style="margin:0 0 16px">Open a drill to see its load, events and clips.</div><div class="drills-2x2">'+drillCards()+'</div>';
+  return '<div class="recapsub" style="margin:0 0 16px">Open a drill to see its load, events and clips.</div><div class="drills-2x2">'+drillCardsCompact()+'</div>';
+}
+function drillCardsCompact(){
+  return '<div class="drillcards">'+DRILLS.map(function(d){
+    return '<button class="dcard2" data-drill="'+d.k+'">'
+      + '<div class="dc2-top"><span class="dc2-num">'+d.n+'<span class="dc2-rule"></span></span><span class="dc2-dur"><i data-lucide="clock"></i>'+d.min+' min</span></div>'
+      + '<div class="dc2-body"><div class="dc2-left"><div class="dc2-name">'+d.name+'</div>'+(d.tag?'<span class="dchip">'+d.tag+'</span>':'')+'</div>'
+      + '<div class="dc2-metric"><div class="dc2-val">'+d.mmin+'<span class="dc2-unit">m/min</span></div><div class="dc2-sub">Distance per minute</div></div></div>'
+      + '<div class="dc2-foot"><div class="dc2-ana"><div class="dc2-al">Available analysis</div><div class="dc2-av">'+d.cardana+'</div></div><span class="dc2-open">Open drill <i data-lucide="arrow-right"></i></span></div>'
+      + '</button>';
+  }).join('')+'</div>';
 }
 function drillCards(){
   var maxMmin=Math.max.apply(null,DRILLS.map(function(d){return d.mmin;}));
