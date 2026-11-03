@@ -1757,7 +1757,7 @@ function renderPane(){
   else { host.innerHTML = PANE[state.tab]?PANE[state.tab]():''; }
   var rootView = (state.tab==='overview'&&!state.ovSub) || (state.tab==='players'&&state.pView==='squad') || (state.tab==='review'&&state.reviewView==='list');
   var pf=document.getElementById('pgfoot'); if(pf) pf.style.display = (!state.srcOpen && !state.planOpen && rootView) ? '' : 'none';
-  var standalone = (state.tab==='overview' && state.ovSub==='drillload') || (state.tab==='review' && state.standaloneReview) || (state.tab==='players' && state.pView==='player' && state.standalonePlayer);
+  var standalone = state.planOpen || (state.tab==='overview' && state.ovSub==='drillload') || (state.tab==='review' && state.standaloneReview) || (state.tab==='players' && state.pView==='player' && state.standalonePlayer);
   var phd=document.querySelector('.phead'); if(phd) phd.style.display = standalone ? 'none' : '';
   var tbs=document.getElementById('themetabs'); if(tbs) tbs.style.display = standalone ? 'none' : '';
   var topb=document.querySelector('.topbar'); if(topb) topb.style.display = standalone ? 'none' : '';
