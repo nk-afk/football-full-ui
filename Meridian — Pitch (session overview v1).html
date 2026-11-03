@@ -1752,13 +1752,13 @@ function renderPane(){
   if(state.planOpen){ host.innerHTML=planPane(); }
   else if(state.srcOpen){ host.innerHTML=sourcesPane(); }
   else if(state.tab==='overview'){ host.innerHTML = state.ovSub==='drillload' ? drillLoadPane() : PANE.overview(); }
-  else if(state.tab==='drills'){ if(!state.drill) state.drill=DRILLS[0].k; host.innerHTML=drillDetail(state.drill); }
+  else if(state.tab==='drills'){ host.innerHTML = state.drill ? drillDetail(state.drill) : drillsLanding(); }
   else if(state.tab==='players'){ host.innerHTML=playersPane(); }
   else if(state.tab==='review'){ host.innerHTML=PANE.review(); }
   else { host.innerHTML = PANE[state.tab]?PANE[state.tab]():''; }
-  var rootView = (state.tab==='overview'&&!state.ovSub) || (state.tab==='players'&&state.pView==='squad') || (state.tab==='review'&&state.reviewView==='list');
+  var rootView = (state.tab==='overview'&&!state.ovSub) || (state.tab==='players'&&state.pView==='squad') || (state.tab==='review'&&state.reviewView==='list') || (state.tab==='drills'&&!state.drill);
   var pf=document.getElementById('pgfoot'); if(pf) pf.style.display = (!state.srcOpen && !state.planOpen && rootView) ? '' : 'none';
-  var standalone = state.planOpen || (state.tab==='overview' && state.ovSub==='drillload') || (state.tab==='review' && state.standaloneReview) || (state.tab==='players' && state.pView==='player' && state.standalonePlayer);
+  var standalone = state.planOpen || (state.tab==='overview' && state.ovSub==='drillload') || (state.tab==='drills' && state.drill) || (state.tab==='review' && state.standaloneReview) || (state.tab==='players' && state.pView==='player' && state.standalonePlayer);
   var phd=document.querySelector('.phead'); if(phd) phd.style.display = standalone ? 'none' : '';
   var tbs=document.getElementById('themetabs'); if(tbs) tbs.style.display = standalone ? 'none' : '';
   var topb=document.querySelector('.topbar'); if(topb) topb.style.display = standalone ? 'none' : '';
@@ -1814,6 +1814,9 @@ function staffFocus(){
     + '<div class="sf-grp"><div class="sf-ghead"><span class="eyebrow">Coaching observations</span></div>'+obs.map(row).join('')+'</div>'
     + '<div class="sf-grp"><div class="sf-ghead"><span class="eyebrow">Data checks</span></div>'+data.map(row).join('')+'</div>'
     + '</div>';
+}
+function drillsLanding(){
+  return '<div class="recapsub" style="margin:0 0 16px">Open a drill to see its load, events and clips.</div>'+drillCards();
 }
 function drillCards(){
   var maxMmin=Math.max.apply(null,DRILLS.map(function(d){return d.mmin;}));
@@ -2250,9 +2253,9 @@ var DRILLANA={
 var PART={warmup:'19 GPS players + 2 goalkeepers','10v10':'19 + U01 + 2 GK','11v11':'19 + U01 + 2 GK',crossing:'18 + 2 GK'};
 function drillDetail(k){
   var d=drill(k), list=DRILLANA[k]||[]; if(state.analysis>=list.length) state.analysis=0; var a=list[state.analysis];
-  var drillOpts=DRILLS.map(function(x){return '<button class="dd-opt'+(x.k===k?' on':'')+'" data-ddrill="'+x.k+'">'+x.name+'</button>';}).join('');
   var anaOpts=list.map(function(x,i){return '<button class="dd-opt'+(i===state.analysis?' on':'')+'" data-dana="'+i+'">'+x.name+'</button>';}).join('');
-  var head='<div class="ddtoolbar"><div class="drilltitle"><div class="dt-row"><div class="dd"><button class="dd-btn big" data-dd="drill">'+d.name+' <i data-lucide="chevron-down"></i></button><div class="dd-menu" data-m="drill">'+drillOpts+'</div></div></div>'
+  var head='<button class="backlink" data-opendrills><i data-lucide="arrow-left"></i>Back to drills</button>'
+    + '<div class="ddtoolbar"><div class="drilltitle"><div class="dt-row"><h2>'+d.name+'</h2></div>'
     + '<div class="dt-meta">'+d.min+' min&nbsp; ·&nbsp; '+d.size+'&nbsp; ·&nbsp; '+PART[k]+'</div></div>'
     + '<div class="analysissel"><span class="al">Analysis</span><div class="dd"><button class="dd-btn wide" data-dd="ana">'+a.name+' <i data-lucide="chevron-down"></i></button><div class="dd-menu right" data-m="ana">'+anaOpts+'</div></div></div></div>';
   return head + a.fn(k) + srcLinkFoot();
