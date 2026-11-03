@@ -1027,6 +1027,7 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .rv-pager button svg{width:16px;height:16px}
 
 .rv-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:16px;align-items:start}
+.rv-grid>.pcard{margin-top:0}
 @media (max-width:1000px){.rv-grid{grid-template-columns:1fr}}
 
 /* sources show */
@@ -1827,7 +1828,7 @@ function drillCards(){
 }
 
 /* ---------- DRILL LOAD (compare) ---------- */
-function srcLinkFoot(){ return '<div class="ddfoot"><span class="l"></span><a data-srcopen>Sources &amp; definitions <i data-lucide="arrow-right"></i></a></div>'; }
+function srcLinkFoot(){ return '<div class="ddfoot"><span class="l"></span><a data-srcopen>Sources &amp; definitions</a></div>'; }
 function drillLoadPane(){
   var parts=['19 + 2 GK','19 + U01 + 2 GK','19 + U01 + 2 GK','18 + 2 GK'];
   var MAX=150;
@@ -2153,7 +2154,7 @@ function reviewDetail(){
     + cmp
     + '<div class="howworks"><div class="hw-head" data-how><span>How this flag works</span><i data-lucide="chevron-down"></i></div><div class="hw-body">'+d.how+'</div></div>'
     + upnext(i) + '</div>';
-  var foot='<div class="ddfoot"><span class="l"></span><a data-srcopen>Sources &amp; definitions <i data-lucide="arrow-right"></i></a></div>';
+  var foot='<div class="ddfoot"><span class="l"></span><a data-srcopen>Sources &amp; definitions</a></div>';
   return head + '<div class="rv-grid">'+poster+decision+'</div>' + foot;
 }
 function upnext(i){
