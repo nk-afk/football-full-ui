@@ -934,7 +934,9 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .dchip{display:inline-block;font-size:11px;font-weight:600;color:var(--color-primary-text);background:var(--color-primary-soft);border-radius:var(--r-pill);padding:3px 9px}
 
 /* compact drill cards (drills landing) — chrome shared via the card reskin list above */
-.dcard2{position:relative;display:flex;flex-direction:column;text-align:left;cursor:pointer;font-family:inherit;transition:box-shadow .15s ease}
+.dcard2{position:relative;display:flex;flex-direction:column;text-align:left;cursor:pointer;font-family:inherit;transition:box-shadow .15s ease,border-color .12s ease}
+.footrow{transition:border-color .12s ease}
+.dcard2:hover,.footrow:hover,.kmcard:hover{border-color:var(--color-primary)}
 .dc2-top{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 0}
 .dc2-num{font-size:12.5px;font-weight:600;color:var(--color-text-soft);font-variant-numeric:tabular-nums}
 .dc2-dur{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--color-text-soft)}
@@ -1305,7 +1307,7 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .kmrail .km-h .c{font-size:12px;color:var(--color-text-soft);display:flex;align-items:center;gap:8px}
 .kmcard{display:flex;gap:12px;padding:10px;border:1px solid var(--color-border);border-radius:var(--r-md);margin-bottom:10px;cursor:pointer;align-items:center}
 .kmrail .kmcard:last-child{margin-bottom:0}
-.kmcard:hover{background:var(--color-surface-subtle)}
+.kmcard{transition:border-color .12s ease}
 .kmcard.sel{border-color:var(--color-primary-border);background:var(--color-primary-soft)}
 .kmthumb{width:96px;height:60px;border-radius:7px;flex:none;background:linear-gradient(160deg,#3b7a4a,#215130);position:relative;overflow:hidden}
 .kmthumb img{width:100%;height:100%;object-fit:cover}
@@ -2476,10 +2478,10 @@ function drillDetail(k){
 function bigTile(v,l,s){ return '<div class="tile"><div class="tv" style="font-size:26px">'+v+'</div><div class="ts" style="font-size:12.5px;color:var(--color-text);font-weight:600;margin-top:7px">'+l+'</div>'+(s?'<div class="ts">'+s+'</div>':'')+'</div>'; }
 function ciBar(label,pct,lo,hi,frac){ return '<div class="cibar"><div class="cilab">'+label+'</div><div class="citrack"><div class="cibarfill" style="width:'+pct+'%"></div><div class="ciwhisk" style="left:'+lo+'%;width:'+(hi-lo)+'%"></div><div class="cidot" style="left:'+pct+'%"></div></div><div class="cival"><b>'+pct+'%</b><span>'+frac+'<br>'+lo+' – '+hi+'%</span></div></div>'; }
 function kmRail(count,items){
-  return '<div class="pcard kmrail"><div class="km-h"><span class="t">Key moments</span><span class="c">'+count+' <button class="rv-pager" style="display:inline"></button></span></div>'
+  return '<div class="pcard kmrail"><div class="km-h"><span class="t">Key moments</span><span class="c">'+count+'</span></div>'
     + items.map(function(m,i){ return '<div class="kmcard'+(i===0?' sel':'')+'" data-play><div class="kmthumb">'+(m.img?'<img src="frames/'+m.img+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">':'')+'<span class="tc">'+m.time+'</span></div><div class="kmm"><div class="kt">'+m.time+' · '+m.title+'</div><div class="kw">'+m.who+'</div>'+(m.tag?'<span class="ktag '+(m.tagCls||'')+'">'+m.tag+'</span>':'')+'</div></div>'; }).join('')+'</div>';
 }
-function footRow(ic,title,meta,link){ return '<div class="pcard" style="margin-top:12px;padding:12px 16px"><div style="display:flex;align-items:center;gap:10px"><i data-lucide="'+ic+'" style="width:17px;height:17px;color:var(--color-text-soft)"></i><span style="font-size:13px;font-weight:700">'+title+'</span><span style="font-size:12.5px;color:var(--color-text-soft)">'+meta+'</span><a class="cnl" data-toast="'+link+' · illustrative" style="margin-left:auto;font-size:12.5px;font-weight:600;color:var(--color-primary-text);cursor:pointer">'+link+' <i data-lucide="chevron-right" style="width:13px;height:13px;vertical-align:-2px"></i></a></div></div>'; }
+function footRow(ic,title,meta,link){ return '<div class="pcard footrow" data-toast="'+link+' · illustrative" style="margin-top:12px;padding:12px 16px;cursor:pointer"><div style="display:flex;align-items:center;gap:10px"><i data-lucide="'+ic+'" style="width:17px;height:17px;color:var(--color-text-soft)"></i><span style="font-size:13px;font-weight:700">'+title+'</span><span style="font-size:12.5px;color:var(--color-text-soft)">'+meta+'</span><span class="cnl" style="margin-left:auto;font-size:12.5px;font-weight:600;color:var(--color-primary-text)">'+link+' <i data-lucide="chevron-right" style="width:13px;height:13px;vertical-align:-2px"></i></span></div></div>'; }
 
 function dashWaves(){
   var left='<div class="pcard"><div class="pct" style="margin-bottom:10px">3v2 wave outcomes '+chip('video')+'</div>'
