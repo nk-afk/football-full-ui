@@ -2502,7 +2502,7 @@ function dashPressing(){
   var cues=[['Touchline pass','3 / 4 (75%)','1 / 11 (9%)'],['Back pass ≥8 m','6 / 24 (25%)','4 / 25 (16%)'],['Square back-line pass','1 / 5 (20%)','0 / 5 (0%)'],['Total','10 / 33 (30%)','5 / 41 (12%)']];
   var cuestbl='<div class="pcard"><div class="pct" style="margin-bottom:2px">Pressing on cues</div><div class="pcsub">Pressure on the receiver within 2 s of arrival.</div><table class="dtable"><thead><tr><th>Cue</th><th class="num">Team A</th><th class="num">Team B</th></tr></thead><tbody>'+cues.map(function(r){return '<tr'+(r[0]==='Total'?' class="sumrow"':'')+'><td>'+r[0]+'</td><td class="num">'+r[1]+'</td><td class="num">'+r[2]+'</td></tr>';}).join('')+'</tbody></table></div>';
   var pctx='<div class="pcard"><div class="pct" style="margin-bottom:12px">Pressure context</div><div class="bigrow"><div class="bignum"><div class="bv pri">58 of 79</div><div class="bl">pressures followed a turnover within 5 s</div><div class="bs">73%</div></div><div class="bignum"><div class="bv">15 of 74</div><div class="bl">tracked cues drew a press</div><div class="bs">20%</div></div></div></div>';
-  return tiles + '<div class="hero-grid">'+teamtbl+km+'</div><div class="twocol" style="margin-top:16px">'+cuestbl+pctx+'</div>'
+  return tiles + '<div class="hero-grid">'+teamtbl+km+'</div><div class="hero-grid" style="margin-top:16px">'+cuestbl+pctx+'</div>'
     + footRow('users','Player pressure counts','both games · 19 players','View full player breakdown')
     + footRow('clock','Passing:','287 passes · 77% complete · 62% under pressure','View definitions');
 }
