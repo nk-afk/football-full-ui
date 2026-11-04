@@ -929,12 +929,11 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .dcard .dbar-pct{font-size:13px;font-weight:600;color:var(--color-text-soft);font-variant-numeric:tabular-nums}
 .dchip{display:inline-block;font-size:11px;font-weight:600;color:var(--color-primary-text);background:var(--color-primary-soft);border-radius:var(--r-pill);padding:3px 9px}
 
-/* compact drill cards (drills landing) */
-.dcard2{position:relative;display:flex;flex-direction:column;text-align:left;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--r-lg);cursor:pointer;box-shadow:var(--shadow-card);font-family:inherit;overflow:hidden;transition:box-shadow .15s ease}
+/* compact drill cards (drills landing) — chrome shared via the card reskin list above */
+.dcard2{position:relative;display:flex;flex-direction:column;text-align:left;cursor:pointer;font-family:inherit;transition:box-shadow .15s ease}
 .dcard2:hover{box-shadow:inset 0 4px 0 0 var(--color-primary),var(--shadow-card)}
 .dc2-top{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 0}
-.dc2-num{display:flex;align-items:center;gap:10px;font-size:12.5px;font-weight:600;color:var(--color-text-soft);font-variant-numeric:tabular-nums}
-.dc2-rule{display:block;width:38px;height:2px;border-radius:2px;background:var(--color-primary)}
+.dc2-num{font-size:12.5px;font-weight:600;color:var(--color-text-soft);font-variant-numeric:tabular-nums}
 .dc2-dur{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--color-text-soft)}
 .dc2-dur svg{width:14px;height:14px}
 .dc2-body{display:flex;align-items:flex-start;gap:20px;padding:12px 18px 16px}
@@ -945,7 +944,7 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .dc2-val{display:flex;align-items:baseline;gap:6px;font-size:34px;font-weight:800;letter-spacing:-.02em;line-height:1;color:var(--color-text)}
 .dc2-unit{font-size:15px;font-weight:600;color:var(--color-text-soft)}
 .dc2-sub{font-size:12.5px;color:var(--color-text-soft);margin-top:7px}
-.dc2-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 18px;background:var(--color-surface-subtle);border-top:1px solid var(--color-border)}
+.dc2-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 18px;border-top:1px solid var(--color-separator)}
 .dc2-al{font-size:12px;color:var(--color-text-soft)}
 .dc2-av{font-size:13.5px;font-weight:600;color:var(--color-text);margin-top:2px}
 .dc2-open{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--color-primary-text);white-space:nowrap}
@@ -1463,7 +1462,7 @@ body.nav-collapsed .sidehead{justify-content:center}
 </style>
 <style>
 /* ======================== GLASS CARDS ======================== */
-.pcard,.tile,.statcard,.statstrip,.ovstrip,.dcard,.pb-card,.panel,.exlb-card,.acard,.revcard,.weekcal,.pd-card,.ptable{
+.pcard,.tile,.statcard,.statstrip,.ovstrip,.dcard,.dcard2,.pb-card,.panel,.exlb-card,.acard,.revcard,.weekcal,.pd-card,.ptable{
   background:rgba(255,255,255,.4);
   border:2px solid #FFFFFF;
   border-radius:24px;
@@ -1511,7 +1510,7 @@ body.nav-collapsed .brandlogo{display:none}
 </style>
 <style>
 /* ======================== CARD STROKE (soft glass edge) ======================== */
-.pcard,.tile,.statcard,.statstrip,.ovstrip,.dcard,.pb-card,.panel,.exlb-card,.acard,.revcard,.weekcal,.pd-card,.ptable{
+.pcard,.tile,.statcard,.statstrip,.ovstrip,.dcard,.dcard2,.pb-card,.panel,.exlb-card,.acard,.revcard,.weekcal,.pd-card,.ptable{
   border:1px solid rgba(255,255,255,.8);
   box-shadow:0 12px 32px rgba(16,24,40,.07), 0 2px 6px rgba(16,24,40,.04), inset 0 1px 0 rgba(255,255,255,.95);
 }
@@ -1867,7 +1866,7 @@ function drillsLanding(){
 function drillCardsCompact(){
   return '<div class="drillcards">'+DRILLS.map(function(d){
     return '<button class="dcard2" data-drill="'+d.k+'">'
-      + '<div class="dc2-top"><span class="dc2-num">'+d.n+'<span class="dc2-rule"></span></span><span class="dc2-dur"><i data-lucide="clock"></i>'+d.min+' min</span></div>'
+      + '<div class="dc2-top"><span class="dc2-num">'+d.n+'</span><span class="dc2-dur"><i data-lucide="clock"></i>'+d.min+' min</span></div>'
       + '<div class="dc2-body"><div class="dc2-left"><div class="dc2-name">'+d.name+'</div>'+(d.tag?'<span class="dchip">'+d.tag+'</span>':'')+'</div>'
       + '<div class="dc2-metric"><div class="dc2-val">'+d.mmin+'<span class="dc2-unit">m/min</span></div><div class="dc2-sub">Distance per minute</div></div></div>'
       + '<div class="dc2-foot"><div class="dc2-ana"><div class="dc2-al">Available analysis</div><div class="dc2-av">'+d.cardana+'</div></div><span class="dc2-open">Open drill <i data-lucide="arrow-right"></i></span></div>'
