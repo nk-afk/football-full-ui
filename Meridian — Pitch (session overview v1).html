@@ -725,6 +725,7 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .pitchcap{font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--color-text-soft);text-align:center}
 .pitch{width:100%;height:auto;display:block;background:#F4F7F3;border:1px solid var(--color-border);border-radius:var(--r-md)}
 .pitch .line{stroke:#CBD5CE;stroke-width:1.4;fill:none}
+.pitch .linedot{fill:#CBD5CE;stroke:none}
 .pitch .shape{fill:rgba(37,99,201,.06);stroke:var(--teamA);stroke-width:1.4;stroke-dasharray:4 3}
 .pitch .shapeB{fill:rgba(217,69,59,.06);stroke:var(--teamB)}
 .pitch .pdot{stroke:#fff;stroke-width:1.5}
@@ -2439,7 +2440,12 @@ function formation(team,phase){
 }
 function pitchMap(phase){
   var W=200,H=128;
-  var lines='<rect class="line" x="3" y="3" width="'+(W-6)+'" height="'+(H-6)+'"/><line class="line" x1="'+(W/2)+'" y1="3" x2="'+(W/2)+'" y2="'+(H-3)+'"/><circle class="line" cx="'+(W/2)+'" cy="'+(H/2)+'" r="16"/><rect class="line" x="3" y="'+(H/2-28)+'" width="30" height="56"/><rect class="line" x="'+(W-33)+'" y="'+(H/2-28)+'" width="30" height="56"/>';
+  var cx=W/2, cy=H/2;
+  var lines='<rect class="line" x="3" y="3" width="'+(W-6)+'" height="'+(H-6)+'" rx="3"/>'
+    +'<line class="line" x1="'+cx+'" y1="3" x2="'+cx+'" y2="'+(H-3)+'"/>'
+    +'<circle class="line" cx="'+cx+'" cy="'+cy+'" r="16"/><circle class="linedot" cx="'+cx+'" cy="'+cy+'" r="1.2"/>'
+    +'<rect class="line" x="3" y="'+(cy-28)+'" width="30" height="56"/><rect class="line" x="3" y="'+(cy-15)+'" width="12" height="30"/><circle class="linedot" cx="21" cy="'+cy+'" r="1.2"/>'
+    +'<rect class="line" x="'+(W-33)+'" y="'+(cy-28)+'" width="30" height="56"/><rect class="line" x="'+(W-15)+'" y="'+(cy-15)+'" width="12" height="30"/><circle class="linedot" cx="'+(W-21)+'" cy="'+cy+'" r="1.2"/>';
   function dots(team){ var pts=formation(team,phase); var col=team==='A'?'var(--teamA)':'var(--teamB)'; var hull=[pts[0],pts[7],pts[9],pts[3]]; var poly='<polygon class="shape'+(team==='B'?' shapeB':'')+'" points="'+hull.map(function(p){return p.x+','+p.y;}).join(' ')+'"/>'; var d=pts.map(function(p){return '<circle class="pdot" cx="'+p.x+'" cy="'+p.y+'" r="6.5" fill="'+col+'"/><text class="plab" x="'+p.x+'" y="'+p.y+'">'+(+p.lab)+'</text>';}).join(''); return poly+d; }
   return '<svg class="pitch" viewBox="0 0 '+W+' '+H+'">'+lines+dots('A')+dots('B')+'</svg>';
 }
