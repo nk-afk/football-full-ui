@@ -914,7 +914,7 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .drills-2x2 .drillcards{grid-template-columns:repeat(2,1fr);gap:16px}
 @media (max-width:620px){.drills-2x2 .drillcards{grid-template-columns:1fr}}
 .dcard{position:relative;display:flex;flex-direction:column;text-align:left;background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--r-lg);padding:16px;cursor:pointer;box-shadow:var(--shadow-card);font-family:inherit;transition:box-shadow .15s ease,border-color .12s ease}
-.dcard:hover{border-color:var(--color-primary)}
+.dcard:hover{outline:1.5px solid var(--color-primary);outline-offset:-1.5px}
 .dcard .dtop{display:flex;align-items:center;justify-content:space-between}
 .dcard .dnum{font-size:12.5px;color:var(--color-text-soft);font-weight:600;font-variant-numeric:tabular-nums}
 .dcard .dchev{color:var(--color-text-disabled);display:flex}
@@ -936,7 +936,8 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 /* compact drill cards (drills landing) — chrome shared via the card reskin list above */
 .dcard2{position:relative;display:flex;flex-direction:column;text-align:left;cursor:pointer;font-family:inherit;transition:box-shadow .15s ease,border-color .12s ease}
 .footrow{transition:border-color .12s ease}
-.dcard2:hover,.footrow:hover,.kmcard:hover{border-color:var(--color-primary)}
+.dcard2:hover,.kmcard:hover{outline:1.5px solid var(--color-primary);outline-offset:-1.5px}
+.footrow:hover{background:var(--color-surface-subtle)}
 .dc2-top{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 0}
 .dc2-num{font-size:12.5px;font-weight:600;color:var(--color-text-soft);font-variant-numeric:tabular-nums}
 .dc2-dur{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--color-text-soft)}
@@ -1138,7 +1139,7 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .upnext{border-top:1px solid var(--color-separator);margin-top:16px;padding-top:14px}
 .upnext .un-e{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--color-text-soft);margin-bottom:10px}
 .un-card{display:flex;align-items:center;gap:12px;padding:8px;border-radius:var(--r-md);cursor:pointer;border:1px solid transparent;transition:border-color .12s ease}
-.un-card:hover{border-color:var(--color-primary)}
+.un-card:hover{outline:1.5px solid var(--color-primary);outline-offset:-1.5px}
 .un-card .un-thumb{width:64px;height:44px;border-radius:7px;flex:none;background:linear-gradient(160deg,#3b7a4a,#215130)}
 .un-card .un-m{flex:1;min-width:0}
 .un-card .un-t{font-size:13.5px;font-weight:700;color:var(--color-text)}
