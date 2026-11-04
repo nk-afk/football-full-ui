@@ -920,8 +920,8 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .dcard .dunit{font-size:15px;font-weight:600;color:var(--color-text-soft)}
 .dcard .dsub{font-size:12.5px;color:var(--color-text-soft);margin-top:7px}
 .dcard .dbar{display:flex;align-items:center;gap:10px;margin-top:12px}
-.dcard .dbar-track{flex:1;height:6px;background:var(--color-primary-soft);border-radius:999px;overflow:hidden}
-.dcard .dbar-fill{display:block;height:100%;background:var(--color-primary);border-radius:999px}
+.dcard .dbar-track{flex:1;height:6px;background:var(--color-surface-muted);border-radius:999px;overflow:hidden}
+.dcard .dbar-fill{display:block;height:100%;background:#A3C9FF;border-radius:999px}
 .dcard .dbar-pct{font-size:13px;font-weight:600;color:var(--color-text-soft);font-variant-numeric:tabular-nums}
 .dchip{display:inline-block;font-size:11px;font-weight:600;color:var(--color-primary-text);background:var(--color-primary-soft);border-radius:var(--r-pill);padding:3px 9px}
 
@@ -1179,6 +1179,7 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .ovstat:first-child{border-left:0;padding-left:0}
 .ovstat .ol{font-size:12px;color:var(--color-text-soft);margin-bottom:6px}
 .ovstat .ov{font-size:22px;font-weight:700;letter-spacing:-.01em;line-height:1}
+.u{font-size:.5em;font-weight:600;color:var(--color-text-soft);letter-spacing:normal;margin-left:.12em;vertical-align:baseline}
 .ovright{text-align:right;padding-left:22px;border-left:1px solid var(--color-separator);flex:0 0 auto}
 .ovright .orl{font-size:12px;color:var(--color-text-soft);margin-bottom:7px}
 .ovright a{font-size:13px;font-weight:600;color:var(--color-primary-text);cursor:pointer;display:inline-flex;align-items:center;gap:5px}
@@ -1210,6 +1211,13 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .sf-d{font-size:12.5px;color:var(--color-text-soft);margin-top:1px}
 .sf-ch{color:var(--color-text-disabled);display:flex}
 .sf-ch svg{width:18px;height:18px}
+.sf-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+.sf-tile{padding:14px;cursor:pointer;transition:box-shadow .15s ease,transform .15s ease}
+.sf-tile:hover{box-shadow:0 6px 16px rgba(16,24,40,.12)}
+.sf-grid .sf-tile{box-shadow:7.65px 7.65px 11.5px -3px rgba(16,24,40,.077)}
+.crtop + .sf-grp .sf-ghead{padding-top:9px}
+.sf-tic{color:var(--color-text-muted);display:block;line-height:0;margin-bottom:9px}
+.sf-tic svg{width:16px;height:16px}
 .sffoot{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--color-separator);padding-top:13px;margin-top:8px;font-size:12.5px;color:var(--color-text-soft)}
 .sffoot a{color:var(--color-primary-text);font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:5px}
 .sffoot a svg{width:13px;height:13px}
@@ -1482,7 +1490,7 @@ body.nav-collapsed .sidehead{justify-content:center}
 </style>
 <style>
 /* ======================== GLASS CARDS ======================== */
-.pcard,.tile,.statcard,.statstrip,.ovstrip,.dcard,.dcard2,.pb-card,.panel,.exlb-card,.acard,.revcard,.weekcal,.pd-card,.ptable{
+.pcard,.tile,.statcard,.statstrip,.ovstrip,.dcard,.dcard2,.pb-card,.panel,.exlb-card,.acard,.revcard,.weekcal,.pd-card,.pm-card,.ptable{
   background:rgba(255,255,255,.4);
   border:2px solid #FFFFFF;
   border-radius:24px;
@@ -1530,14 +1538,14 @@ body.nav-collapsed .brandlogo{display:none}
 </style>
 <style>
 /* ======================== CARD STROKE (soft glass edge) ======================== */
-.pcard,.tile,.statcard,.statstrip,.ovstrip,.dcard,.dcard2,.pb-card,.panel,.exlb-card,.acard,.revcard,.weekcal,.pd-card,.ptable{
+.pcard,.tile,.statcard,.statstrip,.ovstrip,.dcard,.dcard2,.pb-card,.panel,.exlb-card,.acard,.revcard,.weekcal,.pd-card,.pm-card,.ptable{
   border:1px solid rgba(255,255,255,.8);
   box-shadow:0 12px 32px rgba(16,24,40,.07), 0 2px 6px rgba(16,24,40,.04), inset 0 1px 0 rgba(255,255,255,.95);
 }
 </style>
 <style>
 /* ======================== INTERNAL CARDS (glass tiles) ======================== */
-.clipcard,.kmcard,.flagcard{
+.clipcard,.kmcard,.flagcard,.sf-tile{
   background:linear-gradient(180deg,rgba(255,255,255,.80),rgba(255,255,255,.52));
   border:1px solid rgba(255,255,255,.85);
   border-radius:20px;
@@ -1558,7 +1566,7 @@ body.nav-collapsed .brandlogo{display:none}
 <style>
 /* ======================== INTERNAL CARDS v2 + NAV LINE FIX ======================== */
 /* Internal cards per spec: 40% white fill, 2px white inside stroke, radius 16 */
-.clipcard,.kmcard,.flagcard{
+.clipcard,.kmcard,.flagcard,.sf-tile{
   background:rgba(255,255,255,.4);
   border:2px solid #FFFFFF;
   border-radius:16px;
@@ -1570,7 +1578,7 @@ body.nav-collapsed .brandlogo{display:none}
 </style>
 <style>
 /* ======================== INTERNAL CARD: translucent (not stacked white) ======================== */
-.clipcard,.kmcard,.flagcard{background:transparent}
+.clipcard,.kmcard,.flagcard,.sf-tile{background:transparent}
 </style>
 <style>
 /* ======================== NAV LEFT EDGE FIX ======================== */
@@ -1578,7 +1586,7 @@ body::before{content:none}
 </style>
 <style>
 /* ======================== INTERNAL CARD DROP SHADOW ======================== */
-.clipcard,.kmcard,.flagcard{box-shadow:10px 10px 15px -3px rgba(16,24,40,.10)}
+.clipcard,.kmcard,.flagcard,.sf-tile{box-shadow:10px 10px 15px -3px rgba(16,24,40,.10)}
 </style>
 <style>
 /* ======================== PARTIAL → amber badge grading (Container.svg) ======================== */
@@ -1850,9 +1858,11 @@ PANE.overview=function(){
   return ovStrip()
     + '<div class="ovgrid">' + recapCard() + staffFocus() + '</div>'
     + '<div class="sech"><h2>Explore four drills</h2></div>'
-    + drillCards();
+    + drillCards(true);
 };
-function ovStat(l,v){ return '<div class="ovstat"><div class="ol">'+l+'</div><div class="ov num">'+v+'</div></div>'; }
+/* split "123 unit" -> big number + small <span class="u">unit</span> (unit = trailing non-space token starting with a letter or %) */
+function uw(v){ var s=String(v); var m=s.match(/^(.+)\s+([A-Za-z%][^\s]*)$/); return m ? m[1]+'<span class="u">'+m[2]+'</span>' : s; }
+function ovStat(l,v){ return '<div class="ovstat"><div class="ol">'+l+'</div><div class="ov num">'+uw(v)+'</div></div>'; }
 function ovStrip(){
   return '<div class="ovstrip">'
     + ovStat('Distance · squad mean','6,429 m')
@@ -1877,12 +1887,12 @@ var STAFFFOCUS=[
 ];
 function staffFocus(){
   function row(f){ var attr=(f.psub!=null)?('data-psub="'+f.psub+'"'):(f.review!=null)?('data-review="'+f.review+'"'):('data-drill="'+f.drill+'" data-ai="'+f.ai+'"');
-    return '<div class="sf-row" '+attr+'><span class="sf-ic"><i data-lucide="'+f.ic+'"></i></span><div class="sf-m"><div class="sf-t">'+f.t+'</div><div class="sf-d">'+f.d+'</div></div><span class="sf-ch"><i data-lucide="chevron-right"></i></span></div>'; }
+    return '<div class="sf-tile" '+attr+'><span class="sf-tic"><i data-lucide="'+f.ic+'"></i></span><div class="sf-t">'+f.t+'</div><div class="sf-d">'+f.d+'</div></div>'; }
   var obs=STAFFFOCUS.filter(function(f){return f.review==null;});
   var data=STAFFFOCUS.filter(function(f){return f.review!=null;});
-  return '<div class="pcard sfcard"><div class="crtop"><span class="lbl">Staff focus</span><span class="crpill" style="background:var(--color-surface-muted);color:var(--color-text-soft)">6 areas</span><a class="sf-toplink" data-reviewlib>Open 13-clip library <i data-lucide="arrow-right"></i></a></div>'
-    + '<div class="sf-grp"><div class="sf-ghead"><span class="eyebrow">Coaching observations</span></div>'+obs.map(row).join('')+'</div>'
-    + '<div class="sf-grp"><div class="sf-ghead"><span class="eyebrow">Data checks</span></div>'+data.map(row).join('')+'</div>'
+  return '<div class="pcard sfcard"><div class="crtop"><span class="lbl">Staff focus</span><a class="sf-toplink" data-go="review">Open 13-clip library <i data-lucide="arrow-right"></i></a></div>'
+    + '<div class="sf-grp"><div class="sf-ghead"><span class="eyebrow">Coaching observations</span></div><div class="sf-grid">'+obs.map(row).join('')+'</div></div>'
+    + '<div class="sf-grp"><div class="sf-ghead"><span class="eyebrow">Data checks</span></div><div class="sf-grid">'+data.map(row).join('')+'</div></div>'
     + '</div>';
 }
 function drillsLanding(){
@@ -1898,7 +1908,7 @@ function drillCardsCompact(){
       + '</button>';
   }).join('')+'</div>';
 }
-function drillCards(){
+function drillCards(hideLabel){
   var maxMmin=Math.max.apply(null,DRILLS.map(function(d){return d.mmin;}));
   return '<div class="drillcards">'+DRILLS.map(function(d){
     var pct=Math.round(d.mmin/maxMmin*100);
@@ -1908,7 +1918,7 @@ function drillCards(){
       + '<div class="dmrow"><span class="dmetric"><span class="dval">'+d.mmin+'</span><span class="dunit">m/min</span></span>'+(d.tag?'<span class="dchip">'+d.tag+'</span>':'')+'</div>'
       + '<div class="dsub">Distance per minute</div>'
       + '<div class="dbar"><span class="dbar-track"><span class="dbar-fill" style="width:'+pct+'%"></span></span><span class="dbar-pct">'+pct+'%</span></div>'
-      + '<div class="dana"><div class="dana-l"><div class="dal">Analysis available</div><div class="dav">'+d.cardana+'</div></div><span class="dana-arrow"><i data-lucide="arrow-right"></i></span></div>'
+      + '<div class="dana"><div class="dana-l">'+(hideLabel?'':'<div class="dal">Analysis available</div>')+'<div class="dav">'+d.cardana+'</div></div><span class="dana-arrow"><i data-lucide="arrow-right"></i></span></div>'
       + '</button>';
   }).join('')+'</div>';
 }
@@ -2196,7 +2206,7 @@ function reviewDetail(){
     + '<div class="hc-play" data-play><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div>'
     + '<div class="hc-ctrls"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span class="t">'+d.cur+' / '+d.total+'</span><div class="sc"></div><div class="rt"><i data-lucide="volume-2"></i><i data-lucide="maximize"></i><i data-lucide="settings"></i></div></div></div>'
     + '<div class="srcshow"><div class="sh-t">What the sources show</div><div class="srcgrid">'
-    + d.sources.map(function(s){return '<div class="srccell"><div class="scl">'+s[0]+'</div><div class="scv num">'+s[1]+'</div>'+(s[2]?'<div class="scs">'+s[2]+'</div>':'')+'</div>';}).join('')
+    + d.sources.map(function(s){return '<div class="srccell"><div class="scl">'+s[0]+'</div><div class="scv num">'+uw(s[1])+'</div>'+(s[2]?'<div class="scs">'+s[2]+'</div>':'')+'</div>';}).join('')
     + '</div><div class="srcnote">'+d.note+'</div></div></div>';
   var corr=reviewCorrections[d.id];
   var curField=d.sources[0][0], curVal=d.sources[0][1];
@@ -2369,7 +2379,7 @@ function dashPressing(){
 function SHAPEMETRICS(){ return {A:{out:[26.1,31.4,9.9,10.6,4.1],in:[31.1,35.5,11.3,13.1,8.0]},B:{out:[26.2,30.8,9.7,10.6,4.5],in:[30.8,37.0,11.9,12.0,7.2]}}; }
 function shapeMetricRow(){
   var m=SHAPEMETRICS()[state.shapeTeam][state.poss], L=['Length','Width','D – M gap','M – A gap','Back spread'];
-  return '<div class="twocol" style="grid-template-columns:repeat(5,1fr);gap:0;margin-top:12px;padding-top:4px">'+m.map(function(v,i){return '<div style="padding:0 14px;border-left:'+(i?'1px solid var(--color-separator)':'0')+'"><div style="font-size:11px;color:var(--color-text-soft);text-transform:uppercase;letter-spacing:.05em">'+L[i]+'</div><div style="font-size:18px;font-weight:700;margin-top:4px">'+v.toFixed(1)+' m</div></div>';}).join('')+'</div>';
+  return '<div class="twocol" style="grid-template-columns:repeat(5,1fr);gap:0;margin-top:12px;padding-top:4px">'+m.map(function(v,i){return '<div style="padding:0 14px;border-left:'+(i?'1px solid var(--color-separator)':'0')+'"><div style="font-size:11px;color:var(--color-text-soft);text-transform:uppercase;letter-spacing:.05em">'+L[i]+'</div><div class="num" style="font-size:22px;font-weight:700;margin-top:4px">'+uw(v.toFixed(1)+' m')+'</div></div>';}).join('')+'</div>';
 }
 function shapeToggles(){
   return '<div class="ctlrow" style="margin-bottom:16px"><div class="ctlgroup"><span class="ctrllabel">Team</span><div class="seg2"><button data-shapeteam="A"'+(state.shapeTeam==='A'?' class="active"':'')+'><span class="teamdot" style="background:var(--teamA)"></span>Team A</button><button data-shapeteam="B"'+(state.shapeTeam==='B'?' class="active"':'')+'><span class="teamdot" style="background:var(--teamB)"></span>Team B</button></div></div>'
@@ -2393,7 +2403,7 @@ function dashBuildup(){
   var tempo='<div class="pcard"><div class="pch"><div class="pct">Tempo <span style="font-weight:500;color:var(--color-text-soft);font-size:12px">27 min</span></div><span style="font-size:11px;color:var(--color-text-soft)">Source: Video</span></div>'
     + '<div class="bipstrip" style="height:30px;margin-top:14px"><div class="seg live" style="width:66%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:12px">Live 17.9 min · 66%</div><div class="seg stop" style="width:20%;display:grid;place-items:center;font-size:11px;font-weight:600;color:#334155">Coach stops</div><div class="seg dead" style="width:14%"></div></div>'
     + '<div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--color-text-soft);margin:4px 0 14px"><span>0:00</span><span>9:00</span><span>18:00</span><span>27:00</span></div>'
-    + '<div class="twocol" style="grid-template-columns:repeat(3,1fr)">'+[['112 m/min','Live (17.9 min)'],['42 m/min','Stopped (9.1 min)'],['88.8 m/min','Whole drill (27 min)']].map(function(r,i){return '<div><div style="font-size:22px;font-weight:700;border-left:3px solid '+['#2B7FFF','#7FB2FF','#B8D5FF'][i]+';padding-left:10px">'+r[0]+'</div><div style="font-size:12px;color:var(--color-text-soft);padding-left:13px;margin-top:3px">'+r[1]+'</div></div>';}).join('')+'</div>'
+    + '<div class="twocol" style="grid-template-columns:repeat(3,1fr)">'+[['112 m/min','Live (17.9 min)'],['42 m/min','Stopped (9.1 min)'],['88.8 m/min','Whole drill (27 min)']].map(function(r,i){return '<div><div style="font-size:22px;font-weight:700;border-left:3px solid '+['#2B7FFF','#7FB2FF','#B8D5FF'][i]+';padding-left:10px" class="num">'+uw(r[0])+'</div><div style="font-size:12px;color:var(--color-text-soft);padding-left:13px;margin-top:3px">'+r[1]+'</div></div>';}).join('')+'</div>'
     + '<div class="footnote">6 coach stops · longest 66 s.</div></div>';
   var prog='<div class="pcard"><div class="pch"><div class="pct">Progression</div><span style="font-size:11px;color:var(--color-text-soft)">Source: Video</span></div><table class="dtable" style="margin-top:8px"><thead><tr><th>Team</th><th>Build-ups escaped</th><th>Line-breaks complete</th></tr></thead><tbody><tr><td style="font-weight:700">A</td><td>4 / 6</td><td>22 / 26 (85%)</td></tr><tr><td style="font-weight:700">B</td><td>5 / 9</td><td>9 / 17 (53%)</td></tr></tbody></table><div class="footnote">Goal kicks escaped: A 0 / 2 · B 3 / 4.</div></div>';
   var gk=[['03:50','A','Coach restart',0,'P03 · RB',5,'Final third','Shot',''],['04:18','B','Goal kick',5,'U01 · LCB',11,'Middle third','Ball out',''],['05:33','B','Save',4,'P12 · RCM',4,'Own third','Lost (tackle)','6'],['07:57','A','Coach restart',0,'P01 · RCB',3,'Middle third','Ball out',''],['09:39','A','Goal kick',5,'P01 · RCB',1,'Own third','Lost',''],['11:40','B','Coach restart',0,'P06 · LB',2,'Own third','Lost','']];
@@ -2417,7 +2427,7 @@ function dashDeliveries(){
 
 function statStrip(stats){
   return '<div class="statstrip">'+stats.map(function(s){
-    return '<div class="statcell"><div class="sl">'+s[0]+'</div><div class="srow"><span class="sv num">'+s[1]+'</span><span class="ss">'+s[2]+'</span></div></div>';
+    return '<div class="statcell"><div class="sl">'+s[0]+'</div><div class="srow"><span class="sv num">'+uw(s[1])+'</span><span class="ss">'+s[2]+'</span></div></div>';
   }).join('')+'</div>';
 }
 
@@ -2609,6 +2619,39 @@ MeridianShell({active:'pitch',club:'Northbank FC',actions:[{label:'Export',icon:
    refresh didn't get the topbar hidden for standalone pages. Re-apply now. */
 renderPane();
 
+</script>
+
+<!-- Plan a session modal (shared across pages) -->
+<div class="modal-scrim" id="planScrim"></div>
+<div class="planmodal" id="planModal" role="dialog" aria-modal="true" aria-label="Plan a session">
+  <div class="pm-head">
+    <div><div class="pm-title">Plan a session</div><div class="pm-sub">Choose how you'd like to build the plan</div></div>
+    <button class="pm-close" id="planClose" aria-label="Close"><i data-lucide="x"></i></button>
+  </div>
+  <div class="pm-grid" id="pmGrid"></div>
+</div>
+<script>
+(function(){
+  var PLAN_METHODS=[
+    {icon:'mic',label:'Voice record',desc:'Talk through the session. We transcribe and structure it.'},
+    {icon:'keyboard',label:'Type it out',desc:'Build the plan by hand with exercises, sets and reps.'},
+    {icon:'link',label:'Connect your AMS',desc:'Pull the plan from your athlete management system.'},
+    {icon:'upload',label:'Upload a plan',desc:'Import a file: PDF, spreadsheet or document.'},
+    {icon:'camera',label:'Take a photo',desc:'Snap a handwritten plan and we digitise it.'},
+    {icon:'layout-template',label:'Start from a template',desc:'Begin from a saved preset or an existing programme.'}
+  ];
+  function pmi(){ if(window.lucide) lucide.createIcons(); }
+  function pmToast(msg){ var t=document.getElementById('m-toast'); if(!t){t=document.createElement('div');t.id='m-toast';t.style.cssText='position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#111827;color:#fff;font-weight:600;font-size:13px;padding:11px 16px;border-radius:10px;box-shadow:0 10px 30px rgba(15,23,42,.25);z-index:9999;opacity:0;transition:opacity .18s;pointer-events:none';document.body.appendChild(t);} t.textContent=msg; requestAnimationFrame(function(){t.style.opacity='1';}); clearTimeout(t._h); t._h=setTimeout(function(){t.style.opacity='0';},2200); }
+  function renderPlanModal(){ document.getElementById('pmGrid').innerHTML=PLAN_METHODS.map(function(m,i){return '<button class="pm-card" data-i="'+i+'"><span class="pm-ic"><i data-lucide="'+m.icon+'"></i></span><span class="pm-ct"><span class="pm-cl">'+m.label+'</span><span class="pm-cd">'+m.desc+'</span></span></button>';}).join(''); pmi(); }
+  function openPlanModal(){ document.getElementById('planScrim').classList.add('open'); document.getElementById('planModal').classList.add('open'); }
+  function closePlanModal(){ document.getElementById('planScrim').classList.remove('open'); document.getElementById('planModal').classList.remove('open'); }
+  document.getElementById('planScrim').onclick=closePlanModal;
+  document.getElementById('planClose').onclick=closePlanModal;
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closePlanModal(); });
+  document.getElementById('pmGrid').addEventListener('click',function(e){ var c=e.target.closest('.pm-card'); if(!c)return; var m=PLAN_METHODS[+c.dataset.i]; closePlanModal(); pmToast(m.label+' · coming soon'); });
+  document.addEventListener('click',function(e){ if(e.target.closest('.sidecta')) openPlanModal(); });
+  renderPlanModal();
+})();
 </script>
 </body>
 </html>

@@ -1470,7 +1470,7 @@ body.nav-collapsed .sidehead{justify-content:center}
 </style>
 <style>
 /* ======================== GLASS CARDS ======================== */
-.pcard,.tile,.statcard,.statstrip,.ovstrip,.dcard,.dcard2,.pb-card,.panel,.exlb-card,.acard,.revcard,.weekcal,.pd-card,.ptable{
+.pcard,.tile,.statcard,.statstrip,.ovstrip,.dcard,.dcard2,.pb-card,.panel,.exlb-card,.acard,.revcard,.weekcal,.pd-card,.pm-card,.ptable{
   background:rgba(255,255,255,.4);
   border:2px solid #FFFFFF;
   border-radius:24px;
@@ -1518,7 +1518,7 @@ body.nav-collapsed .brandlogo{display:none}
 </style>
 <style>
 /* ======================== CARD STROKE (soft glass edge) ======================== */
-.pcard,.tile,.statcard,.statstrip,.ovstrip,.dcard,.dcard2,.pb-card,.panel,.exlb-card,.acard,.revcard,.weekcal,.pd-card,.ptable{
+.pcard,.tile,.statcard,.statstrip,.ovstrip,.dcard,.dcard2,.pb-card,.panel,.exlb-card,.acard,.revcard,.weekcal,.pd-card,.pm-card,.ptable{
   border:1px solid rgba(255,255,255,.8);
   box-shadow:0 12px 32px rgba(16,24,40,.07), 0 2px 6px rgba(16,24,40,.04), inset 0 1px 0 rgba(255,255,255,.95);
 }
@@ -2705,6 +2705,39 @@ icons();
 MeridianShell({active:'pitch',club:'Northbank FC',actions:[{label:'Export',icon:'download'},{label:'Plan a session',icon:'plus',primary:true}]});
 (function(){ var tb=document.querySelector('.topbar'); if(!tb) return; var club=tb.querySelector('.topclub'); if(!club) return; var box=document.createElement('div'); box.className='topsearch-gym'; box.innerHTML='<svg class="searchico" viewBox="11.5 9.5 20 20" fill="none" stroke="currentColor" width="15" height="15"><path d="M29.4998 19.5832C29.4998 23.9554 25.9554 27.4998 21.5832 27.4998C17.2109 27.4998 13.6665 23.9554 13.6665 19.5832C13.6665 15.2109 17.2109 11.6665 21.5832 11.6665C25.9554 11.6665 29.4998 15.2109 29.4998 19.5832Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M30.3332 28.3332L28.6665 26.6665" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><input type="text" placeholder="Search players" aria-label="Search players">'; club.insertAdjacentElement('afterend', box); icons(); })();
 
+</script>
+
+<!-- Plan a session modal (shared across pages) -->
+<div class="modal-scrim" id="planScrim"></div>
+<div class="planmodal" id="planModal" role="dialog" aria-modal="true" aria-label="Plan a session">
+  <div class="pm-head">
+    <div><div class="pm-title">Plan a session</div><div class="pm-sub">Choose how you'd like to build the plan</div></div>
+    <button class="pm-close" id="planClose" aria-label="Close"><i data-lucide="x"></i></button>
+  </div>
+  <div class="pm-grid" id="pmGrid"></div>
+</div>
+<script>
+(function(){
+  var PLAN_METHODS=[
+    {icon:'mic',label:'Voice record',desc:'Talk through the session. We transcribe and structure it.'},
+    {icon:'keyboard',label:'Type it out',desc:'Build the plan by hand with exercises, sets and reps.'},
+    {icon:'link',label:'Connect your AMS',desc:'Pull the plan from your athlete management system.'},
+    {icon:'upload',label:'Upload a plan',desc:'Import a file: PDF, spreadsheet or document.'},
+    {icon:'camera',label:'Take a photo',desc:'Snap a handwritten plan and we digitise it.'},
+    {icon:'layout-template',label:'Start from a template',desc:'Begin from a saved preset or an existing programme.'}
+  ];
+  function pmi(){ if(window.lucide) lucide.createIcons(); }
+  function pmToast(msg){ var t=document.getElementById('m-toast'); if(!t){t=document.createElement('div');t.id='m-toast';t.style.cssText='position:fixed;left:50%;bottom:26px;transform:translateX(-50%);background:#111827;color:#fff;font-weight:600;font-size:13px;padding:11px 16px;border-radius:10px;box-shadow:0 10px 30px rgba(15,23,42,.25);z-index:9999;opacity:0;transition:opacity .18s;pointer-events:none';document.body.appendChild(t);} t.textContent=msg; requestAnimationFrame(function(){t.style.opacity='1';}); clearTimeout(t._h); t._h=setTimeout(function(){t.style.opacity='0';},2200); }
+  function renderPlanModal(){ document.getElementById('pmGrid').innerHTML=PLAN_METHODS.map(function(m,i){return '<button class="pm-card" data-i="'+i+'"><span class="pm-ic"><i data-lucide="'+m.icon+'"></i></span><span class="pm-ct"><span class="pm-cl">'+m.label+'</span><span class="pm-cd">'+m.desc+'</span></span></button>';}).join(''); pmi(); }
+  function openPlanModal(){ document.getElementById('planScrim').classList.add('open'); document.getElementById('planModal').classList.add('open'); }
+  function closePlanModal(){ document.getElementById('planScrim').classList.remove('open'); document.getElementById('planModal').classList.remove('open'); }
+  document.getElementById('planScrim').onclick=closePlanModal;
+  document.getElementById('planClose').onclick=closePlanModal;
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closePlanModal(); });
+  document.getElementById('pmGrid').addEventListener('click',function(e){ var c=e.target.closest('.pm-card'); if(!c)return; var m=PLAN_METHODS[+c.dataset.i]; closePlanModal(); pmToast(m.label+' · coming soon'); });
+  document.addEventListener('click',function(e){ if(e.target.closest('.sidecta')) openPlanModal(); });
+  renderPlanModal();
+})();
 </script>
 </body>
 </html>
