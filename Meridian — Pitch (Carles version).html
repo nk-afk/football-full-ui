@@ -23,6 +23,7 @@
   --c-notobs:#9CA3AF; --c-notobs-soft:#EEF1F4;
   --c-dot:#16A34A; /* calendar session dot (green, per reference) */
   --sb-steel:#A3C9FF; --sb-steel2:#A3C9FF; --sb-grey:#AFAFBB; --sb-green:#9CDE68; --sb-gold:#FFB54D; --sb-clay:#FF8680;
+  --bar-deep:#6E9AE0; --bar:#A3C9FF; --bar-soft:#CBDFF9;
   --r-sm:6px; --r-md:10px; --r-lg:12px; --r-xl:16px; --r-pill:999px;
   --shadow-card:0 1px 2px rgba(15,23,42,.04); --shadow-pop:0 16px 40px rgba(15,23,42,.18);
   --ff:"Inter Display","Inter",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
@@ -759,7 +760,7 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .ibar .ibname{width:120px;font-weight:600;color:var(--color-text)}
 .ibar .ibtrack{flex:1;height:18px;background:var(--color-surface-muted);border-radius:5px;position:relative;overflow:hidden}
 .ibar .ibfill{height:100%;background:var(--sb-steel);border-radius:5px}
-.ibar .ibfill.over{background:var(--color-primary)}
+.ibar .ibfill.over{background:var(--bar-deep)}
 .ibar .ibref{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--color-text-soft);opacity:.5}
 .ibar .ibval{width:92px;text-align:right;font-variant-numeric:tabular-nums;color:var(--color-text-muted);font-weight:600}
 
@@ -823,7 +824,7 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .sessmeta .mp svg{width:14px;height:14px}
 
 /* ============ REFERENCE REDESIGN ADDITIONS ============ */
-.wrap2{max-width:1420px;margin:0 auto;padding:22px 28px 0}
+.wrap2{max-width:1420px;margin:0 auto;padding:22px 28px 20px}
 
 /* breadcrumb + session header */
 .crumbs{font-size:12.5px;color:var(--color-text-soft);margin-bottom:8px}
@@ -1064,7 +1065,7 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 
 /* viz-type analysis: left panel holds a chart/map */
 .vizhero{min-height:120px}
-.ddfoot{display:flex;align-items:center;justify-content:space-between;margin:22px 0 40px;padding-top:14px;border-top:1px solid var(--color-separator);font-size:12px;color:var(--color-text-soft)}
+.ddfoot{display:flex;align-items:center;justify-content:space-between;margin:22px 0 0;padding-top:14px;border-top:1px solid var(--color-separator);font-size:12px;color:var(--color-text-soft)}
 .ddfoot a{color:var(--color-primary-text);font-weight:600;cursor:pointer}
 .ddfoot>a{display:inline-flex;align-items:center;gap:6px}
 .ddfoot>a svg{width:14px;height:14px}
@@ -1261,7 +1262,7 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .lcbar{display:flex;align-items:center;gap:8px;height:16px}
 .lctrack{flex:1;height:10px;background:#E0E6ED;border-radius:3px;position:relative;overflow:visible}
 .lcfill{height:100%;border-radius:3px}
-.lcfill.m{background:var(--sb-steel)} .lcfill.h{background:var(--color-primary)} .lcfill.a{background:var(--color-primary-active)}
+.lcfill.m{background:var(--bar-soft)} .lcfill.h{background:var(--bar)} .lcfill.a{background:var(--bar-deep)}
 .lcval{width:42px;font-size:11.5px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--color-text-muted)}
 .lcref{position:absolute;top:-4px;bottom:-4px;left:66.6%;width:2px;background:var(--color-text-soft);opacity:.45}
 .lcaxis{display:flex;justify-content:space-between;font-size:10.5px;color:var(--color-text-soft);margin:6px 0 0 132px}
@@ -1911,7 +1912,7 @@ function drillLoadPane(){
     return '<div class="lcrow"><div class="lcname">'+d.name+'</div><div class="lcbars">'
       + bar('m',d.pct)+bar('h',d.hsrpct)+bar('a',d.accpct)+'</div></div>';
   }).join('');
-  var chart='<div class="pcard"><div class="lclegend"><span><i style="background:var(--sb-steel)"></i>Metres/min</span><span><i style="background:var(--color-primary)"></i>High-speed m/min</span><span><i style="background:var(--color-primary-active)"></i>Acc + dec/min</span></div>'
+  var chart='<div class="pcard"><div class="lclegend"><span><i style="background:var(--bar-soft)"></i>Metres/min</span><span><i style="background:var(--bar)"></i>High-speed m/min</span><span><i style="background:var(--bar-deep)"></i>Acc + dec/min</span></div>'
     + '<div class="loadchart">'+rows+'</div>'
     + '<div class="lcaxis"><span>0%</span><span>50%</span><span>100% ref</span><span>150%</span></div></div>';
   var trows=DRILLS.map(function(d,i){
@@ -2067,7 +2068,7 @@ function pMovement(){
     + '<table class="dtable"><thead><tr><th class="num">#</th><th>Player</th><th class="num">Max km/h</th><th class="num">% own peak</th><th class="num">Exports</th></tr></thead><tbody>'
     + PEAKS.map(function(r,i){return '<tr><td class="num">'+(i+1)+'</td><td style="font-weight:600">'+r[0]+'</td><td class="num">'+r[1].toFixed(1)+'</td><td class="num">'+r[2]+'%</td><td class="num">'+r[3]+'</td></tr>';}).join('')+'</tbody></table><div class="footnote">P12 has only one export: 100% by definition.</div></div>';
   var cut='<div class="pcard" style="margin-top:16px"><div class="pch"><div class="pct">Cutting direction <span style="font-weight:500;color:var(--color-text-soft);font-size:12px">Cut ≥45° from ≥14.4 km/h</span></div><span style="font-size:12px;color:var(--color-text-soft)">No player differs from 50/50 after correction for 20 tests.</span></div>'
-    + '<div class="stackbar" style="height:30px"><div class="seg" style="width:47%;background:var(--color-primary);display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px">47%</div><div class="seg" style="width:53%;background:var(--color-surface-muted);display:grid;place-items:center;color:var(--color-text);font-weight:700;font-size:13px">53%</div></div>'
+    + '<div class="stackbar" style="height:30px"><div class="seg" style="width:47%;background:var(--bar);display:grid;place-items:center;color:var(--color-text);font-weight:700;font-size:13px">47%</div><div class="seg" style="width:53%;background:var(--color-surface-muted);display:grid;place-items:center;color:var(--color-text);font-weight:700;font-size:13px">53%</div></div>'
     + '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--color-text-soft);margin-top:6px"><span>110 of 234 cuts to left</span><span>124 of 234 cuts to right</span></div></div>';
   var head='<div class="pagetitle"><div><h2>Speed, braking &amp; cutting</h2><div class="ptsub">Both games · '+chip('both')+'</div></div>'+pAnaSel()+'</div>';
   return head + cards + '<div class="twocol">'+stops+peaks+'</div>' + cut + srcLinkFoot();
@@ -2076,7 +2077,7 @@ function statCard(ic,v,l,r){ return '<div class="statcard"><div class="sc-ic"><i
 
 /* ---------- LONGITUDINAL PROFILE ---------- */
 function lsCard(t,sub,inner){ return '<div class="pcard"><div class="pct" style="margin-bottom:2px">'+t+'</div>'+(sub?'<div class="pcsub">'+sub+'</div>':'')+inner+'</div>'; }
-function lsLegendTM(){ return '<div style="display:flex;gap:14px;margin-top:8px;font-size:11.5px;color:var(--color-text-soft)"><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:10px;height:10px;border-radius:50%;corner-shape:round;background:#fff;border:2px solid var(--color-primary);display:inline-block"></i>Training</span><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:10px;height:10px;border-radius:50%;corner-shape:round;background:var(--color-primary-active);display:inline-block"></i>Match</span></div>'; }
+function lsLegendTM(){ return '<div style="display:flex;gap:14px;margin-top:8px;font-size:11.5px;color:var(--color-text-soft)"><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:10px;height:10px;border-radius:50%;corner-shape:round;background:#fff;border:2px solid var(--bar-deep);display:inline-block"></i>Training</span><span style="display:inline-flex;align-items:center;gap:6px"><i style="width:10px;height:10px;border-radius:50%;corner-shape:round;background:var(--bar-deep);display:inline-block"></i>Match</span></div>'; }
 function lsFact(t,b){ return '<div style="background:var(--color-surface-subtle);border:1px solid var(--color-border-subtle);border-radius:var(--r-md);padding:12px"><div style="font-size:12.5px;font-weight:700;margin-bottom:4px">'+t+'</div><div style="font-size:12px;color:var(--color-text-muted);line-height:1.45">'+b+'</div></div>'; }
 function lsLine(pts,labels,o){
   o=o||{}; var W=320,H=140,padL=26,padB=20,padT=8,padR=8;
@@ -2088,8 +2089,8 @@ function lsLine(pts,labels,o){
   var grid=''; (o.grid||[]).forEach(function(g){grid+='<line x1="'+padL+'" y1="'+Y(g).toFixed(1)+'" x2="'+(W-padR)+'" y2="'+Y(g).toFixed(1)+'" stroke="var(--color-border-subtle)" stroke-width="1"/><text x="'+(padL-4)+'" y="'+(Y(g)+3).toFixed(1)+'" text-anchor="end" style="font-size:8px;fill:var(--color-text-soft)">'+g+'</text>';});
   var band=''; if(o.band){ band='<rect x="'+padL+'" y="'+Y(o.band[1]).toFixed(1)+'" width="'+(W-padL-padR)+'" height="'+(Y(o.band[0])-Y(o.band[1])).toFixed(1)+'" fill="var(--color-primary-soft)" opacity=".6"/>'; if(o.bandMed!=null) band+='<line x1="'+padL+'" y1="'+Y(o.bandMed).toFixed(1)+'" x2="'+(W-padR)+'" y2="'+Y(o.bandMed).toFixed(1)+'" stroke="var(--color-text-soft)" stroke-width="1" stroke-dasharray="3 3" opacity=".6"/>'; }
   var d=pts.map(function(v,i){return (i?'L':'M')+X(i).toFixed(1)+' '+Y(v).toFixed(1);}).join(' ');
-  var line='<path d="'+d+'" fill="none" stroke="var(--color-primary)" stroke-width="2"/>';
-  var dots=pts.map(function(v,i){var isM=types[i]==='M';return '<circle cx="'+X(i).toFixed(1)+'" cy="'+Y(v).toFixed(1)+'" r="'+(isM?4:3.4)+'" fill="'+(isM?'var(--color-primary-active)':'#fff')+'" stroke="var(--color-primary)" stroke-width="1.8"/>';}).join('');
+  var line='<path d="'+d+'" fill="none" stroke="var(--bar-deep)" stroke-width="2"/>';
+  var dots=pts.map(function(v,i){var isM=types[i]==='M';return '<circle cx="'+X(i).toFixed(1)+'" cy="'+Y(v).toFixed(1)+'" r="'+(isM?4:3.4)+'" fill="'+(isM?'var(--bar-deep)':'#fff')+'" stroke="var(--bar-deep)" stroke-width="1.8"/>';}).join('');
   var xl=labels.map(function(l,i){return '<text x="'+X(i).toFixed(1)+'" y="'+(H-5)+'" text-anchor="middle" style="font-size:8px;fill:var(--color-text-soft)">'+l+'</text>';}).join('');
   return '<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;display:block;margin-top:8px">'+grid+band+line+dots+xl+'</svg>';
 }
@@ -2152,7 +2153,7 @@ function pPlayer(){
     var dbd=[['Warm-up',30,55,30,56,23.2],['10v10',16,100,78,73,26.2],['11v11',27,101,168,79,29.2],['Crossing',15,53,101,17,23.3]];
     var drillTable='<div class="pcard"><div class="pch"><div class="pct">Drill by drill</div><span style="font-size:12px;color:var(--color-text-soft)"><i data-lucide="smartphone" style="width:13px;height:13px;vertical-align:-2px"></i> Club GPS</span></div>'
       + '<table class="dtable"><thead><tr><th>Drill</th><th class="num">Min</th><th class="num">m/min</th><th class="num">HS m</th><th class="num">Acc+dec</th><th class="num">Top km/h</th></tr></thead><tbody>'+dbd.map(function(r){return '<tr><td style="font-weight:600">'+r[0]+'</td><td class="num">'+r[1]+'</td><td class="num">'+r[2]+'</td><td class="num">'+r[3]+'</td><td class="num">'+r[4]+'</td><td class="num">'+r[5]+'</td></tr>';}).join('')+'</tbody></table>'
-      + '<div style="border-top:1px solid var(--color-separator);margin-top:14px;padding-top:14px"><div class="pct" style="font-size:13px;margin-bottom:8px">Fast runs in the games</div><div class="stackbar"><div class="seg" style="width:67%;background:var(--color-primary-active)"></div><div class="seg" style="width:25%;background:var(--color-primary)"></div><div class="seg" style="width:8%;background:var(--sb-steel)"></div></div><div style="display:flex;justify-content:space-between;align-items:center"><div class="stacklegend"><span><i style="background:var(--color-primary-active)"></i>8 recovery/pressing</span><span><i style="background:var(--color-primary)"></i>3 with ball</span><span><i style="background:var(--sb-steel)"></i>1 in-possession off-ball</span></div><a class="cnl" data-opendrill="11v11" data-ai="1" style="font-size:12.5px;font-weight:600;color:var(--color-primary-text);cursor:pointer;white-space:nowrap">View positions &amp; run clips <i data-lucide="arrow-right" style="width:13px;height:13px;vertical-align:-2px"></i></a></div></div></div>';
+      + '<div style="border-top:1px solid var(--color-separator);margin-top:14px;padding-top:14px"><div class="pct" style="font-size:13px;margin-bottom:8px">Fast runs in the games</div><div class="stackbar"><div class="seg" style="width:67%;background:var(--bar-deep)"></div><div class="seg" style="width:25%;background:var(--bar)"></div><div class="seg" style="width:8%;background:var(--bar-soft)"></div></div><div style="display:flex;justify-content:space-between;align-items:center"><div class="stacklegend"><span><i style="background:var(--bar-deep)"></i>8 recovery/pressing</span><span><i style="background:var(--bar)"></i>3 with ball</span><span><i style="background:var(--bar-soft)"></i>1 in-possession off-ball</span></div><a class="cnl" data-opendrill="11v11" data-ai="1" style="font-size:12.5px;font-weight:600;color:var(--color-primary-text);cursor:pointer;white-space:nowrap">View positions &amp; run clips <i data-lucide="arrow-right" style="width:13px;height:13px;vertical-align:-2px"></i></a></div></div></div>';
     var tech='<div class="pcard"><div class="pct" style="margin-bottom:4px">Technical work</div>'
       + '<div class="twrow"><div class="tw-ic"><i data-lucide="send"></i></div><div><div class="tw-l">Crossing</div><div class="tw-v">5 of 9</div><div class="tw-s">Attacker-first</div></div></div>'
       + '<div class="twrow"><div class="tw-ic"><i data-lucide="eye"></i></div><div><div class="tw-l">Scanning</div><div class="tw-v">0.29 /s</div><div class="tw-s">Preseason 0.24 – 0.33</div></div></div>'

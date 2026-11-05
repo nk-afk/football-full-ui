@@ -13,6 +13,8 @@
   --c-notobs:#9CA3AF; --c-notobs-soft:#EEF1F4;
   --c-dot:#16A34A; /* calendar session dot (green, per reference) */
   --sb-steel:#A3C9FF; --sb-steel2:#A3C9FF; --sb-grey:#AFAFBB; --sb-green:#9CDE68; --sb-gold:#FFB54D; --sb-clay:#FF8680;
+  /* Data-viz stacked-bar palette — reuses the bipstrip blues (live/stop/dead); the CTA primary is NEVER used on bars */
+  --bar-deep:#2B7FFF; --bar:#7FB2FF; --bar-soft:#B8D5FF;
   --r-sm:6px; --r-md:10px; --r-lg:12px; --r-xl:16px; --r-pill:999px;
   --shadow-card:0 1px 2px rgba(15,23,42,.04); --shadow-pop:0 16px 40px rgba(15,23,42,.18);
   --ff:"Inter Display","Inter",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
@@ -729,7 +731,7 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .ibar .ibname{width:120px;font-weight:600;color:var(--color-text)}
 .ibar .ibtrack{flex:1;height:18px;background:var(--color-surface-muted);border-radius:5px;position:relative;overflow:hidden}
 .ibar .ibfill{height:100%;background:var(--sb-steel);border-radius:5px}
-.ibar .ibfill.over{background:var(--color-primary)}
+.ibar .ibfill.over{background:var(--bar-deep)}
 .ibar .ibref{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--color-text-soft);opacity:.5}
 .ibar .ibval{width:92px;text-align:right;font-variant-numeric:tabular-nums;color:var(--color-text-muted);font-weight:600}
 
@@ -802,7 +804,7 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .sessmeta .mp svg{width:14px;height:14px}
 
 /* ============ REFERENCE REDESIGN ADDITIONS ============ */
-.wrap2{max-width:1420px;margin:0 auto;padding:22px 28px 0;display:flex;flex-direction:column;min-height:calc(100vh - var(--top))}
+.wrap2{max-width:1420px;margin:0 auto;padding:22px 28px 20px;display:flex;flex-direction:column;min-height:calc(100vh - var(--top))}
 body.standalone .wrap2{min-height:100vh}
 #panes{display:flex;flex-direction:column;flex:1 0 auto;min-width:0}
 
@@ -941,7 +943,7 @@ body.standalone .wrap2{min-height:100vh}
 .dc2-open svg{width:14px;height:14px}
 
 /* page footer */
-.pgfoot{display:flex;align-items:center;justify-content:space-between;margin:auto 0 20px;padding-top:14px;border-top:1px solid var(--color-separator);font-size:12px;color:var(--color-text-soft)}
+.pgfoot{display:flex;align-items:center;justify-content:space-between;margin:auto 0 0;padding-top:14px;border-top:1px solid var(--color-separator);font-size:12px;color:var(--color-text-soft)}
 .pgfoot a{color:var(--color-primary-text);font-weight:600;cursor:pointer}
 
 /* drill detail */
@@ -949,8 +951,9 @@ body.standalone .wrap2{min-height:100vh}
 .backlink:hover{color:var(--color-text)}
 .backlink svg{width:16px;height:16px}
 /* standalone pages: a top-nav-styled bar (Back only) that reveals on scroll-up; the inline back button stays plain */
-.backbar{transform:translateY(-100%);transition:transform .26s ease;z-index:41;cursor:default}
+.backbar{transform:translateY(-100%);transition:transform .26s ease;z-index:41;cursor:default;padding:0}
 .backbar.show{transform:translateY(0)}
+.backbar-inner{max-width:1420px;margin:0 auto;width:100%;height:100%;padding:8px 28px 0;display:flex;align-items:center}
 .backbar .backlink{margin:0}
 .ddh{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:14px}
 .ddh h2{font-size:22px;font-weight:700;letter-spacing:-.01em}
@@ -1051,7 +1054,10 @@ body.standalone .wrap2{min-height:100vh}
 
 /* viz-type analysis: left panel holds a chart/map */
 .vizhero{min-height:120px}
-.ddfoot{display:flex;align-items:center;justify-content:space-between;margin:auto 0 20px;padding-top:14px;border-top:1px solid var(--color-separator);font-size:12px;color:var(--color-text-soft)}
+.ddfoot{display:flex;align-items:center;justify-content:space-between;margin:auto 0 0;padding-top:14px;border-top:1px solid var(--color-separator);font-size:12px;color:var(--color-text-soft)}
+/* Guaranteed gap above the footer stroke (so it never sits flush against content), while margin-top:auto still bottom-aligns on short pages; wrap2 gives the 20px below. */
+#panes > *:has(+ .ddfoot){margin-bottom:28px}
+.wrap2:has(> .pgfoot:not([style*="none"])) > #panes{margin-bottom:28px}
 .ddfoot a{color:var(--color-primary-text);font-weight:600;cursor:pointer}
 .ddfoot>a{display:inline-flex;align-items:center;gap:6px}
 .ddfoot>a svg{width:14px;height:14px}
@@ -1256,7 +1262,7 @@ body.standalone .wrap2{min-height:100vh}
 .lcbar{display:flex;align-items:center;gap:8px;height:16px}
 .lctrack{flex:1;height:10px;background:#E0E6ED;border-radius:3px;position:relative;overflow:visible}
 .lcfill{height:100%;border-radius:3px}
-.lcfill.m{background:var(--sb-steel)} .lcfill.h{background:var(--color-primary)} .lcfill.a{background:var(--color-primary-active)}
+.lcfill.m{background:var(--bar-soft)} .lcfill.h{background:var(--bar)} .lcfill.a{background:var(--bar-deep)}
 .lcval{width:42px;font-size:11.5px;font-weight:700;font-variant-numeric:tabular-nums;color:var(--color-text-muted)}
 .lcref{position:absolute;top:-4px;bottom:-4px;left:66.6%;width:2px;background:var(--color-text-soft);opacity:.45}
 .lcaxis{display:flex;justify-content:space-between;font-size:10.5px;color:var(--color-text-soft);margin:6px 0 0 132px}
@@ -1426,16 +1432,17 @@ body.standalone .wrap2{min-height:100vh}
 .infobar svg{width:16px;height:16px;flex:none;margin-top:1px}
 .deflist .dfrow{display:grid;grid-template-columns:140px 1fr;gap:14px;padding:9px 0;border-top:1px solid var(--color-border-subtle);font-size:13px}
 .deflist .dfrow:first-child{border-top:0}
-.deflist .dfk{font-weight:700;color:var(--color-text)}
+.deflist .dfk{font-weight:600;color:var(--color-text)}
 .deflist .dfv{color:var(--color-text-muted);line-height:1.45}
 .covrow{display:grid;grid-template-columns:1fr auto auto;gap:14px;padding:9px 0;border-top:1px solid var(--color-border-subtle);font-size:13px;align-items:baseline}
 .covrow:first-child{border-top:0}
-.covrow .ck{font-weight:600}.covrow .cv{font-weight:700;font-variant-numeric:tabular-nums}.covrow .cs{color:var(--color-text-soft);font-size:12px}
-.reconbox{background:#FFFBEB;border:1px solid var(--color-warning-soft);border-radius:var(--r-lg);padding:16px}
-.reconbox .rh{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:var(--color-warning-ink);margin-bottom:12px}
-.reconbox .rh svg{width:18px;height:18px}
+.covrow .ck{font-weight:600;color:var(--color-text)}.covrow .cv{font-weight:700;font-variant-numeric:tabular-nums}.covrow .cs{color:var(--color-text-soft);font-size:12px}
+.srctbl td{font-size:13px}
+.reconbox{background:#FFF9F0;border:1px solid #FFD9A3;border-radius:24px;padding:16px}
+.reconbox .rh{display:flex;align-items:center;gap:7px;font-size:14px;font-weight:700;color:var(--color-warning-ink);margin-bottom:12px}
+.reconbox .rh svg{width:16px;height:16px}
 .reconbox ol{margin:0;padding-left:0;list-style:none;counter-reset:r}
-.reconbox li{display:flex;gap:11px;padding:8px 0;font-size:13px;color:var(--color-text);counter-increment:r}
+.reconbox li{display:flex;align-items:center;gap:11px;padding:8px 0;font-size:13px;color:var(--color-text);counter-increment:r}
 .reconbox li::before{content:counter(r);width:22px;height:22px;flex:none;border-radius:50%;background:#fff;border:1px solid var(--color-warning-soft);color:var(--color-warning-ink);font-size:12px;font-weight:700;display:grid;place-items:center}
 .reconbox li.recon-flash{position:relative;border-radius:8px;animation:reconFlash 1.9s ease-out 1}
 @keyframes reconFlash{0%{background:var(--color-warning-soft)}100%{background:transparent}}

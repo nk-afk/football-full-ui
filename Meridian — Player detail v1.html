@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
-<link rel="stylesheet" href="styles.css?v=4">
+<link rel="stylesheet" href="styles.css?v=5">
 <style>
 .avatar,.pnum,.cal-date.today,.rc-ava,.rc-play .pc{corner-shape:round}
 .tbi{width:34px;height:34px;border-radius:var(--r-md);border:1px solid transparent;background:none;color:var(--color-text-soft);display:grid;place-items:center;cursor:pointer;position:relative}
@@ -253,7 +253,7 @@
 </div>
 
 
-<script src="shell.js?v=4"></script>
+<script src="shell.js?v=5"></script>
 <script>
 /* ============ DATA ============ */
 const DAYS=['24','25','26','27','28','29','30','01','02','03','04','05','06','07'];
@@ -464,7 +464,7 @@ function lineChartHTML(m){
   let grid='';
   for(let t=yMin;t<=yMax+0.001;t+=step){ const top=yOf(t); grid+=`<div class="gl" style="top:${top}%"></div><div class="ylab" style="top:${top}%">${fmt(Math.round(t))}</div>`; }
   const poly=pts.map((p,i)=>`${xOf(i).toFixed(2)},${yOf(p[1]).toFixed(2)}`).join(' ');
-  const svg=`<svg class="lsvg" viewBox="0 0 100 100" preserveAspectRatio="none"><polyline points="${poly}" fill="none" stroke="var(--color-primary)" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
+  const svg=`<svg class="lsvg" viewBox="0 0 100 100" preserveAspectRatio="none"><polyline points="${poly}" fill="none" stroke="var(--bar-deep)" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round" stroke-linecap="round"/></svg>`;
   const dots=pts.map((p,i)=>{const act=i===n-1;return `<div class="ldot${act?' act':''}" style="left:${xOf(i)}%;top:${yOf(p[1])}%"></div>`;}).join('');
   const li=n-1, lx=xOf(li), ly=yOf(pts[li][1]);
   const drop=`<div class="ldrop" style="left:${lx}%;top:${ly}%;height:${(100-ly).toFixed(2)}%"></div>`;
