@@ -1282,9 +1282,10 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .cival span{display:block;font-size:11px;color:var(--color-text-soft)}
 .ciaxis{display:grid;grid-template-columns:150px 1fr auto;gap:12px;font-size:10.5px;color:var(--color-text-soft);margin-top:2px}
 .ciaxis .a2{display:flex;justify-content:space-between}
-.callout{display:flex;align-items:flex-start;gap:9px;background:var(--color-primary-soft);border-radius:var(--r-md);padding:10px 12px;font-size:12.5px;color:var(--color-primary-ink);font-weight:600;line-height:1.4}
-.callout .ci-ic{flex:none;width:16px;height:16px;margin-top:1px}.callout .ci-ic svg{width:16px;height:16px}
-.callout .sub{display:block;color:var(--color-warning-ink);font-weight:500;margin-top:3px}
+.callout{display:grid;grid-template-columns:16px 1fr;column-gap:9px;row-gap:3px;align-items:start;background:var(--color-primary-soft);border-radius:var(--r-md);padding:10px 12px;font-size:12.5px;color:var(--color-primary-ink);font-weight:600;line-height:1.4}
+.callout .ci-ic{width:16px;height:16px;margin-top:1px}.callout .ci-ic svg{width:16px;height:16px}
+.callout .ci-ic.warn{color:var(--color-warning-ink)}.callout .ci-ic.warn svg{width:13px;height:13px}
+.callout .sub{color:var(--color-warning-ink);font-weight:500}
 
 /* big-number panel (pressure context / player stat cards) */
 .bigrow{display:flex;flex-direction:column;gap:16px}
@@ -2487,7 +2488,7 @@ function footRow(ic,title,meta,link){ return '<div class="pcard footrow" data-to
 
 function dashWaves(){
   var left='<div class="pcard"><div class="pct" style="margin-bottom:10px">3v2 wave outcomes '+chip('video')+'</div>'
-    + '<div class="callout" style="margin-bottom:14px"><span class="ci-ic"><i data-lucide="bar-chart-3"></i></span><div>Drawing a defender was linked with more goals.<span class="sub"><i data-lucide="alert-triangle" style="width:12px;height:12px;vertical-align:-2px"></i> Small sample; intervals overlap.</span></div></div>'
+    + '<div class="callout" style="margin-bottom:14px"><span class="ci-ic"><i data-lucide="bar-chart-3"></i></span><div>Drawing a defender was linked with more goals.</div><span class="ci-ic warn"><i data-lucide="alert-triangle"></i></span><div class="sub">Small sample; intervals overlap.</div></div>'
     + ciBar('Drew defender, then passed',35,21,52,'12/34') + ciBar('Released early or carried',12,3,34,'2/17')
     + '<div class="ciaxis"><span></span><div class="a2"><span>0%</span><span>50%</span><span>100%</span></div><span></span></div>'
     + '<table class="dtable" style="margin-top:14px"><thead><tr><th>Wave type</th><th class="num">Waves</th><th class="num">Goals</th><th class="num">Shots</th><th class="num">Lost</th></tr></thead><tbody><tr><td>Drew defender</td><td class="num">34</td><td class="num">12</td><td class="num">21</td><td class="num">9</td></tr><tr><td>Released early / carried</td><td class="num">17</td><td class="num">2</td><td class="num">7</td><td class="num">9</td></tr></tbody></table>'
