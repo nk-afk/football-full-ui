@@ -16,7 +16,8 @@
 .tbi svg{width:18px;height:18px}
 .tbi .dot{position:absolute;top:7px;right:8px;width:6px;height:6px;border-radius:50%;background:var(--c-review)}
 /* ---------- player detail ---------- */
-.players{max-width:1420px;margin:0 auto;padding:20px 28px 0}
+.players{max-width:1420px;margin:0 auto;padding:20px 28px 28px}
+.pd-card{padding:24px 26px;margin-bottom:16px}
 #perfBody .metric,#perfBody .bodycomp{margin-top:0}
 .pd-notobs{display:flex;align-items:flex-start;gap:16px;padding:28px 26px}
 .pd-notobs-ic{width:44px;height:44px;border-radius:var(--r-md);background:var(--color-surface-subtle);display:grid;place-items:center;color:var(--color-text-soft);flex:none}
@@ -41,7 +42,7 @@
 .pd-share{width:42px;height:42px;border:1px solid var(--color-border);border-radius:var(--r-md);background:var(--color-surface);color:var(--color-text-soft);display:grid;place-items:center;cursor:pointer;flex:none}
 .pd-share:hover{background:var(--color-surface-subtle)}
 .pd-share svg{width:18px;height:18px}
-.perf-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin:4px 2px 14px;flex-wrap:wrap}
+.perf-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin:0 2px 14px;flex-wrap:wrap}
 .perf-title{font-size:24px;line-height:30px;font-weight:700;letter-spacing:-.01em}
 .range{display:flex;align-items:center;gap:8px}
 .rnav{width:28px;height:40px;border:0;background:none;border-radius:var(--r-md);display:grid;place-items:center;color:var(--color-text-soft);cursor:pointer}
@@ -73,8 +74,8 @@
 .ylab{position:absolute;left:-54px;width:44px;text-align:right;transform:translateY(-50%);font-size:11px;color:var(--color-text-soft)}
 .bars{position:absolute;left:0;right:0;bottom:0;top:0;display:flex;align-items:flex-end;justify-content:space-around;padding:0 8px}
 .bcol{position:relative;flex:1;height:100%;display:flex;align-items:flex-end;justify-content:center}
-.bar{position:relative;width:58px;max-width:72%;border-radius:6px 6px 0 0;background:var(--bar)}
-.bar.act{background:var(--color-primary)}
+.bar{position:relative;width:58px;max-width:72%;border-radius:6px 6px 0 0;background:#A3C9FF}
+.bar.act{background:var(--bar-deep)}
 .bval{position:absolute;top:-23px;left:50%;transform:translateX(-50%);font-size:12.5px;font-weight:600;color:var(--color-text);white-space:nowrap}
 .bar.act .bval{font-weight:700}
 .btip{position:absolute;top:-58px;left:50%;transform:translateX(-50%);background:var(--color-surface);border:1px solid var(--color-border);box-shadow:var(--shadow-pop);border-radius:var(--r-md);padding:6px 11px;font-size:12px;font-weight:600;color:var(--color-text);white-space:nowrap;z-index:2}
@@ -82,11 +83,25 @@
 .xaxis{display:flex;justify-content:space-around;padding:10px 8px 0}
 .xlab{flex:1;text-align:center;font-size:12px;color:var(--color-text-soft)}
 .lsvg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;z-index:1}
-.ldot{position:absolute;width:9px;height:9px;border-radius:50%;corner-shape:round;background:var(--color-surface);border:2px solid var(--color-primary);transform:translate(-50%,-50%);z-index:3}
-.ldot.act{width:13px;height:13px;background:var(--color-primary);border:2.5px solid #fff;box-shadow:0 0 0 1.5px var(--color-primary)}
+.ldot{position:absolute;width:9px;height:9px;border-radius:50%;corner-shape:round;background:var(--color-surface);border:2px solid var(--bar-deep);transform:translate(-50%,-50%);z-index:3}
+.ldot.act{width:13px;height:13px;background:var(--bar-deep);border:2.5px solid #fff;box-shadow:0 0 0 1.5px var(--bar-deep)}
 .ldrop{position:absolute;width:0;border-left:1px dashed var(--color-primary);transform:translateX(-50%);z-index:1}
 .ltip{position:absolute;transform:translate(-50%,calc(-100% - 16px));background:var(--color-surface);border:1px solid var(--color-border);box-shadow:var(--shadow-pop);border-radius:var(--r-md);padding:6px 11px;font-size:12px;font-weight:600;color:var(--color-text);white-space:nowrap;z-index:4}
 .ltip:after{content:"";position:absolute;bottom:-5px;left:50%;transform:translateX(-50%) rotate(45deg);width:9px;height:9px;background:var(--color-surface);border-right:1px solid var(--color-border);border-bottom:1px solid var(--color-border)}
+/* ---- Pitch performance section (mirrors the gym header) ---- */
+.perf-head-pitch{margin-top:10px}
+/* ---- Pitch stat-tabs (label + value) ---- */
+.ptabs2.pstabs{gap:40px}
+.pstab{display:flex;flex-direction:column;gap:5px;padding:8px 0 12px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.pstab .pstab-l{font-size:13px;font-weight:500;color:var(--color-text-soft)}
+.pstab .pstab-v{font-size:17px;font-weight:700;letter-spacing:-.01em;color:var(--color-text)}
+.pstab:hover .pstab-l{color:var(--color-text)}
+.pstab.on{border-bottom-color:var(--color-primary-text)}
+.pstab.on .pstab-l,.pstab.on .pstab-v{color:var(--color-primary-text)}
+/* ---- GPS chip + metric info bar ---- */
+.gpschip{margin-left:auto;font-size:11px;font-weight:600;color:var(--color-text-soft);background:var(--color-surface-muted);border-radius:999px;padding:3px 10px}
+.selinfo{display:flex;align-items:center;gap:8px;background:#F4F6FB;border-radius:10px;padding:10px 13px;margin-top:14px;font-size:12.5px;color:var(--color-text-soft)}
+.selinfo svg{width:15px;height:15px;flex:none;color:var(--color-text-soft)}
 .bodycomp{margin-top:18px}
 .bc-block+.bc-block{margin-top:28px}
 .bc-head{display:flex;align-items:baseline;justify-content:space-between;gap:20px;margin-bottom:4px}
@@ -120,8 +135,8 @@
 .attlab{font-size:12.5px;color:var(--color-text-soft)}
 .acell{display:flex;justify-content:center}
 .sq{width:22px;height:22px;border-radius:5px;display:block}
-.sq.gym{background:var(--att-gym)}
-.sq.pitch{background:var(--att-pitch)}
+.sq.gym{background:#A3C9FF}
+.sq.pitch{background:#86CF6A}
 .sq.miss{background:transparent;border:1.5px solid var(--c-partial)}
 .dash{color:var(--color-text-disabled);font-size:13px}
 .attlegend{display:flex;gap:20px;margin-top:18px;font-size:12.5px;color:var(--color-text-soft)}
@@ -133,7 +148,9 @@
 .ai-sub{font-size:12.5px;color:var(--color-text-soft);margin:4px 0 16px}
 .ai-list p{font-size:14px;line-height:20px;color:var(--color-text-muted);margin-bottom:12px}
 .ai-upd{font-size:12px;color:var(--color-text-disabled);margin-top:6px}
-.lgs{display:flex;align-items:flex-start;justify-content:space-between;margin:0}
+.lgs{display:flex;flex-direction:column;margin:0}
+.lgs-row{display:flex;align-items:flex-start;justify-content:space-between;gap:24px}
+.lgs-row + .lgs-row{border-top:1px solid var(--color-border-subtle);margin-top:16px;padding-top:16px}
 .lgs-l{display:flex;gap:34px}
 .lgs-title{font-size:18px;font-weight:700;white-space:nowrap}
 .lgs-body{display:flex;flex-direction:column;gap:8px;padding-top:1px}
@@ -220,6 +237,16 @@
     </div>
     <div class="pd-card">
       <div id="perfBody"></div>
+    </div>
+
+    <div class="perf-head perf-head-pitch">
+      <div class="perf-headl">
+        <div class="perf-title">Pitch performance</div>
+        <div class="ptabs2 pstabs" id="pitchTabs"></div>
+      </div>
+    </div>
+    <div class="pd-card">
+      <div id="pitchBody"></div>
     </div>
 
     <div class="pd-card">
@@ -404,10 +431,39 @@ const PLAYERS={
 };
 const ORDER=[1,2,3,8,12,13,16,20,24];
 
+/* ---- Pitch performance (sample GPS data per player; 4 training sessions) ---- */
+const PF=['F01 · 26 Aug','F02 · 31 Aug','F03 · 04 Sep','F04 · 08 Sep'];
+const PITCH={
+  1: {accel:[104,98,110,112], decel:[94,90,97,100],  top:[30.1,29.8,30.3,30.5], hsr:[13,12,14,15]},
+  2: {accel:[121,116,125,129],decel:[99,97,103,106],  top:[31.2,31.0,31.5,31.7], hsr:[16,15,18,18]},
+  3: {accel:[90,86,93,96],    decel:[112,108,115,118], top:[28.3,28.0,28.5,28.7], hsr:[8,7,9,10]},
+  8: {accel:[122,117,126,130],decel:[101,98,104,108], top:[31.4,31.1,31.6,31.8], hsr:[17,16,18,19]},
+  12:{accel:[108,102,113,116],decel:[96,92,99,102],   top:[30.4,30.1,30.6,30.8], hsr:[13,12,15,15]},
+  13:{accel:[110,103,114,118],decel:[102,96,104,107], top:[28.9,28.6,29.0,29.2], hsr:[11,10,13,12]},
+  16:{accel:[106,100,111,114],decel:[95,91,98,101],   top:[30.0,29.7,30.2,30.4], hsr:[12,11,14,14]},
+  20:{accel:[94,89,97,100],   decel:[109,105,112,115], top:[28.6,28.3,28.8,29.0], hsr:[9,8,10,11]},
+  24:{accel:[92,88,95,98],    decel:[111,107,114,117], top:[28.5,28.2,28.7,28.9], hsr:[8,8,10,10]}
+};
+const PITCHSESSION={name:'Training F04', date:'08 Sep', loc:'Pitch 1', ex:'Warm-up / 10v10 / 11v11 / Crossing & finishing', reviews:0};
+function last(a){return a[a.length-1];}
+function pDelta(a){ var f=a[0],l=last(a); return (l>=f?'+':'')+(((l-f)/f)*100).toFixed(1)+'%'; }
+function pAbs(a,u){ var d=last(a)-a[0]; if(u==='km/h') return (d>=0?'+':'')+d.toFixed(1)+' km/h'; var r=Math.round(d); return (r>=0?'+':'')+r+' run'+(Math.abs(r)===1?'':'s'); }
+function buildPitch(num){
+  var d=PITCH[num]||PITCH[13];
+  var tmax=Math.ceil(Math.max.apply(null,d.top)), tmin=tmax-4;
+  return {
+    accel:{title:'Accelerations', tabVal:fmt(last(d.accel)), unit:'', latest:last(d.accel), delta:pDelta(d.accel), deltaLabel:'vs first session', caption:'Acceleration efforts per session', axis:'Efforts', foot:'4 pitch sessions · Sample values', info:'Select a metric to compare it across sessions.', pts:mk(PF,d.accel)},
+    decel:{title:'Decelerations', tabVal:fmt(last(d.decel)), unit:'', latest:last(d.decel), delta:pDelta(d.decel), deltaLabel:'vs first session', caption:'Deceleration efforts per session', axis:'Efforts', foot:'4 pitch sessions · Sample values', info:'Select a metric to compare it across sessions.', pts:mk(PF,d.decel)},
+    top:{title:'Top speed', type:'line', tabVal:last(d.top).toFixed(1)+' km/h', unit:'km/h', latest:last(d.top).toFixed(1), delta:pAbs(d.top,'km/h'), deltaLabel:'vs first session', caption:'Highest recorded speed in each session', axis:'Top speed (km/h)', foot:'4 pitch sessions · Sample values', info:'Select a metric to compare it across sessions.', yMin:tmin, yMax:tmax, step:1, pts:mk(PF,d.top)},
+    hsr:{title:'High-speed runs', tabVal:fmt(last(d.hsr)), unit:'runs', latest:last(d.hsr), delta:pAbs(d.hsr,'runs'), deltaLabel:'vs first session', caption:'High-speed running efforts per session', axis:'Runs', foot:'4 pitch sessions · Sample values', info:'Run-count definition to be confirmed.', pts:mk(PF,d.hsr)}
+  };
+}
+
 /* ============ STATE ============ */
 const params=new URLSearchParams(location.search);
 let cur=parseInt(params.get('p'),10); if(!PLAYERS[cur]) cur=1;
 let metric='load';
+let pmetric='accel';
 
 /* ============ HELPERS ============ */
 function icons(){ if(window.lucide) lucide.createIcons(); }
@@ -492,6 +548,23 @@ function renderPerf(){
   }
   document.querySelectorAll('#perfTabs .ptab2').forEach(t=>t.classList.toggle('on',t.dataset.m===metric));
 }
+function renderPitch(){
+  const PM=buildPitch(PLAYERS[cur].num);
+  const m=PM[pmetric];
+  const tabs=[['accel','Accelerations'],['decel','Decelerations'],['top','Top speed'],['hsr','High-speed runs']];
+  document.getElementById('pitchTabs').innerHTML=tabs.map(t=>`<div class="pstab${t[0]===pmetric?' on':''}" data-pm="${t[0]}"><span class="pstab-l">${t[1]}</span><span class="pstab-v">${PM[t[0]].tabVal}</span></div>`).join('');
+  const val=fmt(m.latest)+(m.unit?(' '+m.unit):'');
+  document.getElementById('pitchBody').innerHTML=`
+    <div class="metric">
+      <div class="m-row"><div class="m-val">${val}</div><div class="m-sep"></div><div class="m-delta"><b>${m.delta}</b> ${m.deltaLabel}</div></div>
+      <div class="m-sub">Latest pitch session</div>
+      <div class="m-cap"><span>${m.caption}</span><span class="gpschip">GPS</span></div>
+      <div class="m-axis">${m.axis}</div>
+      ${chartHTML(m)}
+      <div class="m-foot">${m.foot}</div>
+      <div class="selinfo"><i data-lucide="info"></i><span>${m.info}</span></div>
+    </div>`;
+}
 function bodyHTML(b){
   return `<div class="bodycomp">
     ${bcBlock('Weight', b.weight, b)}
@@ -534,40 +607,53 @@ function attCell(s){
 function renderAtt(){
   const p=PLAYERS[cur];
   const gymN=p.gym.filter(x=>x==='g').length;
+  const pP=p.pitch.filter(x=>x==='p').length, pM=p.pitch.filter(x=>x==='m').length;
+  const attended=gymN+pP, scheduled=gymN+pP+pM;
   document.getElementById('attBody').innerHTML=`
     <div class="sec-row"><div class="sec-h">Attendance</div><div class="sec-sub">Last 14 days</div></div>
-    <div class="att-count"><b>${gymN}</b> gym sessions attended</div>
+    <div class="att-count"><b>${attended} / ${scheduled}</b> scheduled sessions attended</div>
     <div class="attgrid">
       <div class="attrow head"><div class="attlab"></div>${DAYS.map(d=>`<div class="attday">${d}</div>`).join('')}</div>
       <div class="attrow"><div class="attlab">Gym</div>${p.gym.map(attCell).join('')}</div>
+      <div class="attrow"><div class="attlab">Pitch</div>${p.pitch.map(attCell).join('')}</div>
     </div>
     <div class="attlegend">
       <div class="lg"><span class="sq gym"></span>Gym</div>
+      <div class="lg"><span class="sq pitch"></span>Pitch</div>
+      <div class="lg"><span class="sq miss"></span>Missed</div>
       <div class="lg"><span class="dash">&ndash;</span>Not scheduled</div>
     </div>`;
 }
 function renderAI(){
   const p=PLAYERS[cur];
+  const PM=buildPitch(p.num);
+  const pitchLine=`Latest pitch session: ${PM.accel.latest} accelerations and ${PM.decel.latest} decelerations.`;
+  const list=[p.ai[0], pitchLine].concat(p.ai.slice(1));
   document.getElementById('aiBody').innerHTML=`
     <div class="ai-title"><i data-lucide="sparkles"></i>AI summary</div>
     <div class="ai-sub">Based on confirmed records</div>
-    <div class="ai-list">${p.ai.map(t=>`<p>${t}</p>`).join('')}</div>
+    <div class="ai-list">${list.map(t=>`<p>${t}</p>`).join('')}</div>
     <div class="ai-upd">${p.aiUpd}</div>`;
 }
-function renderSession(){
-  const s=PLAYERS[cur].session;
-  const review = s.reviews>0
-    ? `<span class="lgs-review">${alertSVG()}${s.reviews} item${s.reviews>1?'s':''} ${s.reviews>1?'need':'needs'} review</span>`
-    : `<span class="lgs-ok"><i data-lucide="check-circle-2"></i>No items need review</span>`;
-  document.getElementById('lgsBody').innerHTML=`
+function lgsRow(title,x,href){
+  const review = x.reviews>0
+    ? `<span class="lgs-review">${alertSVG()}${x.reviews} item${x.reviews>1?'s':''} ${x.reviews>1?'need':'needs'} review</span>`
+    : '';
+  return `<div class="lgs-row">
     <div class="lgs-l">
-      <div class="lgs-title">Latest gym session</div>
+      <div class="lgs-title">${title}</div>
       <div class="lgs-body">
-        <div class="lgs-meta"><b>${s.name}</b> &middot; ${s.date} &middot; ${s.loc}</div>
-        <div class="lgs-exrow"><span class="lgs-ex">${s.ex}</span>${review}</div>
+        <div class="lgs-meta"><b>${x.name}</b> &middot; ${x.date} &middot; ${x.loc}</div>
+        <div class="lgs-exrow"><span class="lgs-ex">${x.ex}</span>${review}</div>
       </div>
     </div>
-    <a class="lgs-view" href="Meridian%20%E2%80%94%20Gym%20(session%20overview%20v3).html">View session <i data-lucide="arrow-right"></i></a>`;
+    <a class="lgs-view" href="${href}">View session <i data-lucide="arrow-right"></i></a>
+  </div>`;
+}
+function renderSession(){
+  document.getElementById('lgsBody').innerHTML=
+    lgsRow('Latest gym session', PLAYERS[cur].session, 'Meridian%20%E2%80%94%20Gym%20(session%20overview%20v3).html')
+    + lgsRow('Latest pitch session', PITCHSESSION, 'Meridian%20%E2%80%94%20Pitch%20(session%20overview%20v1).html');
 }
 
 function renderAll(){
@@ -575,13 +661,14 @@ function renderAll(){
   renderSwitch(); renderHero();
   document.getElementById('pdObsContent').style.display=notObs?'none':'';
   document.getElementById('pdNotObs').style.display=notObs?'':'none';
-  if(!notObs){ renderPerf(); renderAtt(); renderAI(); renderSession(); }
+  if(!notObs){ renderPerf(); renderPitch(); renderAtt(); renderAI(); renderSession(); }
   icons();
 }
 
 /* ============ WIRING ============ */
-document.getElementById('pdSwitch').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b)return; cur=parseInt(b.dataset.n,10); metric='load'; renderAll(); });
+document.getElementById('pdSwitch').addEventListener('click',e=>{ const b=e.target.closest('button'); if(!b)return; cur=parseInt(b.dataset.n,10); metric='load'; pmetric='accel'; renderAll(); });
 document.getElementById('perfTabs').addEventListener('click',e=>{ const t=e.target.closest('.ptab2'); if(!t)return; metric=t.dataset.m; renderPerf(); icons(); });
+document.getElementById('pitchTabs').addEventListener('click',e=>{ const t=e.target.closest('.pstab'); if(!t)return; pmetric=t.dataset.pm; renderPitch(); icons(); });
 
 renderAll();
 

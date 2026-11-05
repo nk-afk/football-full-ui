@@ -44,12 +44,12 @@
 .pdd-opt.sel{color:var(--color-primary-text);font-weight:600}
 .pdd-opt svg{width:15px;height:15px;color:var(--color-primary-text)}
 .pattend-label{font-size:13px;color:var(--color-text-soft);margin:4px 0 12px}
+.ptable #ptBody{display:flex;flex-direction:column;gap:10px}
 .pt-head,.pt-row{display:grid;grid-template-columns:minmax(190px,220px) minmax(100px,140px) minmax(150px,200px) 220px 1fr minmax(120px,150px) 44px;align-items:center;gap:24px;padding:0 24px}
-.pt-head{height:46px;border-bottom:1px solid var(--color-separator)}
+.pt-head{height:auto;padding:4px 26px 12px;border-bottom:none}
 .pt-head span{font-size:11px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--color-text-soft)}
-.pt-row{min-height:94px;border-bottom:1px solid var(--color-border-subtle);cursor:pointer;color:inherit;transition:background .12s}
-.pt-row:last-child{border-bottom:none}
-.pt-row:hover{background:var(--color-surface-subtle)}
+.pt-row{min-height:88px;cursor:pointer;color:inherit;transition:transform .13s ease,box-shadow .13s ease}
+.pt-row:hover{transform:translateY(-1px);box-shadow:0 18px 38px rgba(16,24,40,.11),0 3px 8px rgba(16,24,40,.05),inset 0 1px 0 rgba(255,255,255,.95)}
 .pt-player{display:flex;align-items:center;gap:14px;padding:16px 0}
 .pt-ava{width:54px;height:54px;border-radius:var(--r-md);overflow:hidden;background:var(--color-surface-muted);flex:none}
 .pt-ava img{width:100%;height:100%;object-fit:cover;display:block}
@@ -61,7 +61,8 @@
 .pt-att-n{font-size:14px;font-weight:600;color:var(--color-text)}
 .pt-att-bar{display:flex;gap:3px;margin-top:9px}
 .pt-seg{height:6px;width:16px;border-radius:2px;background:var(--color-border)}
-.pt-seg.on{background:var(--att-fill)}
+.pt-seg{background:rgba(16,24,40,.12)}
+.pt-seg.on{background:var(--color-primary)}
 .pt-review .pill{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--c-partial);background:var(--c-partial-soft);border-radius:var(--r-pill);padding:4px 11px}
 .pt-review .pill svg{width:14px;height:14px}
 .pt-review .none{color:var(--color-text-disabled);font-size:16px}
