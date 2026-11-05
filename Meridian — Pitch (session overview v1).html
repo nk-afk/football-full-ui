@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
-<link rel="stylesheet" href="styles.css?v=3">
+<link rel="stylesheet" href="styles.css?v=4">
 </head>
 <body>
 
@@ -52,7 +52,7 @@
 <div class="toast" id="toast"></div>
 
 
-<script src="shell.js?v=3"></script>
+<script src="shell.js?v=4"></script>
 <script>
 
 /* ============ PITCH SESSION OVERVIEW — reference redesign ============ */
@@ -63,7 +63,7 @@ function chip(k){ var m={gps:'GPS',video:'VIDEO',both:'GPS + VIDEO',testing:'TES
 var INTEST='<span class="testtag">In testing</span>';
 
 var state={ tab:'overview', drill:null, analysis:0, moment:0, reviewView:'list', reviewIdx:0,
-  ovSub:null, pView:'squad', pPlayer:'13', pSub:'session', reviewClip:13, srcOpen:false, srcTab:'sources', srcBack:'overview',
+  ovSub:null, pView:'cards', pPlayer:'13', pSub:'session', reviewClip:13, srcOpen:false, srcTab:'sources', srcBack:'overview',
   poss:'out', shapeTeam:'A', planOpen:false, standaloneReview:false, standalonePlayer:false };
 var reviewDecisions={};
 var reviewCorrections={}; /* id -> {field, from, to, reason, by, at} */
@@ -111,7 +111,7 @@ var TABS=[{k:'overview',label:'Overview'},{k:'drills',label:'Drills'},{k:'player
 function renderTabs(){
   var host=document.getElementById('themetabs');
   host.innerHTML=TABS.map(function(t){ var ct=t.ct; return '<button class="ttab'+(t.k===state.tab?' active':'')+'" data-tab="'+t.k+'">'+t.label+(ct?'<span class="tct num">'+ct+'</span>':'')+'</button>'; }).join('');
-  host.querySelectorAll('.ttab').forEach(function(b){ b.onclick=function(){ state.tab=b.dataset.tab; state.drill=null; state.ovSub=null; state.srcOpen=false; state.planOpen=false; state.standaloneReview=false; state.standalonePlayer=false; if(b.dataset.tab==='players') state.pView='squad'; if(b.dataset.tab==='review') state.reviewView='list'; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
+  host.querySelectorAll('.ttab').forEach(function(b){ b.onclick=function(){ state.tab=b.dataset.tab; state.drill=null; state.ovSub=null; state.srcOpen=false; state.planOpen=false; state.standaloneReview=false; state.standalonePlayer=false; if(b.dataset.tab==='players') state.pView='cards'; if(b.dataset.tab==='review') state.reviewView='list'; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
 }
 function renderPane(){
   var host=document.getElementById('panes');
@@ -122,9 +122,9 @@ function renderPane(){
   else if(state.tab==='players'){ host.innerHTML=playersPane(); }
   else if(state.tab==='review'){ host.innerHTML=PANE.review(); }
   else { host.innerHTML = PANE[state.tab]?PANE[state.tab]():''; }
-  var rootView = (state.tab==='overview'&&!state.ovSub) || (state.tab==='players'&&state.pView==='squad') || (state.tab==='review'&&state.reviewView==='list') || (state.tab==='drills'&&!state.drill);
+  var rootView = (state.tab==='overview'&&!state.ovSub) || (state.tab==='players'&&state.pView==='cards') || (state.tab==='review'&&state.reviewView==='list') || (state.tab==='drills'&&!state.drill);
   var pf=document.getElementById('pgfoot'); if(pf) pf.style.display = (!state.srcOpen && !state.planOpen && rootView) ? '' : 'none';
-  var standalone = state.planOpen || state.srcOpen || (state.tab==='overview' && state.ovSub==='drillload') || (state.tab==='drills' && state.drill) || (state.tab==='review' && (state.reviewView==='detail' || state.standaloneReview)) || (state.tab==='players' && state.pView==='player' && state.standalonePlayer);
+  var standalone = state.planOpen || state.srcOpen || (state.tab==='overview' && state.ovSub==='drillload') || (state.tab==='drills' && state.drill) || (state.tab==='review' && (state.reviewView==='detail' || state.standaloneReview)) || (state.tab==='players' && (state.pView==='squad' || state.pView==='scanning' || state.pView==='movement' || (state.pView==='player' && state.standalonePlayer)));
   var phd=document.querySelector('.phead'); if(phd) phd.style.display = standalone ? 'none' : '';
   var tbs=document.getElementById('themetabs'); if(tbs) tbs.style.display = standalone ? 'none' : '';
   var topb=document.querySelector('.topbar:not(.backbar)'); if(topb) topb.style.display = standalone ? 'none' : '';
@@ -136,8 +136,8 @@ function renderPane(){
 }
 /* ---- browser history: two-finger swipe / back-forward navigation ---- */
 function navSnapshot(){ return {tab:state.tab,ovSub:state.ovSub,drill:state.drill,pView:state.pView,pPlayer:state.pPlayer,reviewView:state.reviewView,reviewIdx:state.reviewIdx,standaloneReview:state.standaloneReview,standalonePlayer:state.standalonePlayer,srcOpen:state.srcOpen,planOpen:state.planOpen}; }
-var lastNavKey=null, navSuppress=false, navDepth=0;
-function maybePushNav(){ if(navSuppress) return; var snap=navSnapshot(), key=JSON.stringify(snap); if(key===lastNavKey) return; try{ if(lastNavKey===null){ history.replaceState(snap,''); } else { history.pushState(snap,''); navDepth++; } }catch(e){} lastNavKey=key; }
+var lastNavKey=null, navSuppress=false, navDepth=0, navReplace=false;
+function maybePushNav(){ if(navSuppress) return; var snap=navSnapshot(), key=JSON.stringify(snap); if(key===lastNavKey) return; try{ if(lastNavKey===null || navReplace){ history.replaceState(snap,''); } else { history.pushState(snap,''); navDepth++; } }catch(e){} navReplace=false; lastNavKey=key; }
 function applySnapshot(s){ ['tab','ovSub','drill','pView','pPlayer','reviewView','reviewIdx','standaloneReview','standalonePlayer','srcOpen','planOpen'].forEach(function(k){ state[k]=s[k]; }); renderTabs(); renderPane(); }
 window.addEventListener('popstate', function(e){ if(!e.state) return; navSuppress=true; navDepth=Math.max(0,navDepth-1); applySnapshot(e.state); lastNavKey=JSON.stringify(navSnapshot()); navSuppress=false; var __y=(typeof e.state.scrollY==='number')?e.state.scrollY:0; requestAnimationFrame(function(){ window.scrollTo(0,__y); }); });
 /* remember scroll position per history entry so Back returns to where you were */
@@ -155,7 +155,7 @@ PANE.overview=function(){
     + drillCards(true);
 };
 /* split "123 unit" -> big number + small <span class="u">unit</span> (unit = trailing non-space token starting with a letter or %) */
-function uw(v){ var s=String(v); var m=s.match(/^(.+)\s+([A-Za-z%][^\s]*)$/); return m ? m[1]+'<span class="u">'+m[2]+'</span>' : s; }
+function uw(v){ var s=String(v); var m=s.match(/^(.+)\s+([A-Za-z%\/][^\s]*)$/); return m ? m[1]+'<span class="u">'+m[2]+'</span>' : s; }
 function ovStat(l,v){ return '<div class="ovstat"><div class="ol">'+l+'</div><div class="ov num">'+uw(v)+'</div></div>'; }
 function ovStrip(){
   return '<div class="ovstrip">'
@@ -313,30 +313,53 @@ var PEAKS=[['P12',29.5,100,1],['P15',30.0,100,3],['P03',29.2,99,3],['P06',28.6,9
 function pAnaSel(){
   var opts=[['squad','Squad comparison'],['scanning','Scanning'],['movement','Movement']];
   var cur=opts.filter(function(o){return o[0]===state.pView;})[0]||opts[0];
-  return '<div class="dd"><button class="selctl" data-dd="pana"><i data-lucide="users"></i>'+cur[1]+' <i data-lucide="chevron-down"></i></button><div class="dd-menu right" data-m="pana">'+opts.map(function(o){return '<button class="dd-opt'+(o[0]===state.pView?' on':'')+'" data-psub="'+o[0]+'">'+o[1]+'</button>';}).join('')+'</div></div>';
+  return '<div class="analysissel"><span class="al">View</span><div class="dd"><button class="dd-btn wide" data-dd="pana">'+cur[1]+' <i data-lucide="chevron-down"></i></button><div class="dd-menu right" data-m="pana">'+opts.map(function(o){return '<button class="dd-opt'+(o[0]===state.pView?' on':'')+'" data-psub="'+o[0]+'">'+o[1]+'</button>';}).join('')+'</div></div></div>';
+}
+function pStandHead(title,sub){
+  return '<button class="backlink" data-psub="cards"><i data-lucide="arrow-left"></i>Back</button>'
+    + '<div class="ddtoolbar"><div class="drilltitle"><div class="dt-row"><h2>'+title+'</h2></div><div class="dt-meta">'+sub+'</div></div>'+pAnaSel()+'</div>';
+}
+var PCARDS=[
+  {k:'squad',ic:'users',tag:'Squad',name:'Squad comparison',val:'22',unit:'players',chip:'19 GPS',sub:'Per-minute load, high-speed metres and scans against the squad median.',cta:'Open comparison'},
+  {k:'scanning',ic:'eye',tag:'Scanning',name:'Scanning before receiving',val:'0.32',unit:'/s median',chip:'video',sub:'Head turns away from the ball in the 10 s before a reception.',cta:'Open scanning'},
+  {k:'movement',ic:'activity',tag:'Movement',name:'Speed, braking & cutting',val:'6',unit:'hard stops',chip:'1 to review',sub:'Top speeds, hardest decelerations and cutting direction.',cta:'Open movement'}
+];
+function pCards(){
+  var cards='<div class="drillcards pcards" style="grid-template-columns:repeat(3,1fr)">'+PCARDS.map(function(c){
+    return '<button class="dcard" data-psub="'+c.k+'">'
+      + '<div class="dtop"><span class="dnum"><i data-lucide="'+c.ic+'"></i>'+c.tag+'</span></div>'
+      + '<div class="dnm">'+c.name+'</div>'
+      + '<div class="dmrow"><span class="dmetric"><span class="dval">'+c.val+'</span><span class="dunit">'+c.unit+'</span></span><span class="dchip">'+c.chip+'</span></div>'
+      + '<div class="dsub">'+c.sub+'</div>'
+      + '<div class="dana"><div class="dana-l"><div class="dav">'+c.cta+'</div></div><span class="dana-arrow"><i data-lucide="arrow-right"></i></span></div>'
+      + '</button>';
+  }).join('')+'</div>';
+  return '<div class="recapsub" style="margin:0 0 16px">Open a view to compare the squad, scanning or movement.</div>'+cards;
 }
 function playersPane(){
   if(state.pView==='player') return pPlayer();
   if(state.pView==='scanning') return pScanning();
   if(state.pView==='movement') return pMovement();
-  return pSquad();
+  if(state.pView==='squad') return pSquad();
+  return pCards();
 }
 function pSquad(){
   var cols=[['mmin','m/min','g'],['hsr','HS metres','g'],['ad','Acc + dec/min','g'],['comp','Passes complete','v'],['press','Pressures','v'],['scans','Scans/s','v']];
   var shade={mmin:1,hsr:1,ad:1}; var body='';
   ['D','M','F'].forEach(function(g){
-    body+='<tr class="grp"><td colspan="'+(cols.length+1)+'">'+GRPN[g]+'</td></tr>';
+    body+='<tr class="grp"><td colspan="'+(cols.length+2)+'">'+GRPN[g]+'</td></tr>';
     P.filter(function(p){return p.grp===g;}).forEach(function(p){
       var isP13=p.n==='13';
       body+='<tr'+(isP13?' class="rowlink" data-pplayer="13"':'')+'><td><span class="pcell"><span class="tteam '+p.team+'"></span><span class="pnm">P'+p.n+'</span> <span style="color:var(--color-text-soft);font-weight:500">'+p.pos.replace('·','/')+'</span></span></td>'
         + cols.map(function(c,ci){ var v=p[c[0]]; var sep=(c[2]==='v'&&cols[ci-1]&&cols[ci-1][2]==='g')?' colsep':''; if(v==null) return '<td class="num'+sep+'">–</td>'; var cls=''; if(shade[c[0]]){var m=MED[c[0]]; if(v>=m*1.25)cls=' class="cell-hi"'; else if(v<=m*0.75)cls=' class="cell-lo"';} var disp=(c[0]==='scans')?v.toFixed(2):(c[0]==='ad')?v.toFixed(2):(c[0]==='comp')?v+'%':v; return '<td class="num'+sep+'"><span'+cls+' style="padding:1px 5px">'+disp+'</span></td>'; }).join('')
-        + (isP13?'<td class="num"><i data-lucide="chevron-right" style="width:15px;height:15px;color:var(--color-text-disabled)"></i></td>':'<td></td>')+'</tr>';
+        + (isP13?'<td class="num"><i data-lucide="chevron-right" style="width:15px;height:15px;color:var(--color-primary-text)"></i></td>':'<td></td>')+'</tr>';
     });
   });
   body+='<tr class="sumrow"><td>Squad median (GPS, 19 players)</td>'+cols.map(function(c){var v=MED[c[0]];var disp=(c[0]==='scans'||c[0]==='ad')?v.toFixed(2):(c[0]==='comp')?v+'%':v;return '<td class="num">'+disp+'</td>';}).join('')+'<td></td></tr>';
   var grphd='<tr class="grphd"><th></th><th colspan="3">GPS (19 players)</th><th colspan="3" class="colsep">VIDEO (22 players)</th><th></th></tr>';
   var colhd='<tr><th>Player</th>'+cols.map(function(c,ci){var sep=(c[2]==='v'&&cols[ci-1]&&cols[ci-1][2]==='g')?' colsep':'';return '<th class="num'+sep+'">'+c[1]+'</th>';}).join('')+'<th></th></tr>';
-  var table='<div class="pcard"><div class="pch"><div class="pct">Squad comparison <span class="crpill" style="background:var(--color-primary-soft);color:var(--color-primary-text)">Both games · 43 min</span></div>'+pAnaSel()+'</div>'
+  var table=pStandHead('Squad comparison','Both games · 43 min · 22 participants')
+    + '<div class="pcard"><div class="pch"><div class="pct">Per-minute load <span class="crpill" style="background:var(--color-primary-soft);color:var(--color-primary-text)">Both games · 43 min</span></div></div>'
     + '<div class="pcsub" style="margin-bottom:12px">22 participants · 19 GPS · 3 video-only. Shaded GPS cells sit far from the squad median. Team split illustrative.</div>'
     + '<div class="fltrow"><span class="selctl">Role: All <i data-lucide="chevron-down"></i></span><span class="selctl">Team: Both <i data-lucide="chevron-down"></i></span><span class="srchbox"><i data-lucide="search"></i><input type="text" placeholder="Search players…"></span><span class="spacer"></span><span class="selctl">Balanced <i data-lucide="chevron-down"></i></span><span class="selctl" data-toast="Column options · illustrative"><i data-lucide="columns-3"></i>Columns</span></div>'
     + '<div style="overflow-x:auto"><table class="dtable"><thead>'+grphd+colhd+'</thead><tbody>'+body+'</tbody></table></div>'
@@ -354,7 +377,7 @@ function pScanning(){
   var left='<div class="pcard"><div class="pct" style="margin-bottom:4px">Scans per second <i data-lucide="info" style="width:14px;height:14px;color:var(--color-text-soft)"></i></div><div class="pcsub">Squad median, readable players: 0.32 (dashed).</div><div class="hbars">'+bars+'</div></div>';
   var right='<div class="pcard"><div class="pct" style="margin-bottom:10px">By position</div><table class="dtable"><thead><tr><th>Position</th><th class="num">Scans per second</th><th class="num">Players</th></tr></thead><tbody>'+pos.map(function(r){return '<tr><td>'+r[0]+'</td><td class="num">'+r[1].toFixed(2)+'</td><td class="num">'+r[2]+'</td></tr>';}).join('')+'</tbody></table>'
     + '<div class="mvreview"><div class="mvthumb"><img src="frames/p04_reception.jpg" alt="" loading="lazy" onerror="this.style.display=\'none\'"><div class="pp"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div></div><div><div style="font-size:13.5px;font-weight:700">P04 · 0 scans before this reception</div><div style="font-size:12px;color:var(--color-text-soft);margin:2px 0 4px">10v10 · 08:06 · Clip 12</div><a class="cnl" data-review="2" style="font-size:12.5px;font-weight:600;color:var(--color-primary-text);cursor:pointer">Review the clip <i data-lucide="arrow-right" style="width:13px;height:13px;vertical-align:-2px"></i></a></div></div></div>';
-  var head='<div class="pagetitle"><div><h2>Scanning before receiving</h2><div class="ptsub">Both games · '+chip('video')+' · '+INTEST+'</div></div>'+pAnaSel()+'</div>'
+  var head=pStandHead('Scanning before receiving','Both games · '+INTEST)
     + '<div class="fltrow"><span class="selctl">All readable players <i data-lucide="chevron-down"></i></span><span class="selctl">All positions <i data-lucide="chevron-down"></i></span></div>'
     + '<div class="infobar" style="background:var(--color-warning-soft);color:var(--color-warning-ink)"><i data-lucide="alert-triangle"></i><div>Camera-readable receptions: 62% in 10v10 · 43% in 11v11. This is a partial view.</div></div>';
   var foot='<div class="twocol" style="margin-top:16px"><div class="pcard"><div class="pct" style="margin-bottom:6px">How this is counted</div><div class="pcsub" style="margin-bottom:0">Head turns away from the ball; 10 s before receipt or since last touch. At least 6 readable receptions. 50 fps sideline camera.</div></div><div class="pcard"><div class="pct" style="margin-bottom:6px">Research context &amp; limits <i data-lucide="info" style="width:14px;height:14px;color:var(--color-text-soft)"></i></div><div class="pcsub" style="margin-bottom:0">Jordet et al. (2020) reported 0.44/s in a different window; not a direct target.</div></div></div>';
@@ -374,10 +397,10 @@ function pMovement(){
   var cut='<div class="pcard" style="margin-top:16px"><div class="pch"><div class="pct">Cutting direction <span style="font-weight:500;color:var(--color-text-soft);font-size:12px">Cut ≥45° from ≥14.4 km/h</span></div><span style="font-size:12px;color:var(--color-text-soft)">No player differs from 50/50 after correction for 20 tests.</span></div>'
     + '<div class="stackbar" style="height:30px"><div class="seg" style="width:47%;background:var(--color-primary);display:grid;place-items:center;color:#fff;font-weight:700;font-size:13px">47%</div><div class="seg" style="width:53%;background:var(--color-surface-muted);display:grid;place-items:center;color:var(--color-text);font-weight:700;font-size:13px">53%</div></div>'
     + '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--color-text-soft);margin-top:6px"><span>110 of 234 cuts to left</span><span>124 of 234 cuts to right</span></div></div>';
-  var head='<div class="pagetitle"><div><h2>Speed, braking &amp; cutting</h2><div class="ptsub">Both games · '+chip('both')+'</div></div>'+pAnaSel()+'</div>';
+  var head=pStandHead('Speed, braking &amp; cutting','Both games · GPS + video');
   return head + cards + '<div class="twocol">'+stops+peaks+'</div>' + cut + srcLinkFoot();
 }
-function statCard(ic,v,l,r){ return '<div class="statcard"><div class="sc-ic"><i data-lucide="'+ic+'"></i></div><div><div class="sc-v">'+v+'</div><div class="sc-l">'+l+'</div>'+(r?'<div class="sc-r">'+r+'</div>':'')+'</div></div>'; }
+function statCard(ic,v,l,r){ var vv=/[·→]/.test(v)?v:uw(v); return '<div class="statcard"><div class="sc-ic"><i data-lucide="'+ic+'"></i></div><div><div class="sc-v">'+vv+'</div><div class="sc-l">'+l+'</div>'+(r?'<div class="sc-r">'+r+'</div>':'')+'</div></div>'; }
 function pPlayer(){
   var sub=state.pSub;
   var subtabs='<div class="themetabs" style="margin-bottom:16px">'+[['session','Session'],['movement','Movement'],['history','History & testing']].map(function(t){return '<button class="ttab'+(sub===t[0]?' active':'')+'" data-ptab="'+t[0]+'">'+t[1]+'</button>';}).join('')+'</div>';
@@ -397,18 +420,18 @@ function pPlayer(){
       + '<table class="dtable"><thead><tr><th>Drill</th><th class="num">Min</th><th class="num">m/min</th><th class="num">HS m</th><th class="num">Acc+dec</th><th class="num">Top km/h</th></tr></thead><tbody>'+dbd.map(function(r){return '<tr><td style="font-weight:600">'+r[0]+'</td><td class="num">'+r[1]+'</td><td class="num">'+r[2]+'</td><td class="num">'+r[3]+'</td><td class="num">'+r[4]+'</td><td class="num">'+r[5]+'</td></tr>';}).join('')+'</tbody></table>'
       + '<div style="border-top:1px solid var(--color-separator);margin-top:14px;padding-top:14px"><div class="pct" style="font-size:13px;margin-bottom:8px">Fast runs in the games</div><div class="stackbar"><div class="seg" style="width:67%;background:var(--color-primary-active)"></div><div class="seg" style="width:25%;background:var(--color-primary)"></div><div class="seg" style="width:8%;background:var(--sb-steel)"></div></div><div style="display:flex;justify-content:space-between;align-items:center"><div class="stacklegend"><span><i style="background:var(--color-primary-active)"></i>8 recovery/pressing</span><span><i style="background:var(--color-primary)"></i>3 with ball</span><span><i style="background:var(--sb-steel)"></i>1 in-possession off-ball</span></div><a class="cnl" data-opendrill="11v11" data-ai="1" style="font-size:12.5px;font-weight:600;color:var(--color-primary-text);cursor:pointer;white-space:nowrap">View positions &amp; run clips <i data-lucide="arrow-right" style="width:13px;height:13px;vertical-align:-2px"></i></a></div></div></div>';
     var tech='<div class="pcard"><div class="pct" style="margin-bottom:4px">Technical work</div>'
-      + '<div class="twrow"><div class="tw-ic"><i data-lucide="send"></i></div><div><div class="tw-l">Crossing</div><div class="tw-v">5 of 9</div><div class="tw-s">Attacker-first</div></div></div>'
-      + '<div class="twrow"><div class="tw-ic"><i data-lucide="eye"></i></div><div><div class="tw-l">Scanning</div><div class="tw-v">0.29 /s</div><div class="tw-s">Preseason 0.24 – 0.33</div></div></div></div>'
-      + '<div class="pcard"><div class="pct" style="margin-bottom:2px">Movement review</div><div class="mvreview"><div class="mvthumb"><img src="frames/hardest_stop.jpg" alt="" loading="lazy" onerror="this.style.display=\'none\'"><div class="pp"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div></div><div><span class="rr-st open" style="font-size:10px">P13</span><div style="font-size:14px;font-weight:700;margin-top:4px">Hard stop</div><div style="font-size:12.5px;color:var(--color-text-soft)">-7.17 m/s² · Unverified</div><a class="cnl" data-review="0" style="font-size:12.5px;font-weight:600;color:var(--color-primary-text);cursor:pointer">Clip 13 <i data-lucide="arrow-right" style="width:13px;height:13px;vertical-align:-2px"></i></a></div></div></div>';
-    var ref='<div class="pcard" style="margin-top:16px"><div class="pch"><div class="pct">His reference <span style="font-weight:500;color:var(--color-text-soft);font-size:12px">6 match halves ≥40 min · individual reference</span></div><span style="display:flex;gap:16px"><a class="cnl" data-ptab="history" style="font-size:12.5px;font-weight:600;color:var(--color-primary-text);cursor:pointer">Compare F01, F02, F03</a><a class="cnl" data-ptab="history" style="font-size:12.5px;font-weight:600;color:var(--color-primary-text);cursor:pointer">Testing &amp; preseason cuts</a></span></div>'
-      + '<div class="cardgrid4" style="margin-bottom:0"><div class="tile"><div class="ts" style="margin-top:0">Match</div><div class="tv">92 <small>m/min</small></div></div><div class="tile"><div class="ts" style="margin-top:0">Match</div><div class="tv">7.4 <small>HS m/min</small></div></div><div class="tile"><div class="ts" style="margin-top:0">Match</div><div class="tv">2.42 <small>acc+dec/min</small></div></div><div class="tile"><div class="ts" style="margin-top:0">Peak</div><div class="tv">31.97 <small>km/h</small></div></div></div></div>';
-    body=cards+'<div class="twocol" style="grid-template-columns:1.55fr 1fr">'+drillTable+tech+'</div>'+ref;
+      + '<div class="twrow"><div class="tw-ic"><i data-lucide="send"></i></div><div class="tw-main"><div class="tw-l">Crossing</div><div class="tw-v">5 of 9</div></div><div class="tw-s">Attacker-first</div></div>'
+      + '<div class="twrow"><div class="tw-ic"><i data-lucide="eye"></i></div><div class="tw-main"><div class="tw-l">Scanning</div><div class="tw-v">'+uw('0.29 /s')+'</div></div><div class="tw-s">Preseason 0.24 – 0.33</div></div></div>'
+      + '<div class="pcard"><div class="pct" style="margin-bottom:2px">Movement review</div><div class="mvreview"><div class="mvthumb"><img src="frames/hardest_stop.jpg" alt="" loading="lazy" onerror="this.style.display=\'none\'"><div class="pp"><span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div></div><div><span class="rr-st open" style="font-size:10px">P13</span><div style="font-size:14px;font-weight:700;margin-top:4px">Hard stop</div><div style="font-size:12.5px;color:var(--color-text-soft)">-7.17 m/s² · Unverified</div></div><span class="mv-ch" data-review="0"><i data-lucide="chevron-right"></i></span></div></div>';
+    var ref='<div class="pcard" style="margin-top:16px"><div class="pct">His reference</div><div class="pcsub">6 match halves ≥40 min · individual reference</div>'
+      + '<div class="cardgrid4" style="grid-template-columns:repeat(2,1fr);margin-bottom:0"><div class="tile"><div class="ts" style="margin-top:0">Match</div><div class="tv">92<span class="u">m/min</span></div></div><div class="tile"><div class="ts" style="margin-top:0">Match</div><div class="tv">7.4<span class="u">HS m/min</span></div></div><div class="tile"><div class="ts" style="margin-top:0">Match</div><div class="tv">2.42<span class="u">acc+dec/min</span></div></div><div class="tile"><div class="ts" style="margin-top:0">Peak</div><div class="tv">31.97<span class="u">km/h</span></div></div></div><div style="margin-top:14px;display:flex;flex-direction:column;gap:9px;align-items:flex-start"><a class="cnl" data-ptab="history" style="font-size:12.5px;font-weight:600;color:var(--color-primary-text);cursor:pointer">Compare F01, F02, F03</a><a class="cnl" data-ptab="history" style="font-size:12.5px;font-weight:600;color:var(--color-primary-text);cursor:pointer">Testing &amp; preseason cuts</a></div></div>';
+    body=cards+'<div class="twocol" style="grid-template-columns:1.55fr 1fr;margin-bottom:24px">'+'<div class="pcol">'+drillTable+ref+'</div>'+'<div class="pcol">'+tech+'</div></div>'+srcLinkFoot();
   } else if(sub==='movement'){
     body='<div class="cardgrid4" style="grid-template-columns:repeat(3,1fr)">'
       + statCard('gauge','29.18 / 28.6','GPS / video top speed','km/h')
       + statCard('footprints','4.49 /s','Step rate','1.77 m per step')
       + statCard('corner-up-right','11 L · 13 R','F03 all-drill cuts','GPS 63/112 · 56% right')+'</div>'
-      + '<div class="twocol"><div class="pcard"><div class="pct" style="margin-bottom:10px">Hardest stop · Clip 13</div><div class="srcgrid"><div class="srccell"><div class="scl">GPS peak</div><div class="scv num">-7.17 m/s²</div></div><div class="srccell"><div class="scl">Video speed</div><div class="scv num">23.7 → 6.1</div></div><div class="srccell"><div class="scl">Time</div><div class="scv num">0.96 s</div></div><div class="srccell"><div class="scl">Distance</div><div class="scv num">4.0 m</div></div></div><div class="srcnote">Step count unavailable · outside sideline coverage. No ground-contact timing.</div></div>'
+      + '<div class="twocol"><div class="pcard"><div class="pct" style="margin-bottom:10px">Hardest stop · Clip 13</div><div class="srcgrid"><div class="srccell"><div class="scl">GPS peak</div><div class="scv num">'+uw('-7.17 m/s²')+'</div></div><div class="srccell"><div class="scl">Video speed</div><div class="scv num">23.7 → 6.1</div></div><div class="srccell"><div class="scl">Time</div><div class="scv num">'+uw('0.96 s')+'</div></div><div class="srccell"><div class="scl">Distance</div><div class="scv num">'+uw('4.0 m')+'</div></div></div><div class="srcnote">Step count unavailable · outside sideline coverage. No ground-contact timing.</div></div>'
       + '<div class="pcard"><div class="pct" style="margin-bottom:10px">Preseason cutting</div><table class="dtable"><tbody>'+row2('Preseason cuts','240 of 419 right · 57%')+row2('95% CI','52 – 62%')+row2('F03 all-drill','11 L · 13 R')+row2('GPS window','63 of 112 · 56%')+'</tbody></table><div class="footnote">Windows differ (preseason vs F03 vs GPS). Not interchangeable; no injury inference.</div></div></div>'+srcLinkFoot();
     return head + body;
   } else {
@@ -635,7 +658,7 @@ function drillDetail(k){
   return head + a.fn(k) + srcLinkFoot();
 }
 /* ---- dashboard helpers ---- */
-function bigTile(v,l,s){ return '<div class="tile"><div class="tv" style="font-size:26px">'+v+'</div><div class="ts" style="font-size:12.5px;color:var(--color-text);font-weight:600;margin-top:7px">'+l+'</div>'+(s?'<div class="ts">'+s+'</div>':'')+'</div>'; }
+function bigTile(v,l,s){ var vv=/[·→]/.test(v)?v:uw(v); return '<div class="tile"><div class="tv" style="font-size:26px">'+vv+'</div><div class="ts" style="font-size:12.5px;color:var(--color-text);font-weight:600;margin-top:7px">'+l+'</div>'+(s?'<div class="ts">'+s+'</div>':'')+'</div>'; }
 function ciBar(label,pct,lo,hi,frac){ return '<div class="cibar"><div class="cilab">'+label+'</div><div class="citrack"><div class="cibarfill" style="width:'+pct+'%"></div><div class="ciwhisk" style="left:'+lo+'%;width:'+(hi-lo)+'%"></div><div class="cidot" style="left:'+pct+'%"></div></div><div class="cival"><b>'+pct+'%</b><span>'+frac+'<br>'+lo+' – '+hi+'%</span></div></div>'; }
 function kmRail(count,items){
   return '<div class="pcard kmrail"><div class="km-h"><span class="t">Key moments</span><span class="c">'+count+'</span></div>'
@@ -825,7 +848,7 @@ function wirePane(){
   host.querySelectorAll('[data-srcgaps]').forEach(function(el){ el.onclick=function(){ state.srcBack=state.tab; state.srcOpen=true; state.srcTab='gaps'; renderPane(); setTimeout(function(){ var t=document.getElementById('recon-p06'); if(t){ t.scrollIntoView({behavior:'smooth',block:'center'}); t.classList.remove('recon-flash'); void t.offsetWidth; t.classList.add('recon-flash'); setTimeout(function(){ t.classList.remove('recon-flash'); },2000); } else { window.scrollTo({top:0,behavior:'smooth'}); } },60); }; });
   host.querySelectorAll('[data-srcclose]').forEach(function(el){ el.onclick=function(){ state.srcOpen=false; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
   host.querySelectorAll('[data-srctab]').forEach(function(el){ el.onclick=function(){ state.srcTab=el.dataset.srctab; state.srcOpen=true; renderPane(); }; });
-  host.querySelectorAll('[data-psub]').forEach(function(el){ el.onclick=function(){ closeMenus(); state.tab='players'; state.srcOpen=false; state.standalonePlayer=false; state.pView=el.dataset.psub; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
+  host.querySelectorAll('[data-psub]').forEach(function(el){ el.onclick=function(){ closeMenus(); var det={squad:1,scanning:1,movement:1}; var tgt=el.dataset.psub; if(det[state.pView]&&det[tgt]) navReplace=true; state.tab='players'; state.srcOpen=false; state.standalonePlayer=false; state.pView=tgt; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
   host.querySelectorAll('[data-pplayer]').forEach(function(el){ el.onclick=function(){ state.tab='players'; state.srcOpen=false; state.pView='player'; state.standalonePlayer=true; state.pPlayer=el.dataset.pplayer; state.pSub='session'; renderTabs(); renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
   host.querySelectorAll('[data-ptab]').forEach(function(el){ el.onclick=function(){ state.pSub=el.dataset.ptab; renderPane(); window.scrollTo({top:0,behavior:'smooth'}); }; });
   host.querySelectorAll('[data-opendrill]').forEach(function(el){ el.onclick=function(){ openDrill(el.dataset.opendrill, +(el.dataset.ai||0)); }; });

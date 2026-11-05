@@ -690,7 +690,7 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .dtable td.num,.dtable th.num{text-align:right;font-variant-numeric:tabular-nums}
 .gkledger td.num,.gkledger th.num{text-align:left}
 .dtable tr:last-child td{border-bottom:0}
-.dtable tr.grp td{background:var(--color-surface-subtle);font-weight:700;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--color-text-soft);padding:6px 10px}
+.dtable tr.grp td{background:var(--color-surface-subtle);font-weight:700;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--color-text-soft);padding:8px 32px}
 .dtable tr.sumrow td{font-weight:700;border-top:2px solid var(--color-separator)}
 .pcard>.dtable:last-child tr:last-child td{padding-bottom:2px}
 .srctbl td{padding:9px 10px;font-size:13px}
@@ -914,6 +914,8 @@ body.standalone .wrap2{min-height:100vh}
 .dcard .dbar-fill{display:block;height:100%;background:#A3C9FF;border-radius:999px}
 .dcard .dbar-pct{font-size:13px;font-weight:600;color:var(--color-text-soft);font-variant-numeric:tabular-nums}
 .dchip{display:inline-block;font-size:11px;font-weight:600;color:var(--color-primary-text);background:var(--color-primary-soft);border-radius:var(--r-pill);padding:3px 9px}
+.pcards .dnum{display:inline-flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.04em}
+.pcards .dnum svg{width:14px;height:14px}
 
 /* compact drill cards (drills landing) — chrome shared via the card reskin list above */
 .dcard2{position:relative;display:flex;flex-direction:column;text-align:left;cursor:pointer;font-family:inherit;transition:box-shadow .15s ease,border-color .12s ease}
@@ -1051,6 +1053,8 @@ body.standalone .wrap2{min-height:100vh}
 .vizhero{min-height:120px}
 .ddfoot{display:flex;align-items:center;justify-content:space-between;margin:auto 0 20px;padding-top:14px;border-top:1px solid var(--color-separator);font-size:12px;color:var(--color-text-soft)}
 .ddfoot a{color:var(--color-primary-text);font-weight:600;cursor:pointer}
+.ddfoot>a{display:inline-flex;align-items:center;gap:6px}
+.ddfoot>a svg{width:14px;height:14px}
 .ddfoot .l a{color:var(--color-primary-text)}
 
 /* ============ REVIEW DETAIL ============ */
@@ -1330,6 +1334,8 @@ body.standalone .wrap2{min-height:100vh}
 .dtable tr.rowlink:hover td{background:var(--color-surface-subtle)}
 .dtable tr.rowlink td{color:var(--color-primary-text)}
 .dtable tr.rowlink .pnm{font-weight:700}
+.dtable tr.rowlink td.num{font-weight:700}
+.dtable tr.rowlink svg{stroke-width:2.5}
 .colsep{border-left:1px solid var(--color-separator)}
 
 /* filters row */
@@ -1363,13 +1369,17 @@ body.standalone .wrap2{min-height:100vh}
 
 /* technical-work mini rows + movement review (player detail) */
 .twrow{display:flex;align-items:center;gap:12px;padding:12px 0}
+.twrow:last-of-type{padding-bottom:0}
 .twrow+.twrow{border-top:1px solid var(--color-border-subtle)}
 .twrow .tw-ic{width:34px;height:34px;border-radius:9px;background:var(--color-primary-soft);color:var(--color-primary-text);display:grid;place-items:center;flex:none}
 .twrow .tw-ic svg{width:18px;height:18px}
 .twrow .tw-l{font-size:12.5px;color:var(--color-text-soft)}
 .twrow .tw-v{font-size:19px;font-weight:700;letter-spacing:-.01em}
-.twrow .tw-s{font-size:12px;color:var(--color-text-soft)}
+.twrow .tw-main{min-width:0}
+.twrow .tw-s{font-size:12px;color:var(--color-text-soft);margin-left:auto;text-align:right}
 .mvreview{display:flex;gap:12px;align-items:center;margin-top:12px}
+.mvreview .mv-ch{margin-left:auto;flex:none;display:flex;align-items:center;color:var(--color-primary-text);cursor:pointer}
+.mvreview .mv-ch svg{width:20px;height:20px}
 .mvthumb{width:120px;height:74px;border-radius:8px;flex:none;position:relative;overflow:hidden;background:linear-gradient(160deg,#3b7a4a,#215130)}
 .mvthumb img{width:100%;height:100%;object-fit:cover}
 .mvthumb .pp{position:absolute;inset:0;display:grid;place-items:center}

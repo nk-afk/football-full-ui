@@ -699,7 +699,7 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .dtable td{padding:8px 10px;border-bottom:1px solid var(--color-border-subtle);color:var(--color-text);white-space:nowrap}
 .dtable td.num,.dtable th.num{text-align:right;font-variant-numeric:tabular-nums}
 .dtable tr:last-child td{border-bottom:0}
-.dtable tr.grp td{background:var(--color-surface-subtle);font-weight:700;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--color-text-soft);padding:6px 10px}
+.dtable tr.grp td{background:var(--color-surface-subtle);font-weight:700;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--color-text-soft);padding:8px 32px}
 .dtable tr.sumrow td{font-weight:700;border-top:2px solid var(--color-separator)}
 .pcard>.dtable:last-child tr:last-child td{padding-bottom:2px}
 .srctbl td{padding:9px 10px;font-size:13px}
@@ -1066,6 +1066,8 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .vizhero{min-height:120px}
 .ddfoot{display:flex;align-items:center;justify-content:space-between;margin:22px 0 40px;padding-top:14px;border-top:1px solid var(--color-separator);font-size:12px;color:var(--color-text-soft)}
 .ddfoot a{color:var(--color-primary-text);font-weight:600;cursor:pointer}
+.ddfoot>a{display:inline-flex;align-items:center;gap:6px}
+.ddfoot>a svg{width:14px;height:14px}
 .ddfoot .l a{color:var(--color-primary-text)}
 
 /* ============ REVIEW DETAIL ============ */
@@ -1327,6 +1329,8 @@ h1{font-size:30px;line-height:36px;font-weight:700;letter-spacing:-.01em}
 .dtable tr.rowlink:hover td{background:var(--color-surface-subtle)}
 .dtable tr.rowlink td{color:var(--color-primary-text)}
 .dtable tr.rowlink .pnm{font-weight:700}
+.dtable tr.rowlink td.num{font-weight:700}
+.dtable tr.rowlink svg{stroke-width:2.5}
 .colsep{border-left:1px solid var(--color-separator)}
 
 /* filters row */
@@ -2005,12 +2009,12 @@ function pSquad(){
   var cols=[['mmin','m/min','g'],['hsr','HS metres','g'],['ad','Acc + dec/min','g'],['comp','Passes complete','v'],['press','Pressures','v'],['scans','Scans/s','v'],['loss','Ball losses','v']];
   var shade={mmin:1,hsr:1,ad:1}; var body='';
   ['D','M','F'].forEach(function(g){
-    body+='<tr class="grp"><td colspan="'+(cols.length+1)+'">'+GRPN[g]+'</td></tr>';
+    body+='<tr class="grp"><td colspan="'+(cols.length+2)+'">'+GRPN[g]+'</td></tr>';
     P.filter(function(p){return p.grp===g;}).forEach(function(p){
       var isP13=p.n==='13';
       body+='<tr'+(isP13?' class="rowlink" data-pplayer="13"':'')+'><td><span class="pcell"><span class="tteam '+p.team+'"></span><span class="pnm">P'+p.n+'</span> <span style="color:var(--color-text-soft);font-weight:500">'+p.pos.replace('·','/')+'</span></span></td>'
         + cols.map(function(c,ci){ var v=p[c[0]]; var sep=(c[2]==='v'&&cols[ci-1]&&cols[ci-1][2]==='g')?' colsep':''; if(v==null) return '<td class="num'+sep+'">–</td>'; var cls=''; if(shade[c[0]]){var m=MED[c[0]]; if(v>=m*1.25)cls=' class="cell-hi"'; else if(v<=m*0.75)cls=' class="cell-lo"';} var disp=(c[0]==='scans')?v.toFixed(2):(c[0]==='ad')?v.toFixed(2):(c[0]==='comp')?v+'%':v; return '<td class="num'+sep+'"><span'+cls+' style="padding:1px 5px">'+disp+'</span></td>'; }).join('')
-        + (isP13?'<td class="num"><i data-lucide="chevron-right" style="width:15px;height:15px;color:var(--color-text-disabled)"></i></td>':'<td></td>')+'</tr>';
+        + (isP13?'<td class="num"><i data-lucide="chevron-right" style="width:15px;height:15px;color:var(--color-primary-text)"></i></td>':'<td></td>')+'</tr>';
     });
   });
   body+='<tr class="sumrow"><td>Squad median (GPS, 19 players)</td>'+cols.map(function(c){var v=MED[c[0]];var disp=(c[0]==='scans'||c[0]==='ad')?v.toFixed(2):(c[0]==='comp')?v+'%':v;return '<td class="num">'+disp+'</td>';}).join('')+'<td></td></tr>';
