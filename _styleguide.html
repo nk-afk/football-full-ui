@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meridian · Component styleguide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
+<!-- the REAL shared system under review: -->
+<link rel="stylesheet" href="styles.css">
+<style>
+/* gallery scaffold only — gx- prefixed so it never collides with styles.css */
+.gx-wrap{max-width:1040px;margin:0 auto;padding:34px max(20px,env(safe-area-inset-left)) 90px}
+.gx-title{font-size:13px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--color-primary-ink)}
+.gx-h1{font-size:28px;font-weight:700;letter-spacing:-.02em;margin:6px 0 6px;color:var(--color-text)}
+.gx-lede{font-size:14px;color:var(--color-text-muted);max-width:68ch}
+.gx-toc{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.gx-toc a{font-size:12px;font-weight:600;color:var(--color-primary-ink);background:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.8);border-radius:999px;padding:4px 11px}
+.gx-sec{margin-top:38px;scroll-margin-top:16px}
+.gx-sh{display:flex;align-items:baseline;gap:10px;margin-bottom:14px;border-bottom:1px solid rgba(16,24,40,.12);padding-bottom:7px}
+.gx-sh h2{font-size:16px;font-weight:700;color:var(--color-text)}
+.gx-sh .ref{font-family:ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--color-primary-ink)}
+.gx-demo{display:flex;flex-wrap:wrap;gap:16px;align-items:center;padding:20px;background:rgba(255,255,255,.5);
+  border:1px solid rgba(255,255,255,.8);border-radius:14px;box-shadow:0 10px 28px rgba(16,24,40,.06),inset 0 1px 0 rgba(255,255,255,.9)}
+.gx-demo.col{flex-direction:column;align-items:stretch}
+.gx-demo.top{align-items:flex-start}
+.gx-cap{font-size:12px;color:var(--color-text-soft)}
+.gx-sub{font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--color-text-soft);width:100%;margin:4px 0 -4px}
+.gx-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;width:100%}
+.gx-note{font-size:12px;color:var(--color-text-soft);margin-top:10px}
+.gx-foot{margin-top:50px;border-top:1px solid rgba(16,24,40,.12);padding-top:16px;font-size:12px;color:var(--color-text-soft)}
+/* icon grid */
+.gx-icos{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:10px;width:100%}
+.gx-ico{display:flex;flex-direction:column;align-items:center;gap:7px;padding:12px 6px;background:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.8);border-radius:10px}
+.gx-ico svg{width:22px;height:22px;color:var(--color-text);stroke-width:1.8}
+.gx-ico .fillico{color:var(--color-primary-ink)}
+.gx-ico span{font-family:ui-monospace,Menlo,monospace;font-size:10.5px;color:var(--color-text-soft);text-align:center;word-break:break-all}
+.gx-cta{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.gx-type{display:flex;flex-direction:column;gap:14px;width:100%}
+.gx-trow{display:flex;align-items:baseline;gap:20px;flex-wrap:wrap;border-bottom:1px solid rgba(16,24,40,.08);padding-bottom:12px}
+.gx-trow:last-child{border-bottom:0}
+.gx-tmeta{font-family:ui-monospace,Menlo,monospace;font-size:11px;color:var(--color-text-soft);width:230px;flex:none}
+</style>
+</head>
+<body>
+<div class="gx-wrap">
+  <div class="gx-title">Meridian · football-full-ui</div>
+  <h1 class="gx-h1">Component styleguide</h1>
+  <p class="gx-lede">Complete live reference for <code>styles.css</code> — every element uses the real shared classes. Edit <code>styles.css</code> and reload; this page reflects it. Single source of truth for all six pages.</p>
+  <nav class="gx-toc">
+    <a href="#icons">Icons</a><a href="#type">Type</a><a href="#buttons">Buttons</a><a href="#ctas">Text CTAs</a><a href="#controls">Controls</a>
+    <a href="#dropdowns">Dropdowns</a><a href="#calendar">Calendar</a><a href="#week">Week strip</a><a href="#status">Status</a>
+    <a href="#chips">Chips &amp; badges</a><a href="#avatars">Avatars</a><a href="#tabs">Tabs</a><a href="#cards">Cards</a>
+    <a href="#bars">Stat bars</a><a href="#table">Table</a><a href="#clip">Clip card</a><a href="#highlights">Highlights</a>
+    <a href="#empty">Empty</a><a href="#drawer">Drawer</a><a href="#toast">Toast</a>
+  </nav>
+
+  <!-- ICONS -->
+  <section class="gx-sec" id="icons">
+    <div class="gx-sh"><h2>Icons</h2><span class="ref">Lucide + custom</span></div>
+    <div class="gx-demo col">
+      <div class="gx-sub">Lucide line icons (every one used across the app)</div>
+      <div class="gx-icos" id="icoGrid"></div>
+      <div class="gx-sub">Custom glyphs</div>
+      <div class="gx-icos" id="icoCustom"></div>
+    </div>
+  </section>
+
+  <!-- TYPOGRAPHY -->
+  <section class="gx-sec" id="type">
+    <div class="gx-sh"><h2>Typography</h2><span class="ref">--ff · Inter Display</span></div>
+    <div class="gx-demo col">
+      <div class="gx-sub">Family &amp; weights</div>
+      <p style="font-size:14px;color:var(--color-text-muted);margin-bottom:4px">Inter Display → Inter → system-ui. Tabular figures on by default (<code>font-feature-settings:"tnum"</code>).</p>
+      <div style="display:flex;gap:26px;flex-wrap:wrap;font-size:19px;color:var(--color-text)">
+        <span style="font-weight:400">Regular 400</span>
+        <span style="font-weight:500">Medium 500</span>
+        <span style="font-weight:600">Semibold 600</span>
+        <span style="font-weight:700">Bold 700</span>
+      </div>
+
+      <div class="gx-sub">Type scale</div>
+      <div class="gx-type">
+        <div class="gx-trow"><div class="gx-tmeta">Page title · 22 / 700</div><div style="font-size:22px;font-weight:700;letter-spacing:-.02em">Session overview</div></div>
+        <div class="gx-trow"><div class="gx-tmeta">Section title · .sg-title · 14 / 700</div><div class="sg-title" style="margin:0">Physical load</div></div>
+        <div class="gx-trow"><div class="gx-tmeta">Stat number · 26 / 700 · .num</div><div class="num" style="font-size:26px;font-weight:700;letter-spacing:-.02em">377<span style="font-size:15px;color:var(--color-text-soft)"> m</span></div></div>
+        <div class="gx-trow"><div class="gx-tmeta">Card / highlight title · .hl-title · 15 / 700</div><div class="hl-title">Session highlights</div></div>
+        <div class="gx-trow"><div class="gx-tmeta">Body · 13.5 / 400 · line-height 1.5</div><div style="font-size:13.5px;max-width:52ch">High-speed running aligned to the drill-row sum across the session.</div></div>
+        <div class="gx-trow"><div class="gx-tmeta">Control / button · 13 / 600</div><div style="font-size:13px;font-weight:600">View positions</div></div>
+        <div class="gx-trow"><div class="gx-tmeta">Table row · .pname 13 / 600 + .tdet</div><div style="font-size:13.5px"><span class="pname">Player 13</span> <span class="tdet">· RW</span></div></div>
+        <div class="gx-trow"><div class="gx-tmeta">Caption / sub · .hl-sub · 12.5 / soft</div><div class="hl-sub" style="margin:0">of 27 min · 11v11</div></div>
+        <div class="gx-trow"><div class="gx-tmeta">Eyebrow · .eyebrow · 11 / 600 / .05em</div><div class="eyebrow" style="margin:0">Staff focus</div></div>
+        <div class="gx-trow"><div class="gx-tmeta">Section label · .dw-sec .l · 11 / 600</div><div class="dw-sec"><div class="l" style="margin:0">High-speed running</div></div></div>
+      </div>
+
+      <div class="gx-sub">Numerals · .num (tabular)</div>
+      <div style="display:flex;gap:40px;align-items:center">
+        <div class="num" style="font-size:19px;font-weight:700;line-height:1.5">1,234<br>0,987<br>5,560</div>
+        <span class="gx-cap">tabular figures keep columns aligned (distance, load, counts)</span>
+      </div>
+
+      <div class="gx-sub">Text colours</div>
+      <div style="display:flex;flex-direction:column;gap:7px;font-size:15px;font-weight:500">
+        <span style="color:var(--color-text)">Ink — var(--color-text) · #111827</span>
+        <span style="color:var(--color-text-muted)">Muted — var(--color-text-muted) · #4B5563</span>
+        <span style="color:var(--color-text-soft)">Soft — var(--color-text-soft) · #6B7280</span>
+        <span style="color:var(--color-text-disabled)">Disabled — var(--color-text-disabled) · #9CA3AF</span>
+        <span style="color:var(--color-primary-ink)">Link / ink — var(--color-primary-ink)</span>
+        <span style="background:#090C34;color:var(--color-text-inverse);padding:3px 10px;border-radius:6px;align-self:flex-start">Inverse — var(--color-text-inverse) on navy</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- BUTTONS -->
+  <section class="gx-sec" id="buttons">
+    <div class="gx-sh"><h2>Buttons</h2><span class="ref">.btn / .btn.primary / .btn.sidecta</span></div>
+    <div class="gx-demo col">
+      <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center">
+        <button class="btn primary"><i data-lucide="alert-circle"></i>Review players</button>
+        <button class="btn"><i data-lucide="list"></i>Session plan</button>
+        <button class="btn primary"><i data-lucide="check"></i>Confirm</button>
+        <button class="btn"><i data-lucide="download"></i>Export</button>
+        <button class="btn"><i data-lucide="pencil"></i>Correct event</button>
+        <button class="btn"><i data-lucide="share"></i>Share</button>
+      </div>
+      <div class="gx-sub">Sidebar CTA · .btn.sidecta</div>
+      <div><button class="btn sidecta" style="max-width:220px"><i data-lucide="plus"></i><span class="lbl">Plan a session</span></button></div>
+    </div>
+  </section>
+
+  <!-- TEXT CTAS -->
+  <section class="gx-sec" id="ctas">
+    <div class="gx-sh"><h2>Text CTAs &amp; links</h2><span class="ref">.cc-cta / .hl-cta / .vd-primary / .vd-act / .crumbs</span></div>
+    <div class="gx-demo col">
+      <div class="gx-sub">Inline link CTAs · .cc-cta</div>
+      <div class="gx-cta">
+        <span class="cc-cta">Compare drill load →</span>
+        <span class="cc-cta">View capture log →</span>
+        <span class="cc-cta">Review clip →</span>
+        <span class="cc-cta">Open 13-clip library →</span>
+      </div>
+      <div class="gx-sub">Breadcrumb · .crumbs / .crumb</div>
+      <div class="crumbs"><a class="crumb">Home</a><i data-lucide="chevron-right" style="width:14px;height:14px;color:var(--color-text-disabled)"></i><span class="crumb">Needs review</span></div>
+      <div class="gx-sub">Primary action CTA · .vd-primary + .vd-actions / .vd-act</div>
+      <div style="max-width:420px;width:100%">
+        <button class="vd-primary"><i data-lucide="video"></i>Review clips</button>
+        <div class="vd-actions"><button class="vd-act"><i data-lucide="check"></i>Confirm</button><span class="vd-sep"></span><button class="vd-act"><i data-lucide="pen-line"></i>Correct event</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTROLS -->
+  <section class="gx-sec" id="controls">
+    <div class="gx-sh"><h2>Controls</h2><span class="ref">.seg / .search / .selectwrap / .donepill</span></div>
+    <div class="gx-demo">
+      <div class="seg"><button class="segb active">Players</button><button class="segb">Exercises</button></div>
+      <div class="search"><i data-lucide="search"></i><input placeholder="Search players"></div>
+      <div class="selectwrap"><select><option>All programmes</option><option>Upper push</option><option>Lower body</option></select><i data-lucide="chevron-down"></i></div>
+      <span class="donepill"><i data-lucide="check"></i>Session complete</span>
+    </div>
+  </section>
+
+  <!-- DROPDOWNS -->
+  <section class="gx-sec" id="dropdowns">
+    <div class="gx-sh"><h2>Dropdowns &amp; pickers (open)</h2><span class="ref">.selectwrap / .sesspop / .datelabel</span></div>
+    <div class="gx-demo top">
+      <div>
+        <div class="gx-sub">Session picker · .sesspop / .sessrow</div>
+        <button class="sesstitle-btn" style="margin-bottom:8px"><span style="font-size:20px;font-weight:700">Strength</span><i data-lucide="chevron-down" class="st-chev"></i></button>
+        <div class="sesspop" style="position:static;box-shadow:var(--shadow-pop)">
+          <button class="sessrow active"><span class="sr-time">09:00</span><span class="sr-name">Strength</span><span class="sr-check"><i data-lucide="check"></i></span></button>
+          <button class="sessrow"><span class="sr-time">12:30</span><span class="sr-name">Rehab</span></button>
+          <button class="sessrow"><span class="sr-time">15:00</span><span class="sr-name">Mobility</span></button>
+        </div>
+      </div>
+      <div>
+        <div class="gx-sub">Date label trigger · .datelabel</div>
+        <button class="datelabel"><i data-lucide="calendar"></i><span>7 Oct 2026</span><i data-lucide="chevron-down" class="dl-chev"></i></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CALENDAR -->
+  <section class="gx-sec" id="calendar">
+    <div class="gx-sh"><h2>Calendar popover (open)</h2><span class="ref">.datepop / .dp-grid / .dp-cell</span></div>
+    <div class="gx-demo top">
+      <div class="datepop" style="position:static;box-shadow:var(--shadow-pop)">
+        <div class="dp-head"><div class="dp-my">October 2026</div><div class="dp-nav"><button class="dp-arrow"><i data-lucide="chevron-left"></i></button><button class="dp-arrow"><i data-lucide="chevron-right"></i></button></div></div>
+        <div class="dp-dow"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+        <div class="dp-grid" id="dpGrid"></div>
+        <div class="dp-foot"><button class="dp-today">Today</button></div>
+      </div>
+      <div class="gx-cap">Cell states: <code>.out</code> (other month), <code>.disabled</code>, <code>.today</code> (dot), <code>.sel</code> (filled).</div>
+    </div>
+  </section>
+
+  <!-- WEEK STRIP -->
+  <section class="gx-sec" id="week">
+    <div class="gx-sh"><h2>Week strip</h2><span class="ref">.days / .day / .weeknav</span></div>
+    <div class="gx-demo">
+      <button class="weeknav"><i data-lucide="chevron-left"></i></button>
+      <div class="days">
+        <button class="day"><span class="dow">MON</span><span class="dnum">5</span></button>
+        <button class="day"><span class="dow">TUE</span><span class="dnum">6</span></button>
+        <button class="day sel"><span class="dow">WED</span><span class="dnum">7</span></button>
+        <button class="day"><span class="dow">THU</span><span class="dnum">8</span></button>
+        <button class="day"><span class="dow">FRI</span><span class="dnum">9</span></button>
+        <button class="day"><span class="dow">SAT</span><span class="dnum">10</span></button>
+        <button class="day"><span class="dow">SUN</span><span class="dnum">11</span></button>
+      </div>
+      <button class="weeknav"><i data-lucide="chevron-right"></i></button>
+    </div>
+  </section>
+
+  <!-- STATUS -->
+  <section class="gx-sec" id="status">
+    <div class="gx-sh"><h2>Status system</h2><span class="ref">.exc / .stag / .minibar</span></div>
+    <div class="gx-demo col">
+      <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+        <span class="exc o"><i data-lucide="check"></i></span>
+        <span class="exc p"><i data-lucide="minus"></i></span>
+        <span class="exc f">!</span>
+        <span class="exc n"></span>
+        <span class="gx-cap">completion dots — plan / partial / review / not-observed</span>
+      </div>
+      <div style="display:flex;gap:22px;align-items:center;flex-wrap:wrap">
+        <span class="stag plan"><span class="sd"></span>Plan met</span>
+        <span class="stag partial"><span class="sd"></span>Partial</span>
+        <span class="stag review"><span class="sd"></span>Review</span>
+        <span class="stag notobs"><span class="sd"></span>Not observed</span>
+        <span class="gx-cap">status tags</span>
+      </div>
+      <div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+        <span class="minibar"><i style="width:86%"></i></span><span class="num" style="font-weight:700;font-size:13px">86%</span>
+        <span class="minibar"><i style="width:54%"></i></span><span class="num" style="font-weight:700;font-size:13px">54%</span>
+        <span class="gx-cap">completion mini-bars</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHIPS & BADGES -->
+  <section class="gx-sec" id="chips">
+    <div class="gx-sh"><h2>Chips &amp; badges</h2><span class="ref">.srcchip / .donepill / .cc-flag / .rv2-pill / .badge / .testtag</span></div>
+    <div class="gx-demo col">
+      <div class="gx-sub">Source chips · .srcchip</div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center" id="srcChips"></div>
+      <div class="gx-sub">Flags &amp; review pills</div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+        <span class="cc-flag"><i data-lucide="flag"></i>Hard stop</span>
+        <span class="cc-flag"><i data-lucide="alert-circle"></i>Set unconfirmed</span>
+        <span class="rv2-pill"><span class="rv2-pdot"></span>Partial</span>
+        <span class="rv2-pill rv2-pill-review"><span class="rv2-pdot"></span>Review</span>
+        <span class="testtag">In testing</span>
+      </div>
+      <div class="gx-sub">Nav badge · pill counts</div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+        <span style="position:relative;display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600">Needs review <span class="badge">2</span></span>
+        <span class="donepill"><i data-lucide="check"></i>Session complete</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- AVATARS -->
+  <section class="gx-sec" id="avatars">
+    <div class="gx-sh"><h2>Avatars &amp; identity</h2><span class="ref">.avatar / .pnum</span></div>
+    <div class="gx-demo">
+      <span class="avatar"><img src="https://randomuser.me/api/portraits/men/41.jpg" alt=""></span>
+      <span class="pnum">P13</span>
+      <span class="pnum">P7</span>
+      <span class="pnum" style="width:40px;height:40px;font-size:13px">P2</span>
+      <span class="gx-cap">photo avatar · player number chips (table 30px / drawer 40px)</span>
+    </div>
+  </section>
+
+  <!-- TABS -->
+  <section class="gx-sec" id="tabs">
+    <div class="gx-sh"><h2>Filter tabs</h2><span class="ref">.ptabs / .ptab / .ptab-dot</span></div>
+    <div class="gx-demo col">
+      <div class="ptabs">
+        <button class="ptab active">All <span>9</span></button>
+        <button class="ptab"><span class="ptab-dot" style="background:var(--c-review)"></span>Needs review <span>1</span></button>
+        <button class="ptab"><span class="ptab-dot" style="background:var(--c-partial)"></span>Partial <span>1</span></button>
+        <button class="ptab"><span class="ptab-dot" style="background:var(--c-notobs)"></span>Not observed <span>1</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CARDS -->
+  <section class="gx-sec" id="cards">
+    <div class="gx-sh"><h2>Glass cards</h2><span class="ref">.panel</span></div>
+    <div class="gx-grid">
+      <div class="panel" style="padding:16px"><div class="eyebrow">High-speed</div><div style="font-size:26px;font-weight:700;margin-top:8px" class="num">377<span style="font-size:15px;color:var(--color-text-soft)"> m</span></div><div style="font-size:12.5px;color:var(--color-text-soft);margin-top:4px">+12 m vs last comparable</div></div>
+      <div class="panel" style="padding:16px"><div class="eyebrow">Ball-live</div><div style="font-size:26px;font-weight:700;margin-top:8px" class="num">17.9<span style="font-size:15px;color:var(--color-text-soft)"> min</span></div><div style="font-size:12.5px;color:var(--color-text-soft);margin-top:4px">of 27 min · 11v11</div></div>
+      <div class="panel" style="padding:16px"><div class="eyebrow">GPS coverage</div><div style="font-size:26px;font-weight:700;margin-top:8px" class="num">19<span style="font-size:15px;color:var(--color-text-soft)">/22</span></div><div style="font-size:12.5px;color:var(--color-text-soft);margin-top:4px">3 video-only</div></div>
+    </div>
+  </section>
+
+  <!-- STAT BARS -->
+  <section class="gx-sec" id="bars">
+    <div class="gx-sh"><h2>Stat bars</h2><span class="ref">.statgroups / .sgrow</span></div>
+    <div class="panel" style="padding:20px"><div class="statgroups">
+      <div class="statgroup">
+        <div class="sg-title">Physical load</div>
+        <div class="sg-rows">
+          <div class="sgrow"><span class="sg-lab">High-speed</span><span class="sg-track"><i style="width:78%;background:var(--sb-steel)"></i></span><span class="sg-val num">78</span></div>
+          <div class="sgrow"><span class="sg-lab">Acc / dec</span><span class="sg-track"><i style="width:54%;background:var(--sb-green)"></i></span><span class="sg-val num">54</span></div>
+          <div class="sgrow"><span class="sg-lab">m / min</span><span class="sg-track"><i style="width:91%;background:var(--sb-gold)"></i></span><span class="sg-val num">91</span></div>
+        </div>
+      </div>
+      <div class="sg-sep"></div>
+      <div class="statgroup">
+        <div class="sg-title">Event quality</div>
+        <div class="sg-rows">
+          <div class="sgrow"><span class="sg-lab">Readable</span><span class="sg-track"><i style="width:62%;background:var(--sb-steel)"></i></span><span class="sg-val num">62</span></div>
+          <div class="sgrow"><span class="sg-lab">Verified</span><span class="sg-track"><i style="width:43%;background:var(--sb-clay)"></i></span><span class="sg-val num">43</span></div>
+        </div>
+      </div>
+      <div class="sg-foot">Pooled across 36 player-halves · GPS 19/22</div>
+    </div></div>
+  </section>
+
+  <!-- TABLE -->
+  <section class="gx-sec" id="table">
+    <div class="gx-sh"><h2>Player table</h2><span class="ref">.ptable / .prow / .pnum / .stag</span></div>
+    <div class="panel" style="padding:8px 14px;overflow-x:auto">
+      <table class="ptable">
+        <thead><tr><th>Player</th><th>Programme</th><th>Exercise checks</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+          <tr class="prow"><td><div class="pcell"><span class="pnum">P2</span><span class="pname">Player 2</span></div></td><td class="tdet">Upper push</td><td><span class="exc f">!</span></td><td><span class="stag review"><span class="sd"></span>Requires review</span></td><td class="chev"><i data-lucide="chevron-right"></i></td></tr>
+          <tr class="prow"><td><div class="pcell"><span class="pnum">P12</span><span class="pname">Player 12</span></div></td><td class="tdet">Upper push</td><td><span class="exc p"><i data-lucide="minus"></i></span></td><td><span class="stag partial"><span class="sd"></span>Partial</span></td><td class="chev"><i data-lucide="chevron-right"></i></td></tr>
+          <tr class="prow"><td><div class="pcell"><span class="pnum">P1</span><span class="pname">Player 1</span></div></td><td class="tdet">Upper push</td><td><span class="exc o"><i data-lucide="check"></i></span></td><td><span class="stag plan"><span class="sd"></span>Plan met</span></td><td class="chev"><i data-lucide="chevron-right"></i></td></tr>
+          <tr class="prow"><td><div class="pcell"><span class="pnum">P16</span><span class="pname">Player 16</span></div></td><td class="tdet">Upper push</td><td><span class="exc n"></span></td><td><span class="stag notobs"><span class="sd"></span>Not observed</span></td><td class="chev"><i data-lucide="chevron-right"></i></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- CLIP CARD -->
+  <section class="gx-sec" id="clip">
+    <div class="gx-sh"><h2>Clip card</h2><span class="ref">.clipcard / .thumb / .cc-flag</span></div>
+    <div class="gx-demo top">
+      <div class="clipcard" style="max-width:300px">
+        <div class="cc-top">
+          <span class="pnum">P7</span>
+          <div><div class="cc-name">Player 7</div><div class="cc-prog">Upper push · 00:12</div></div>
+          <span class="cc-flag"><i data-lucide="alert-circle"></i>Set unconfirmed</span>
+        </div>
+        <div class="thumb" style="background:linear-gradient(135deg,#6b7280,#374151)">
+          <span class="play"><svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7z" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/></svg></span>
+          <span class="dur">0:12</span>
+        </div>
+        <div class="cc-title">Seated row</div>
+        <div class="cc-note">Set 1 capture half-obscured. Confirm the reps before it counts.</div>
+        <span class="cc-cta">Review clip →</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIGHLIGHTS -->
+  <section class="gx-sec" id="highlights">
+    <div class="gx-sh"><h2>Highlights banner</h2><span class="ref">.highlightbox</span></div>
+    <div class="panel" style="padding:0;overflow:hidden">
+      <div class="highlightbox">
+        <div class="hl-thumb" style="background:linear-gradient(135deg,#1f6f43,#2f9d5e)">
+          <span class="hl-play"><span><svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7z" fill="#fff"/></svg></span></span>
+          <span class="hl-dur">1:28</span>
+        </div>
+        <div class="hl-text"><div class="hl-title">Session highlights</div><div class="hl-sub">A short recap of the key moments from this session</div></div>
+        <button class="btn hl-cta"><i data-lucide="play"></i>View session highlight</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- EMPTY -->
+  <section class="gx-sec" id="empty">
+    <div class="gx-sh"><h2>Empty states</h2><span class="ref">.empty</span></div>
+    <div class="gx-grid">
+      <div class="panel"><div class="empty" style="min-height:170px"><div class="ic"><i data-lucide="calendar-x"></i></div><div class="title">Nothing scheduled</div></div></div>
+      <div class="panel"><div class="empty" style="min-height:170px"><div class="ic"><i data-lucide="loader"></i></div><div class="title">Still processing</div><div class="sub">This usually takes a little while.</div></div></div>
+      <div class="panel"><div class="empty" style="min-height:170px"><div class="ic"><i data-lucide="bed"></i></div><div class="title">Rest day</div></div></div>
+      <div class="panel"><div class="empty" style="min-height:170px"><div class="ic"><i data-lucide="waves"></i></div><div class="title">Recovery day</div><div class="sub">2 Nov · 09:30 · Pool</div></div></div>
+    </div>
+  </section>
+
+  <!-- DRAWER -->
+  <section class="gx-sec" id="drawer">
+    <div class="gx-sh"><h2>Row drawer</h2><span class="ref">.scrim / .drawer / .dw-sec / .forcoach</span></div>
+    <div class="gx-demo">
+      <button class="btn primary" id="openDrawer"><i data-lucide="panel-right-open"></i>Open detail drawer</button>
+      <span class="gx-cap">slides in from the right over a scrim — the app's signature interaction</span>
+    </div>
+  </section>
+
+  <!-- TOAST -->
+  <section class="gx-sec" id="toast">
+    <div class="gx-sh"><h2>Toast</h2><span class="ref">.toast</span></div>
+    <div class="gx-demo">
+      <button class="btn primary" id="fireToast"><i data-lucide="check"></i>Save correction</button>
+      <span class="gx-cap">dark pill, bottom-centre, auto-dismisses</span>
+    </div>
+  </section>
+
+  <p class="gx-foot">Served from <code>_styleguide.html</code> · links the live <code>styles.css</code>. Not part of app nav — keep it as a living styleguide or delete before deploy.</p>
+</div>
+
+<!-- drawer + toast instances (real classes) -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer">
+  <div class="dw-head">
+    <span class="pnum" style="width:40px;height:40px;font-size:13px">P13</span>
+    <div><div class="cc-name" style="font-size:16px">Player 13 · Right winger</div><div class="cc-prog" style="font-size:13px">Position RW · 377 m high-speed</div></div>
+    <button class="dw-close" id="closeDrawer"><i data-lucide="x"></i></button>
+  </div>
+  <div class="dw-body">
+    <div class="dw-sec"><div class="l">High-speed running</div><p>377 m across the session, aligned to the drill-row sum.</p></div>
+    <div class="dw-sec"><div class="l">Review status</div><p><span class="stag plan"><span class="sd"></span>Plan met</span></p></div>
+    <div class="dw-sec forcoach"><div class="l">For the coach</div><p>Off-ball runs tracked across the 11v11 and 10v10 shape phases. Scanning before receipt below squad median — worth a word in the debrief.</p></div>
+    <div class="dw-sec">
+      <button class="vd-primary"><i data-lucide="video"></i>Review clips</button>
+      <div class="verdicts" style="margin-top:10px"><button class="vbtn confirm"><i data-lucide="check"></i> Confirm</button><button class="vbtn">Correct event</button></div>
+    </div>
+  </div>
+</aside>
+<div class="toast" id="toast">Correction saved.</div>
+
+<script>
+  function icons(){ try{ if(window.lucide) lucide.createIcons(); }catch(e){} }
+
+  // --- all lucide icons used across the app ---
+  var ICONS="alert-circle alert-triangle arrow-left arrow-right arrow-up bar-chart-3 bed calendar calendar-x check check-circle check-circle-2 chevron-down chevron-left chevron-right chevrons-right chevrons-up-down circle-off clock columns-3 download external-link eye file-text flag info line-chart list loader map-pin maximize minus panel-left panel-right-open pen-line pencil play plus search send settings share smartphone sparkles trash-2 user-check user-x users video video-off volume-2 waves x".split(' ');
+  document.getElementById('icoGrid').innerHTML = ICONS.map(function(n){ return '<div class="gx-ico"><i data-lucide="'+n+'"></i><span>'+n+'</span></div>'; }).join('');
+
+  // --- custom glyphs (from the chip() helper + nav) ---
+  var GPSICO='<svg class="fillico" viewBox="0 0 512 512"><path d="M8.828 282.484H54.73c12.063 91.067 83.72 162.723 174.786 174.786v45.902a8.857 8.857 0 0 0 8.828 8.828h35.312a8.857 8.857 0 0 0 8.828-8.828V457.27c91.067-12.063 162.723-83.72 174.786-174.786h45.902a8.857 8.857 0 0 0 8.828-8.828v-35.312a8.857 8.857 0 0 0-8.828-8.828H457.27C445.207 138.449 373.55 66.793 282.484 54.73V8.828A8.857 8.857 0 0 0 273.656 0h-35.312a8.857 8.857 0 0 0-8.828 8.828V54.73C138.449 66.793 66.793 138.45 54.73 229.516H8.828A8.857 8.857 0 0 0 0 238.344v35.312a8.857 8.857 0 0 0 8.828 8.828M256 105.93c82.879 0 150.07 67.191 150.07 150.07S338.88 406.07 256 406.07 105.93 338.88 105.93 256c.117-82.832 67.238-149.953 150.07-150.07m0 0"/><path d="M326.621 256c0 39.004-31.617 70.621-70.621 70.621S185.379 295.004 185.379 256s31.617-70.621 70.621-70.621 70.621 31.617 70.621 70.621m0 0"/></svg>';
+  var VIDICO='<svg class="fillico" viewBox="0 0 24 24"><path d="M22 7.56v8.88a.753.753 0 0 1-1.224.587l-2.164-1.737a.3.3 0 0 1-.112-.234V8.944a.3.3 0 0 1 .112-.234l2.164-1.737A.753.753 0 0 1 22 7.56M17 16V8a2.652 2.652 0 0 0-3-3H5a2.652 2.652 0 0 0-3 3v8a2.652 2.652 0 0 0 3 3h9a2.652 2.652 0 0 0 3-3"/></svg>';
+  var PLAY='<svg viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>';
+  document.getElementById('icoCustom').innerHTML =
+    '<div class="gx-ico">'+GPSICO+'<span>GPS (chip)</span></div>'+
+    '<div class="gx-ico">'+VIDICO+'<span>VIDEO (chip)</span></div>'+
+    '<div class="gx-ico"><span style="width:22px;height:22px;display:grid;place-items:center;color:var(--color-primary-ink)">'+PLAY+'</span><span>play</span></div>';
+
+  // --- source chips ---
+  document.getElementById('srcChips').innerHTML =
+    '<span class="srcchip gps">'+GPSICO+'GPS</span>'+
+    '<span class="srcchip video">'+VIDICO+'VIDEO</span>'+
+    '<span class="srcchip both">'+GPSICO+'GPS + VIDEO</span>'+
+    '<span class="srcchip testing">TESTING</span>';
+
+  // --- calendar grid (Oct 2026: starts Thu; render a full month) ---
+  (function(){
+    var cells='';
+    // trailing days of Sep (grid starts Mon): Sep 29,30 then Oct 1..
+    cells+='<button class="dp-cell out">29</button><button class="dp-cell out">30</button>';
+    for(var d=1; d<=31; d++){
+      var cls='dp-cell';
+      if(d===7) cls+=' sel today';
+      if(d<5) cls+=' disabled';
+      cells+='<button class="'+cls+'">'+d+'</button>';
+    }
+    // leading days of Nov to fill last row
+    cells+='<button class="dp-cell out">1</button><button class="dp-cell out">2</button>';
+    document.getElementById('dpGrid').innerHTML=cells;
+  })();
+
+  // --- drawer / toast / toggles ---
+  var scrim=document.getElementById('scrim'), drawer=document.getElementById('drawer');
+  function open(){ scrim.classList.add('open'); drawer.classList.add('open'); }
+  function close(){ scrim.classList.remove('open'); drawer.classList.remove('open'); }
+  document.getElementById('openDrawer').onclick=open;
+  document.getElementById('closeDrawer').onclick=close;
+  scrim.onclick=close;
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') close(); });
+  document.querySelectorAll('.seg').forEach(function(s){ s.onclick=function(e){ var b=e.target.closest('.segb'); if(!b) return; s.querySelectorAll('.segb').forEach(function(x){x.classList.remove('active');}); b.classList.add('active'); }; });
+  document.querySelectorAll('.ptabs').forEach(function(s){ s.onclick=function(e){ var b=e.target.closest('.ptab'); if(!b) return; s.querySelectorAll('.ptab').forEach(function(x){x.classList.remove('active');}); b.classList.add('active'); }; });
+  var toast=document.getElementById('toast'), tt;
+  document.getElementById('fireToast').onclick=function(){ toast.classList.add('show'); clearTimeout(tt); tt=setTimeout(function(){ toast.classList.remove('show'); },2200); };
+
+  icons();
+</script>
+</body>
+</html>
