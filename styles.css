@@ -128,7 +128,7 @@ body.nav-collapsed .profile .pname{display:none}
 .todaybtn:hover{background:var(--color-surface-subtle)}
 
 /* ---------- content ---------- */
-.wrap{max-width:1420px;margin:0 auto;padding:22px 28px 0}
+.wrap{max-width:1420px;margin:0 auto;padding:22px 28px 20px}
 .crumb{font-size:12.5px;color:var(--color-text-soft);margin-bottom:8px}
 .crumb b{color:var(--color-text-muted);font-weight:600}
 .phead{display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap;margin-bottom:4px}

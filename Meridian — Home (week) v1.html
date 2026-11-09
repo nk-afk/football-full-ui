@@ -16,7 +16,7 @@
 /* week-calendar grid metrics (restored: lost in the shared-CSS extraction) */
 :root{--c-now:#EF4444;--hourpx:58px;--gridh:522px}
 /* ---------- home layout ---------- */
-.home{max-width:1420px;margin:0 auto;padding:22px 28px 0}
+.home{max-width:1420px;margin:0 auto;padding:22px 28px 20px}
 .home-main{min-width:0}
 .home-rail{margin-top:54px}
 .h-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
@@ -168,6 +168,7 @@
 .rv-tpill{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;color:var(--color-text-soft);background:var(--color-surface-subtle);border-radius:var(--r-pill);padding:4px 11px}
 .rv-tpill svg{width:14px;height:14px}
 .rv-pctx{font-size:13px;color:var(--color-text-soft)}
+.revcard{padding:18px 20px;margin-bottom:12px}
 .rv-cols{display:grid;grid-template-columns:300px minmax(0,1fr) 270px;gap:28px;align-items:start}
 .rv-video{position:relative;aspect-ratio:16/10;border-radius:var(--r-md);overflow:hidden;background:var(--color-surface-muted);cursor:pointer}
 .rv-video img,.rv-video video{width:100%;height:100%;object-fit:cover;display:block}
@@ -191,6 +192,8 @@
 .rv-row .v{font-weight:600;color:var(--color-text)}
 .rv-ev-label{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--color-text-soft);font-weight:600;margin:16px 0 7px;padding-top:15px;border-top:1px solid var(--color-separator)}
 .rv-ev{font-size:13.5px;color:var(--color-text-muted);line-height:1.5}
+/* Home's decision column stacks (shared styles.css makes .rv-right a flex ROW for other pages) */
+.rv-right{display:block}
 .rv-dn-label{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--color-text-soft);font-weight:600;margin-bottom:8px}
 .rv-dn{font-size:16px;font-weight:700;line-height:1.3;color:var(--color-text);margin-bottom:16px}
 .rv-review{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:100%;font-size:14px;font-weight:700;color:var(--color-primary-text);background:var(--color-primary-tint);border:1px solid var(--color-primary-text);border-radius:var(--r-lg);padding:10px 14px;cursor:pointer;font-family:inherit}
